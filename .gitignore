@@ -1,0 +1,24 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea/
+.build/
+.DS_Store
+
+attribution-datacube/click-index/target
+attribution-datacube/conv-attribution/target
+attribution-datacube/attribution-proto/target
+attribution-datacube/target
+attribution-datacube/attribution-datacube.iml
+attribution-datacube/attribution-proto/attribution-proto.iml
+attribution-datacube/click-index/click-index.iml
+attribution-datacube/conv-attribution/conv-attribution.iml
+
+attribution-datacube-us/click-index/target
+attribution-datacube-us/conv-attribution/target
+attribution-datacube-us/attribution-proto/target
+attribution-datacube-us/target
+attribution-datacube-us/attribution-datacube.iml
+attribution-datacube-us/attribution-proto/attribution-proto.iml
+attribution-datacube-us/click-index/click-index.iml
+attribution-datacube-us/conv-attribution/conv-attribution.iml
+
+

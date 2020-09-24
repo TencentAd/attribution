@@ -1,0 +1,5 @@
+{"user_data": {"idfa": "idfa1", "imei": "imei1"}, "event_time": 1597318010, "app_id": "app_id1"}
+{"user_data": {"idfa": "idfa1", "imei": "imei1"}, "event_time": 1597318001, "app_id": "app_id1"}
+{"user_data": {"idfa": "idfa2", "imei": "imei2"}, "event_time": 1597317000, "app_id": "app_id1"}
+{"user_data": {"idfa": "idfa3", "imei": "imei3"}, "event_time": 1597318020, "app_id": "app_id1"}
+{"user_data": {"uuid": "uuid1"}, "event_time": 1597318004, "app_id": "app_id1"}

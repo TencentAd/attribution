@@ -1,0 +1,4 @@
+tableName: click_index
+poolSize: 10
+properties:
+  hbase.zookeeper.quorum: 127.0.0.1:2181

@@ -1,0 +1,5 @@
+isCluster: true
+node: 127.0.0.1:7379
+nodes:
+  - 9.138.128.17:7000
+timeout: 100

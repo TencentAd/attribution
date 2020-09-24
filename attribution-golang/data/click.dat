@@ -1,0 +1,4 @@
+{"user_data": {"idfa": "idfa1"}, "click_time": 1597318000, "app_id": "app_id1"}
+{"user_data": {"imei": "imei1"}, "click_time": 1597318001, "app_id": "app_id1"}
+{"user_data": {"idfa": "idfa3"}, "click_time": 1597318002, "app_id": "app_id1"}
+{"user_data": {"uuid": "uuid1"}, "click_time": 1597318003, "app_id": "app_id1"}

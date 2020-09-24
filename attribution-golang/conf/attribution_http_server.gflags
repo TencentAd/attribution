@@ -1,0 +1,11 @@
+# 服务配置
+-metric_server_address=:8005
+-server_address=:9082
+
+-enable_task_time_cost_report=false
+-ignore_undefined_flag=false
+
+# 日志
+-log_dir=./log
+-logtostderr=true
+-v=100
