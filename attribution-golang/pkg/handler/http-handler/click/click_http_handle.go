@@ -20,8 +20,9 @@ import (
 	"attribution/pkg/handler/http-handler/click/action"
 	"attribution/pkg/handler/http-handler/click/data"
 	"attribution/pkg/handler/http-handler/click/response"
-	"attribution/pkg/storage"
 	"attribution/pkg/parser"
+	"attribution/pkg/storage"
+
 	"github.com/golang/glog"
 )
 
@@ -42,7 +43,7 @@ type HttpHandle struct {
 }
 
 func NewClickHttpHandle() *HttpHandle {
-	jq :=  workflow.NewDefaultJobQueue(
+	jq := workflow.NewDefaultJobQueue(
 		&workflow.QueueOption{
 			WorkerCount: *clickHandleWorkerCount,
 			QueueSize:   *clickHandleQueueSize,
