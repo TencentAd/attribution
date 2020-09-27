@@ -51,8 +51,12 @@ func serveHttp() error {
 }
 
 func main() {
-	flagx.Parse()
-	serveMetrics()
+	if err := flagx.Parse(); err != nil {
+		panic(err)
+	}
+	if err := serveMetrics(); err != nil {
+		panic(err)
+	}
 	if err := serveHttp(); err != nil {
 		glog.Errorf("failed to start server, err: %v", err)
 	}
