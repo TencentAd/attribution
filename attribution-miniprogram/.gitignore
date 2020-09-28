@@ -1,0 +1,7 @@
+yarn-error.log
+node_modules/
+.vscode/
+.history
+.idea/
+.DS_Store
+dist
