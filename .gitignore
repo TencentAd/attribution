@@ -2,6 +2,8 @@
 .idea/
 .build/
 .DS_Store
+.vscode/
+.history
 
 attribution-datacube/click-index/target
 attribution-datacube/conv-attribution/target
@@ -22,3 +24,6 @@ attribution-datacube-us/click-index/click-index.iml
 attribution-datacube-us/conv-attribution/conv-attribution.iml
 
 
+attribution-web/yarn-error.log
+attribution-web/node_modules/
+attribution-web/dist
