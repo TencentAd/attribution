@@ -28,3 +28,12 @@ attribution-web/yarn-error.log
 attribution-web/node_modules/
 attribution-web/dist
 attribution-web/deploy
+attribution-web/.orange-ci.yml
+attribution-web/CHANGELOG.md
+
+attribution-miniprogram/yarn-error.log
+attribution-miniprogram/node_modules/
+attribution-miniprogram/dist
+attribution-miniprogram/deploy
+attribution-miniprogram/.orange-ci.yml
+attribution-miniprogram/CHANGELOG.md

@@ -2,7 +2,7 @@ import Attribution from "../src";
 
 Attribution.send({
   callback: response => {
-    console.log(response.code);
+    console.log(response);
   },
   click_id: "xxxxxx",
   leads_name: "zhihuilai",

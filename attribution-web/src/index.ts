@@ -5,6 +5,22 @@ const post = (url: string, data: any, callback: IResponseCallback) => {
   xhr.open("POST", url, true);
   xhr.setRequestHeader("Content-Type", "text/plain");
   xhr.send(JSON.stringify(data));
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      callback(JSON.parse(xhr.responseText));
+    } else {
+      callback({
+        code: -1,
+        message: `status code: ${xhr.status}, ${xhr.responseText}`
+      });
+    }
+  };
+  xhr.onerror = error => {
+    callback({
+      code: -1,
+      message: `请求异常`
+    });
+  };
 };
 
 class Attribution {

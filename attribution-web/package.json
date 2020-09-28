@@ -1,6 +1,6 @@
 {
   "name": "attribution-web",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "",
   "main": "dist/attribution-web.min.js",
   "files": [
@@ -9,12 +9,6 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "preinstall": "node check-script/yarn-check.js",
-    "prelint": "node check-script/yarn-check.js",
-    "pretest": "node check-script/yarn-check.js",
-    "prestart": "node check-script/yarn-check.js",
-    "prebuild": "node check-script/yarn-check.js",
-    "preprettier": "node check-script/yarn-check.js",
     "lint": "tslint",
     "test": "jest",
     "start": "cross-env NODE_ENV=development webpack-dev-server --open",
