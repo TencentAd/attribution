@@ -27,3 +27,4 @@ attribution-datacube-us/conv-attribution/conv-attribution.iml
 attribution-web/yarn-error.log
 attribution-web/node_modules/
 attribution-web/dist
+attribution-web/deploy
