@@ -10,10 +10,11 @@ package main
 
 import (
 	"flag"
+	"os"
 
 	"attribution/pkg/common/flagx"
-	"attribution/pkg/handler/file-handler/click"
-	"attribution/pkg/handler/file-handler/conv"
+	"attribution/pkg/handler/file/click"
+	"attribution/pkg/handler/file/conv"
 	"attribution/pkg/storage"
 	"attribution/pkg/storage/hbase"
 	"attribution/pkg/storage/native"
@@ -25,7 +26,6 @@ var (
 	clickDataPath      = flag.String("click_data_path", "", "")
 	conversionDataPath = flag.String("conversion_data_path", "", "")
 	useHbase           = flag.Bool("use_hbase", false, "")
-	useFileStore       = flag.Bool("use_file_store", false, "")
 )
 
 func useClickIndex() storage.ClickIndex {
@@ -37,11 +37,7 @@ func useClickIndex() storage.ClickIndex {
 }
 
 func useStore() storage.AttributionStore {
-	if *useFileStore {
-		return native.NewNativeAttributionStore()
-	} else {
-		return native.NewStdoutAttributionStore()
-	}
+	return native.NewStdoutAttributionStore()
 }
 
 func main() {
@@ -52,14 +48,13 @@ func main() {
 	clickFileHandler := click.NewClickFileHandle(*clickDataPath, clickIndex)
 	if err := clickFileHandler.Run(); err != nil {
 		glog.Errorf("failed to process click log, err: %v", err)
-		return
+		os.Exit(1)
 	}
 
 	attrStore := useStore()
 	convFileHandler := conv.NewConvFileHandle(*conversionDataPath, clickIndex, attrStore)
 	if err := convFileHandler.Run(); err != nil {
 		glog.Errorf("failed to process conversion data, err: %v", err)
-		return
+		os.Exit(2)
 	}
-
 }

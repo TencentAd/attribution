@@ -22,6 +22,7 @@ import (
 	"attribution/pkg/oauth"
 	"attribution/pkg/storage"
 
+	"github.com/avast/retry-go"
 	"github.com/golang/glog"
 )
 
@@ -35,9 +36,9 @@ type LeadsPullClient struct {
 	beginTime    time.Time     // 拉取开始的时间
 	endTime      time.Time     // 拉取结束的时间戳
 	pullInterval time.Duration // 拉取间隔
+	intervalDone bool          // 拉取时间段已经完成
 
 	nextPage     int // 下次拉取第几页
-	totalPage    int // 总共有多少页
 	currentCount int // 当前时间段总共的线索数
 
 	lastSearch [2]string // 最后查到的线索，用户深度翻页
@@ -90,7 +91,23 @@ func (c *LeadsPullClient) pullRoutine() error {
 }
 
 func (c *LeadsPullClient) requestInterval() error {
+	c.intervalDone = false
+	for !c.intervalDone {
+		if err := c.requestPageWithRetry(); err != nil {
+			glog.Errorf("failed to request page, err: %v", err)
+			return err
+		}
+	}
 
+	return nil
+}
+
+func (c *LeadsPullClient) requestPageWithRetry() error {
+	return retry.Do(
+		func() error {
+			return c.requestPage()
+		},
+		retry.Attempts(3))
 }
 
 func (c *LeadsPullClient) requestPage() error {
@@ -146,6 +163,9 @@ func (c *LeadsPullClient) requestPage() error {
 	if len(resp.Data) == 0 {
 		return errors.New("leads data empty")
 	}
+	if resp.PageInfo == nil {
+		return errors.New("response page info nil")
+	}
 	if err := c.store(&resp); err != nil {
 		return err
 	}
@@ -170,4 +190,10 @@ func (c *LeadsPullClient) onPageRequestSuccess(resp *protocal.LeadsResponse) {
 	}
 
 	c.nextPage++
+
+	// 检查是否已经拉取完成
+	c.currentCount += len(resp.Data)
+	if c.currentCount == resp.PageInfo.TotalNumber {
+		c.intervalDone = true
+	}
 }

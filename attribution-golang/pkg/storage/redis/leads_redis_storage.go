@@ -72,6 +72,7 @@ func (s *LeadsRedisStorage) Store(leads *protocal.LeadsInfo) error {
 }
 
 const prefix = "leads::"
+
 func (s *LeadsRedisStorage) FormatKey(key string) string {
 	return prefix + key
 }

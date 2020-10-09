@@ -9,29 +9,31 @@
 package click
 
 import (
+	"attribution/pkg/handler/file/line"
 	"attribution/pkg/logic"
-	"attribution/pkg/storage"
-	"github.com/golang/glog"
 	"attribution/pkg/parser"
 	"attribution/pkg/parser/click_parser"
+	"attribution/pkg/storage"
+
+	"github.com/golang/glog"
 )
 
-type ClickFileHandle struct {
-	parser parser.ClickParserInterface
+type FileHandle struct {
+	parser     parser.ClickParserInterface
 	clickIndex storage.ClickIndex
 	filename   string
 }
 
-func NewClickFileHandle(filename string, clickIndex storage.ClickIndex) *ClickFileHandle {
-	return &ClickFileHandle{
+func NewClickFileHandle(filename string, clickIndex storage.ClickIndex) *FileHandle {
+	return &FileHandle{
 		parser:     click_parser.NewClickParser(),
 		filename:   filename,
 		clickIndex: clickIndex,
 	}
 }
 
-func (p *ClickFileHandle) Run() error {
-	lp := NewLineProcess(p.filename, p.processLine, func(line string, err error) {
+func (p *FileHandle) Run() error {
+	lp := line.NewLineProcess(p.filename, p.processLine, func(line string, err error) {
 		glog.Errorf("failed to handle line[%s], err[%v]", line, err)
 	})
 
@@ -43,7 +45,7 @@ func (p *ClickFileHandle) Run() error {
 	return nil
 }
 
-func (p *ClickFileHandle) processLine(line string) error {
+func (p *FileHandle) processLine(line string) error {
 	clickLog, err := p.parser.Parse(line)
 	if err != nil {
 		return err

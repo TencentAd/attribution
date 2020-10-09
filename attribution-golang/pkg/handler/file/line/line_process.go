@@ -1,12 +1,12 @@
 /*
- * copyright (c) 2019, Tencent Inc.
+ * copyright (c) 2020, Tencent Inc.
  * All rights reserved.
  *
  * Author:  linceyou@tencent.com
- * Last Modify: 8/12/20, 5:36 PM
+ * Last Modify: 10/9/20, 5:26 PM
  */
 
-package click
+package line
 
 import (
 	"bufio"

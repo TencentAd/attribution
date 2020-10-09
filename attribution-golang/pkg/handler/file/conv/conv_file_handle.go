@@ -14,36 +14,37 @@ import (
 
 	"attribution/pkg/association"
 	"attribution/pkg/association/validation"
-	"attribution/pkg/handler/file-handler/click"
-	"attribution/pkg/storage"
+	"attribution/pkg/handler/file/line"
 	"attribution/pkg/parser"
 	"attribution/pkg/parser/conv_parser"
+	"attribution/pkg/storage"
+
 	"github.com/golang/glog"
 )
 
-type ConvFileHandle struct {
-	filename   string
-	parser parser.ConvParserInterface
-	clickIndex storage.ClickIndex
+type FileHandle struct {
+	filename         string
+	parser           parser.ConvParserInterface
+	clickIndex       storage.ClickIndex
 	attributionStore storage.AttributionStore
-	assoc      *association.ClickAssociation
+	assoc            *association.ClickAssociation
 }
 
-func NewConvFileHandle(filename string, clickIndex storage.ClickIndex, attributionStore storage.AttributionStore) *ConvFileHandle {
+func NewConvFileHandle(filename string, clickIndex storage.ClickIndex, attributionStore storage.AttributionStore) *FileHandle {
 	assoc := association.NewClickAssociation().
 		WithClickIndex(clickIndex).
 		WithValidation(&validation.DefaultClickLogValidation{})
-	return &ConvFileHandle{
-		filename:   filename,
-		parser:     conv_parser.NewConvParser(),
-		clickIndex: clickIndex,
+	return &FileHandle{
+		filename:         filename,
+		parser:           conv_parser.NewConvParser(),
+		clickIndex:       clickIndex,
 		attributionStore: attributionStore,
-		assoc:      assoc,
+		assoc:            assoc,
 	}
 }
 
-func (p *ConvFileHandle) Run() error {
-	lp := click.NewLineProcess(p.filename, p.processLine, func(line string, err error) {
+func (p *FileHandle) Run() error {
+	lp := line.NewLineProcess(p.filename, p.processLine, func(line string, err error) {
 		glog.Errorf("failed to handle conv line[%s], err[%v]", line, err)
 	}).WithParallelism(1)
 
@@ -55,7 +56,7 @@ func (p *ConvFileHandle) Run() error {
 	return nil
 }
 
-func (p *ConvFileHandle) processLine(line string) error {
+func (p *FileHandle) processLine(line string) error {
 	convLog, err := p.parser.Parse(line)
 	if err != nil {
 		return err

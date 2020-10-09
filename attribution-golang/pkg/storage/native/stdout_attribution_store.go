@@ -9,28 +9,21 @@
 package native
 
 import (
-	"attribution/proto/click"
-	"attribution/proto/conv"
 	"encoding/json"
 	"fmt"
+
+	"attribution/proto/click"
+	"attribution/proto/conv"
 )
 
 type StdoutAttributionStore struct {
 }
 
 func NewStdoutAttributionStore() *StdoutAttributionStore {
-	stdout_attribution_store := &StdoutAttributionStore{
-	}
-	return stdout_attribution_store
+	return &StdoutAttributionStore{}
 }
 
-func NewEmptyAttributionStore() *EmptyAttributionStore {
-	empty_attribution_store := &EmptyAttributionStore{
-	}
-	return empty_attribution_store
-}
-
-func (kv *StdoutAttributionStore) Store(conv *conv.ConversionLog, click *click.ClickLog) error {
+func (s *StdoutAttributionStore) Store(conv *conv.ConversionLog, click *click.ClickLog) error {
 	var convContent []byte
 	var clickContent []byte
 	var err error
@@ -49,15 +42,3 @@ func (kv *StdoutAttributionStore) Store(conv *conv.ConversionLog, click *click.C
 	fmt.Printf("conv: %s\nclick:%s\n", string(convContent), string(clickContent))
 	return nil
 }
-
-type EmptyAttributionStore struct {
-}
-
-func (ea *EmptyAttributionStore) Store(conv *conv.ConversionLog, click *click.ClickLog) error{
-	return nil
-}
-
-
-
-
-
