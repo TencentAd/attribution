@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package click;
+option java_package = "com.tencent.attribution.proto.click";
+
+import "attribution/proto/user/user.proto";
+
+message ClickLog {
+  user.UserData user_data = 1;
+  int64 click_time = 2; // 点击时间
+  string app_id = 3; // 推广app, 对应promoted_object_id
+  string click_id = 4; // 点击id
+  string callback = 5; // 回调，归因后回传
+  int64 campaign_id = 6; // 推广计划id
+  int64 adgroup_id = 7; // 广告组id
+  int64 ad_id = 8; // 广告id
+  int32 ad_platform_type = 9; // 广告投放平台
+  int64 account_id = 10; // 广告主id
+  int64 agency_id = 11; // 代理商id
+  string click_sku_id = 12; // 点击sku
+  BillingEvent billing_event = 13; // 计费类型
+  string deeplink_url = 14; // 应用直达链接（android）
+  string universal_link = 15; // 应用直达链接（ios)
+  string page_url = 16; // 落地页地址
+  string device_os_type = 17; // 设备类型，ios，android
+  int64 process_time = 18; // 请求时间
+  int32 promoted_object_type = 19; // 推广类型
+  int64 real_cost = 20; // 点击扣费金额
+  string request_id = 21; // 请求id
+  string impression_id = 22; // 曝光id
+  int32 site_set = 23; // 流量广告版位
+  int64 encrypted_position_id = 24; // 联盟广告位id
+  string adgroup_name = 25; // 广告名称
+  string site_set_name = 26; // 版位名称
+}
+
+enum BillingEvent {
+  Unknown = 0;
+  CPC = 1;
+  CPA = 2;
+  CPS = 3;
+  CPM = 4;
+  CPD = 5;
+}
