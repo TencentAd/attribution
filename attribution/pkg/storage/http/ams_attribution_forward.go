@@ -30,6 +30,6 @@ func NewAmsAttributionForward() interface{} {
 }
 
 func (f *AmsAttributionForward) Store(convLog *conv.ConversionLog) error {
-
+	return nil
 }
 
