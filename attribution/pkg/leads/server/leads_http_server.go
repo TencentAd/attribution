@@ -39,7 +39,9 @@ func serveHttp() error {
 }
 
 func main() {
-	flagx.Parse()
+	if err := flagx.Parse(); err != nil {
+		panic(err)
+	}
 	metricUtil.ServeMetrics(*metricsServerAddress)
 	if err := serveHttp(); err != nil {
 		glog.Errorf("failed to start server, err: %v", err)

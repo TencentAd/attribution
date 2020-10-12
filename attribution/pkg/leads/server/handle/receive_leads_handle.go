@@ -54,15 +54,18 @@ func (handle *ReceiveLeadsHandle) ServeHTTP(w http.ResponseWriter, r *http.Reque
 		}
 	}
 
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	bytes, err := json.Marshal(resp)
 	if err == nil {
-		w.Write(bytes)
+		if _, writeErr := w.Write(bytes); writeErr != nil {
+			glog.Errorf("failed to write data, err: %v", writeErr)
+		}
 	} else {
 		glog.Errorf("failed to marshal response, err: %v", err)
 	}
 }
 
-func (handle *ReceiveLeadsHandle) doServeHttp(w http.ResponseWriter, r *http.Request) error {
+func (handle *ReceiveLeadsHandle) doServeHttp(_ http.ResponseWriter, r *http.Request) error {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return err
