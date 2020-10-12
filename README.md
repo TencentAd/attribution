@@ -6,12 +6,11 @@
 
 ## Get Start
 
-### 入门测试
-
-进入根目录，执行
+### 简单测试，在根目录执行
 
 ```shell
-make
+cd attribution
+bash logic_test.sh
 ```
 
 默认执行归因example
