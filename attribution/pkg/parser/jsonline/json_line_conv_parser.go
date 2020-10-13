@@ -21,12 +21,12 @@ func NewConvParser() *ConvParser {
 	return &ConvParser{}
 }
 
-func (p *ConvParser) Parse(input interface{}) (*conv.ConversionLog, error) {
+func (p *ConvParser) Parse(input interface{}) ([]*conv.ConversionLog, error) {
 	line := input.(string)
 	convLog := new(conv.ConversionLog)
 	err := json.Unmarshal([]byte(line), convLog)
 	if err != nil {
 		return nil, err
 	}
-	return convLog, nil
+	return []*conv.ConversionLog{convLog}, nil
 }

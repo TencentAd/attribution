@@ -21,6 +21,7 @@ import (
 	"attribution/pkg/handler/http/click/response"
 	"attribution/pkg/parser"
 	"attribution/pkg/storage"
+	"attribution/proto/click"
 
 	"github.com/golang/glog"
 )
@@ -86,7 +87,12 @@ func (handle *HttpHandle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (handle *HttpHandle) doServeHTTP(w http.ResponseWriter, r *http.Request) error {
-	clickLog, err := handle.parser.Parse(r)
+	var err error
+	defer func() {
+		handle.serveResponse(w, err)
+	}()
+	var clickLog *click.ClickLog
+	clickLog, err = handle.parser.Parse(r)
 	if err != nil {
 		return err
 	}
@@ -95,8 +101,8 @@ func (handle *HttpHandle) doServeHTTP(w http.ResponseWriter, r *http.Request) er
 	c.SetClickLog(clickLog)
 
 	handle.run(c)
-	handle.serveResponse(w, c)
-	return c.Error
+	err = c.Error
+	return err
 }
 
 func (handle *HttpHandle) run(c *data.ClickContext) {
@@ -110,13 +116,14 @@ func (handle *HttpHandle) run(c *data.ClickContext) {
 	wf.WaitDone()
 }
 
-func (handle *HttpHandle) serveResponse(w http.ResponseWriter, c *data.ClickContext) {
+func (handle *HttpHandle) serveResponse(w http.ResponseWriter, err error) {
 	var resp *response.ClickHttpResponse
-	if c.Error != nil {
+	if err != nil {
 		resp = &response.ClickHttpResponse{
 			Code:    -1,
-			Message: c.Error.Error(),
+			Message: err.Error(),
 		}
+		w.WriteHeader(400)
 	} else {
 		resp = &response.ClickHttpResponse{
 			Message: "success",

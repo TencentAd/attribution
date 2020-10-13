@@ -14,8 +14,8 @@ import (
 )
 
 type ConvHttpResponse struct {
-	Code    int                 `json:"code"`
-	Message string              `json:"message"`
-	SelectClick *click.ClickLog `json:"click"`
-	ConvLog *conv.ConversionLog `json:"conv"`
+	Code        int                 `json:"code"`
+	Message     string              `json:"message"`
+	SelectClick *click.ClickLog     `json:"click,omitempty"`
+	ConvLog     *conv.ConversionLog `json:"conv,omitempty"`
 }

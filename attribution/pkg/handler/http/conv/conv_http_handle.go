@@ -12,8 +12,8 @@ import (
 	"encoding/json"
 	"errors"
 	"flag"
-	"io/ioutil"
 	"net/http"
+	"sync"
 	"time"
 
 	"attribution/pkg/common/workflow"
@@ -22,6 +22,7 @@ import (
 	"attribution/pkg/handler/http/conv/response"
 	"attribution/pkg/parser"
 	"attribution/pkg/storage"
+	"attribution/proto/conv"
 
 	"github.com/golang/glog"
 )
@@ -33,10 +34,10 @@ var (
 )
 
 type HttpHandle struct {
-	parser           parser.ConvParserInterface
-	ClickIndex       storage.ClickIndex
-	attributionStore storage.AttributionStore
-	jobQueue         workflow.JobQueue
+	parser            parser.ConvParserInterface
+	ClickIndex        storage.ClickIndex
+	attributionStores []storage.AttributionStore
+	jobQueue          workflow.JobQueue
 
 	// 定义所有的action，如增加id mapping等完善id信息
 	clickAssocAction *action.ClickAssocAction
@@ -66,8 +67,8 @@ func (handle *HttpHandle) WithClickIndex(clickIndex storage.ClickIndex) *HttpHan
 	return handle
 }
 
-func (handle *HttpHandle) WithAttributionStore(attributionStore storage.AttributionStore) *HttpHandle {
-	handle.attributionStore = attributionStore
+func (handle *HttpHandle) WithAttributionStore(attributionStores []storage.AttributionStore) *HttpHandle {
+	handle.attributionStores = attributionStores
 	return handle
 }
 
@@ -92,21 +93,38 @@ func (handle *HttpHandle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (handle *HttpHandle) doServeHTTP(w http.ResponseWriter, r *http.Request) error {
-	requestBody, _ := ioutil.ReadAll(r.Body)
-
-	convLog, err := handle.parser.Parse(string(requestBody[:]))
-
+	var err error
+	defer func() {
+		handle.serveResponse(w, err)
+	}()
+	var convLogs []*conv.ConversionLog
+	convLogs, err = handle.parser.Parse(r)
 	if err != nil {
 		return err
 	}
 
-	c := data.NewConvContext()
-	c.SetConvLog(convLog)
+	var wg sync.WaitGroup
+	wg.Add(len(convLogs))
+	for _, convLog := range convLogs {
+		go func(convLog *conv.ConversionLog) {
+			defer wg.Add(1)
 
-	handle.run(c)
-	handle.serveResponse(w, c)
-	handle.attributionStore.Store(c.AssocContext.ConvLog, c.AssocContext.SelectClick)
-	return c.Error
+			c := data.NewConvContext()
+			c.SetConvLog(convLog)
+			handle.run(c)
+			for _, s := range handle.attributionStores {
+				if err = s.Store(c.AssocContext.ConvLog); err != nil {
+					glog.Errorf("failed to stare, err: %v", err)
+				}
+			}
+
+			if c.Error != nil {
+				err = c.Error
+			}
+		}(convLog)
+	}
+
+	return err
 }
 
 func (handle *HttpHandle) run(c *data.ConvContext) {
@@ -120,18 +138,17 @@ func (handle *HttpHandle) run(c *data.ConvContext) {
 	wf.WaitDone()
 }
 
-func (handle *HttpHandle) serveResponse(w http.ResponseWriter, c *data.ConvContext) {
+func (handle *HttpHandle) serveResponse(w http.ResponseWriter, err error) {
 	var resp *response.ConvHttpResponse
-	if c.Error != nil {
+	if err != nil {
 		resp = &response.ConvHttpResponse{
 			Code:    -1,
-			Message: c.Error.Error(),
+			Message: err.Error(),
 		}
 	} else {
 		resp = &response.ConvHttpResponse{
-			Message:     "success",
-			SelectClick: c.AssocContext.SelectClick,
-			ConvLog:     c.AssocContext.ConvLog,
+			Code:    0,
+			Message: "success",
 		}
 	}
 
