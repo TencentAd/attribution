@@ -19,7 +19,17 @@ bash logic_test.sh
 
 我们提供docker，helm。推荐使用helm可以在k8s集群一键启动服务，且能自动扩缩容。
 
+#### 镜像构建
 
+```shell
+docker build -f attribution/Dockerfile -t attribution:latest attribution
+```
+
+#### 镜像启动
+
+```shell
+docker run -d -p 9081:9081 attribution:latest -conv_parser_name=ams -click_parser_name=ams -attribution_result_storage=stdout -server_address=:9081 -v=50 -logtostderr
+```
 
 ## 功能介绍
 
