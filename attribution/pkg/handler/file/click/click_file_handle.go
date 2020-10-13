@@ -9,11 +9,11 @@
 package click
 
 import (
-	"attribution/pkg/handler/file/line"
-	"attribution/pkg/logic"
-	"attribution/pkg/parser"
-	"attribution/pkg/parser/jsonline"
-	"attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/handler/file/line"
+	"github.com/TencentAd/attribution/attribution/pkg/logic"
+	"github.com/TencentAd/attribution/attribution/pkg/parser"
+	"github.com/TencentAd/attribution/attribution/pkg/parser/jsonline"
+	"github.com/TencentAd/attribution/attribution/pkg/storage"
 
 	"github.com/golang/glog"
 )

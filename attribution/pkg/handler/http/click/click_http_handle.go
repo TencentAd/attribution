@@ -15,13 +15,13 @@ import (
 	"net/http"
 	"time"
 
-	"attribution/pkg/common/workflow"
-	"attribution/pkg/handler/http/click/action"
-	"attribution/pkg/handler/http/click/data"
-	"attribution/pkg/handler/http/click/response"
-	"attribution/pkg/parser"
-	"attribution/pkg/storage"
-	"attribution/proto/click"
+	"github.com/TencentAd/attribution/attribution/pkg/common/workflow"
+	"github.com/TencentAd/attribution/attribution/pkg/handler/http/click/action"
+	"github.com/TencentAd/attribution/attribution/pkg/handler/http/click/data"
+	"github.com/TencentAd/attribution/attribution/pkg/handler/http/click/response"
+	"github.com/TencentAd/attribution/attribution/pkg/parser"
+	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/proto/click"
 
 	"github.com/golang/glog"
 )

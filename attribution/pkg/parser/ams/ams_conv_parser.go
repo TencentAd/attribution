@@ -13,10 +13,10 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"attribution/pkg/common/httpx"
-	"attribution/pkg/protocal/ams/conversion"
-	"attribution/proto/conv"
-	"attribution/proto/user"
+	"github.com/TencentAd/attribution/attribution/pkg/common/httpx"
+	"github.com/TencentAd/attribution/attribution/pkg/protocal/ams/conversion"
+	"github.com/TencentAd/attribution/attribution/proto/conv"
+	"github.com/TencentAd/attribution/attribution/proto/user"
 
 	"github.com/golang/glog"
 )

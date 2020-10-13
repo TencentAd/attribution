@@ -17,8 +17,8 @@ import (
 	"net/http"
 	"strings"
 
-	"attribution/pkg/storage"
-	"attribution/proto/conv"
+	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/proto/conv"
 
 	"github.com/golang/glog"
 	"github.com/prometheus/client_golang/prometheus"

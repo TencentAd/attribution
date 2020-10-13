@@ -13,8 +13,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"attribution/pkg/leads/pull/protocal"
-	"attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/leads/pull/protocal"
+	"github.com/TencentAd/attribution/attribution/pkg/storage"
 
 	"github.com/golang/glog"
 )

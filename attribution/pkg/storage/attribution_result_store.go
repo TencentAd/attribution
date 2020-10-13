@@ -13,8 +13,8 @@ import (
 	"fmt"
 	"strings"
 
-	"attribution/pkg/common/factory"
-	"attribution/proto/conv"
+	"github.com/TencentAd/attribution/attribution/pkg/common/factory"
+	"github.com/TencentAd/attribution/attribution/proto/conv"
 )
 
 var (

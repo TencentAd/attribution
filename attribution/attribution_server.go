@@ -13,13 +13,13 @@ import (
 	"net/http"
 	"os"
 
-	"attribution/pkg/common/flagx"
-	metricUtil "attribution/pkg/common/metric-util"
-	"attribution/pkg/handler/http/click"
-	"attribution/pkg/handler/http/conv"
-	"attribution/pkg/parser"
-	"attribution/pkg/storage"
-	_ "attribution/pkg/storage/all"
+	"github.com/TencentAd/attribution/attribution/pkg/common/flagx"
+	"github.com/TencentAd/attribution/attribution/pkg/common/metricutil"
+	"github.com/TencentAd/attribution/attribution/pkg/handler/http/click"
+	"github.com/TencentAd/attribution/attribution/pkg/handler/http/conv"
+	"github.com/TencentAd/attribution/attribution/pkg/parser"
+	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	_ "github.com/TencentAd/attribution/attribution/pkg/storage/all"
 
 	"github.com/golang/glog"
 )
@@ -93,7 +93,7 @@ func (s *ServerImpl) initConvHandle() error {
 
 func main() {
 	flagx.Parse()
-	metricUtil.ServeMetrics(*metricsServerAddress)
+	metricutil.ServeMetrics(*metricsServerAddress)
 	if err := serveHttp(); err != nil {
 		glog.Errorf("failed to start server, err: %v", err)
 		os.Exit(1)

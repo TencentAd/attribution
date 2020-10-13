@@ -4,7 +4,7 @@
  * LastModified: 19-4-29 下午3:33
  */
 
-package metricUtil
+package metricutil
 
 import (
 	"net/http"

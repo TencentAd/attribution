@@ -1,4 +1,4 @@
-module attribution
+module github.com/TencentAd/attribution/attribution
 
 go 1.14
 

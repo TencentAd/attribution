@@ -9,8 +9,8 @@
 package response
 
 import (
-	"attribution/proto/click"
-	"attribution/proto/conv"
+	"github.com/TencentAd/attribution/attribution/proto/click"
+	"github.com/TencentAd/attribution/attribution/proto/conv"
 )
 
 type ConvHttpResponse struct {

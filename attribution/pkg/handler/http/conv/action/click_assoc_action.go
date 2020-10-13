@@ -9,10 +9,10 @@
 package action
 
 import (
-	"attribution/pkg/association"
-	"attribution/pkg/association/validation"
-	"attribution/pkg/handler/http/conv/data"
-	"attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/association"
+	"github.com/TencentAd/attribution/attribution/pkg/association/validation"
+	"github.com/TencentAd/attribution/attribution/pkg/handler/http/conv/data"
+	"github.com/TencentAd/attribution/attribution/pkg/storage"
 
 	"github.com/golang/glog"
 )

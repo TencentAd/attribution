@@ -16,7 +16,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	metricUtil "attribution/pkg/common/metric-util"
+	"github.com/TencentAd/attribution/attribution/pkg/common/metricutil"
 
 	"github.com/golang/glog"
 )
@@ -96,7 +96,7 @@ func (n *TaskNode) ExecuteTaskWithContext(ctx context.Context, wf *WorkFlow, i i
 			}
 			n.Task.Run(i)
 			if *enableTaskTimeCostReport {
-				TaskTimeCost.WithLabelValues(getTaskName(n.Task)).Observe(metricUtil.CalcTimeUsedMicro(startTime))
+				TaskTimeCost.WithLabelValues(getTaskName(n.Task)).Observe(metricutil.CalcTimeUsedMicro(startTime))
 			}
 		}
 
@@ -134,7 +134,7 @@ func (n *TaskNode) SubmitTask(ctx context.Context, wf *WorkFlow, i interface{}) 
 			}
 			n.Task.Run(i)
 			if *enableTaskTimeCostReport {
-				TaskTimeCost.WithLabelValues(getTaskName(n.Task)).Observe(metricUtil.CalcTimeUsedMicro(startTime))
+				TaskTimeCost.WithLabelValues(getTaskName(n.Task)).Observe(metricutil.CalcTimeUsedMicro(startTime))
 			}
 		}
 

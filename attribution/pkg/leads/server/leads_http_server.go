@@ -12,10 +12,10 @@ import (
 	"flag"
 	"net/http"
 
-	"attribution/pkg/common/flagx"
-	metricUtil "attribution/pkg/common/metric-util"
-	"attribution/pkg/leads/server/handle"
-	"attribution/pkg/storage/redis"
+	"github.com/TencentAd/attribution/attribution/pkg/common/flagx"
+	"github.com/TencentAd/attribution/attribution/pkg/common/metricutil"
+	"github.com/TencentAd/attribution/attribution/pkg/leads/server/handle"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/redis"
 
 	"github.com/golang/glog"
 )
@@ -42,7 +42,7 @@ func main() {
 	if err := flagx.Parse(); err != nil {
 		panic(err)
 	}
-	metricUtil.ServeMetrics(*metricsServerAddress)
+	metricutil.ServeMetrics(*metricsServerAddress)
 	if err := serveHttp(); err != nil {
 		glog.Errorf("failed to start server, err: %v", err)
 	}

@@ -11,7 +11,7 @@ package jsonline
 import (
 	"encoding/json"
 
-	"attribution/proto/conv"
+	"github.com/TencentAd/attribution/attribution/proto/conv"
 )
 
 // 按照json格式解析http的body

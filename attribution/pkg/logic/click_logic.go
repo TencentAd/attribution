@@ -9,10 +9,10 @@
 package logic
 
 import (
-	"attribution/pkg/common/key"
-	"attribution/pkg/data/user"
-	"attribution/pkg/storage"
-	"attribution/proto/click"
+	"github.com/TencentAd/attribution/attribution/pkg/common/key"
+	"github.com/TencentAd/attribution/attribution/pkg/data/user"
+	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/proto/click"
 )
 
 func ProcessClickLog(clickLog *click.ClickLog, index storage.ClickIndex) error {

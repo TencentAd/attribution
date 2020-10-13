@@ -3,7 +3,7 @@ syntax = "proto3";
 package click;
 option java_package = "com.tencent.attribution.proto.click";
 
-import "attribution/proto/user/user.proto";
+import "github.com/TencentAd/attribution/attribution/proto/user/user.proto";
 
 message ClickLog {
   user.UserData user_data = 1;

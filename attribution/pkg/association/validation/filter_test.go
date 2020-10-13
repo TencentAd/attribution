@@ -11,8 +11,8 @@ package validation
 import (
 	"testing"
 
-	"attribution/proto/click"
-	"attribution/proto/conv"
+	"github.com/TencentAd/attribution/attribution/proto/click"
+	"github.com/TencentAd/attribution/attribution/proto/conv"
 
 	"github.com/stretchr/testify/assert"
 )

@@ -18,9 +18,9 @@ import (
 	"strconv"
 	"time"
 
-	"attribution/pkg/leads/pull/protocal"
-	"attribution/pkg/oauth"
-	"attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/leads/pull/protocal"
+	"github.com/TencentAd/attribution/attribution/pkg/oauth"
+	"github.com/TencentAd/attribution/attribution/pkg/storage"
 
 	"github.com/avast/retry-go"
 	"github.com/golang/glog"

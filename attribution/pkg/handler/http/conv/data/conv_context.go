@@ -8,9 +8,9 @@
 package data
 
 import (
-	"attribution/pkg/association"
-	"attribution/pkg/data"
-	"attribution/proto/conv"
+	"github.com/TencentAd/attribution/attribution/pkg/association"
+	"github.com/TencentAd/attribution/attribution/pkg/data"
+	"github.com/TencentAd/attribution/attribution/proto/conv"
 )
 
 type ConvContext struct {

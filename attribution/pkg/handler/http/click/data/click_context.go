@@ -9,8 +9,8 @@
 package data
 
 import (
-	"attribution/pkg/data"
-	"attribution/proto/click"
+	"github.com/TencentAd/attribution/attribution/pkg/data"
+	"github.com/TencentAd/attribution/attribution/proto/click"
 )
 
 type ClickContext struct {

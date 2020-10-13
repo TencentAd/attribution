@@ -11,12 +11,12 @@ package conv
 import (
 	"fmt"
 
-	"attribution/pkg/association"
-	"attribution/pkg/association/validation"
-	"attribution/pkg/handler/file/line"
-	"attribution/pkg/parser"
-	"attribution/pkg/parser/jsonline"
-	"attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/association"
+	"github.com/TencentAd/attribution/attribution/pkg/association/validation"
+	"github.com/TencentAd/attribution/attribution/pkg/handler/file/line"
+	"github.com/TencentAd/attribution/attribution/pkg/parser"
+	"github.com/TencentAd/attribution/attribution/pkg/parser/jsonline"
+	"github.com/TencentAd/attribution/attribution/pkg/storage"
 
 	"github.com/golang/glog"
 )
@@ -56,22 +56,25 @@ func (p *FileHandle) Run() error {
 }
 
 func (p *FileHandle) processLine(line string) error {
-	convLog, err := p.parser.Parse(line)
+	convLogs, err := p.parser.Parse(line)
 	if err != nil {
 		return err
 	}
 
-	c := &association.AssocContext{
-		ConvLog: convLog,
+	for _, convLog := range convLogs {
+		c := &association.AssocContext{
+			ConvLog: convLog,
+		}
+
+		if err := p.assoc.Association(c); err != nil {
+			fmt.Println(err.Error())
+			return err
+		}
+
+		for _, s := range p.attributionStore {
+			s.Store(c.ConvLog)
+		}
 	}
 
-	if err := p.assoc.Association(c); err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
-
-	for _, s := range p.attributionStore {
-		s.Store(c.ConvLog)
-	}
 	return nil
 }

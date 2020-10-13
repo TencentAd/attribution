@@ -3,8 +3,8 @@ syntax = "proto3";
 package conv;
 option java_package = "com.tencent.attribution.proto.conv";
 
-import "attribution/proto/user/user.proto";
-import "attribution/proto/click/click.proto";
+import "github.com/TencentAd/attribution/attribution/proto/user/user.proto";
+import "github.com/TencentAd/attribution/attribution/proto/click/click.proto";
 
 message ConversionLog {
   user.UserData user_data = 1;

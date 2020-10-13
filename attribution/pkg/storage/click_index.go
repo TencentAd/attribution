@@ -12,9 +12,9 @@ import (
 	"flag"
 	"fmt"
 
-	"attribution/pkg/common/factory"
-	"attribution/proto/click"
-	"attribution/proto/user"
+	"github.com/TencentAd/attribution/attribution/pkg/common/factory"
+	"github.com/TencentAd/attribution/attribution/proto/click"
+	"github.com/TencentAd/attribution/attribution/proto/user"
 )
 
 var (

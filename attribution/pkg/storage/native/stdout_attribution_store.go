@@ -12,8 +12,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"attribution/pkg/storage"
-	"attribution/proto/conv"
+	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/proto/conv"
 )
 
 func init() {

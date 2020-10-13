@@ -8,7 +8,7 @@
 
 package user
 
-import "attribution/proto/user"
+import "github.com/TencentAd/attribution/attribution/proto/user"
 
 type Id struct {
 	Id string      // id值
