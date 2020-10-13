@@ -3,7 +3,7 @@ package jsonline
 import (
 	"encoding/json"
 
-	"attribution/proto/click"
+	"github.com/TencentAd/attribution/attribution/proto/click"
 )
 
 // 按照json格式解析http的body

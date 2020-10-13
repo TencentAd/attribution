@@ -9,9 +9,9 @@
 package all
 
 import (
-	_ "attribution/pkg/storage/hbase"
-	_ "attribution/pkg/storage/hdfs"
-	_ "attribution/pkg/storage/http"
-	_ "attribution/pkg/storage/native"
-	_ "attribution/pkg/storage/redis"
+	_ "github.com/TencentAd/attribution/attribution/pkg/storage/hbase"
+	_ "github.com/TencentAd/attribution/attribution/pkg/storage/hdfs"
+	_ "github.com/TencentAd/attribution/attribution/pkg/storage/http"
+	_ "github.com/TencentAd/attribution/attribution/pkg/storage/native"
+	_ "github.com/TencentAd/attribution/attribution/pkg/storage/redis"
 )

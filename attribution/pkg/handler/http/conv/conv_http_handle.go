@@ -16,13 +16,13 @@ import (
 	"sync"
 	"time"
 
-	"attribution/pkg/common/workflow"
-	"attribution/pkg/handler/http/conv/action"
-	"attribution/pkg/handler/http/conv/data"
-	"attribution/pkg/handler/http/conv/response"
-	"attribution/pkg/parser"
-	"attribution/pkg/storage"
-	"attribution/proto/conv"
+	"github.com/TencentAd/attribution/attribution/pkg/common/workflow"
+	"github.com/TencentAd/attribution/attribution/pkg/handler/http/conv/action"
+	"github.com/TencentAd/attribution/attribution/pkg/handler/http/conv/data"
+	"github.com/TencentAd/attribution/attribution/pkg/handler/http/conv/response"
+	"github.com/TencentAd/attribution/attribution/pkg/parser"
+	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/proto/conv"
 
 	"github.com/golang/glog"
 )

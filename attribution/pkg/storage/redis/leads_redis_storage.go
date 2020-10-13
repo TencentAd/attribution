@@ -13,8 +13,8 @@ import (
 	"flag"
 	"time"
 
-	"attribution/pkg/common/redisx"
-	"attribution/pkg/leads/pull/protocal"
+	"github.com/TencentAd/attribution/attribution/pkg/common/redisx"
+	"github.com/TencentAd/attribution/attribution/pkg/leads/pull/protocal"
 
 	"github.com/go-redis/redis"
 )

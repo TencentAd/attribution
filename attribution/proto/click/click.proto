@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package click;
 option java_package = "com.tencent.attribution.proto.click";
+option go_package = "github.com/TencentAd/attribution/attribution/proto/click";
 
 import "attribution/proto/user/user.proto";
 

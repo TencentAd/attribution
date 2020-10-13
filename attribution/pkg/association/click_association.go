@@ -3,12 +3,12 @@ package association
 import (
 	"sort"
 
-	"attribution/pkg/association/validation"
-	"attribution/pkg/common/key"
-	"attribution/pkg/data/user"
-	"attribution/pkg/storage"
-	"attribution/proto/click"
-	"attribution/proto/conv"
+	"github.com/TencentAd/attribution/attribution/pkg/association/validation"
+	"github.com/TencentAd/attribution/attribution/pkg/common/key"
+	"github.com/TencentAd/attribution/attribution/pkg/data/user"
+	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/proto/click"
+	"github.com/TencentAd/attribution/attribution/proto/conv"
 )
 
 // 将点击信息关联到转化日志

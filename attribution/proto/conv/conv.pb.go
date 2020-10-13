@@ -4,9 +4,9 @@
 package conv
 
 import (
-	click "attribution/proto/click"
-	user "attribution/proto/user"
 	fmt "fmt"
+	click "github.com/TencentAd/attribution/attribution/proto/click"
+	user "github.com/TencentAd/attribution/attribution/proto/user"
 	proto "github.com/golang/protobuf/proto"
 	math "math"
 )

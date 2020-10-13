@@ -9,9 +9,9 @@
 package action
 
 import (
-	"attribution/pkg/logic"
-	"attribution/pkg/handler/http/click/data"
-	"attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/logic"
+	"github.com/TencentAd/attribution/attribution/pkg/handler/http/click/data"
+	"github.com/TencentAd/attribution/attribution/pkg/storage"
 
 	"github.com/golang/glog"
 )

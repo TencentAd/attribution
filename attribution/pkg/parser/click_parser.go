@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"attribution/pkg/parser/ams"
-	"attribution/pkg/parser/jsonline"
-	"attribution/proto/click"
+	"github.com/TencentAd/attribution/attribution/pkg/parser/ams"
+	"github.com/TencentAd/attribution/attribution/pkg/parser/jsonline"
+	"github.com/TencentAd/attribution/attribution/proto/click"
 )
 
 var (

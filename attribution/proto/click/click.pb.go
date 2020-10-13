@@ -4,8 +4,8 @@
 package click
 
 import (
-	user "attribution/proto/user"
 	fmt "fmt"
+	user "github.com/TencentAd/attribution/attribution/proto/user"
 	proto "github.com/golang/protobuf/proto"
 	math "math"
 )

@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package user;
 option java_package = "com.tencent.attribution.proto.user";
+option go_package = "github.com/TencentAd/attribution/attribution/proto/user";
 
 // 用户信息，主要包含支持的id体系
 message UserData {

@@ -11,11 +11,11 @@ package main
 import (
 	"flag"
 
-	"attribution/pkg/common/flagx"
-	"attribution/pkg/handler/file/click"
-	"attribution/pkg/handler/file/conv"
-	"attribution/pkg/storage"
-	_ "attribution/pkg/storage/all"
+	"github.com/TencentAd/attribution/attribution/pkg/common/flagx"
+	"github.com/TencentAd/attribution/attribution/pkg/handler/file/click"
+	"github.com/TencentAd/attribution/attribution/pkg/handler/file/conv"
+	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	_ "github.com/TencentAd/attribution/attribution/pkg/storage/all"
 
 	"github.com/golang/glog"
 )

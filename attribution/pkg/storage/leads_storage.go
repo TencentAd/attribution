@@ -12,8 +12,8 @@ import (
 	"flag"
 	"fmt"
 
-	"attribution/pkg/common/factory"
-	"attribution/pkg/leads/pull/protocal"
+	"github.com/TencentAd/attribution/attribution/pkg/common/factory"
+	"github.com/TencentAd/attribution/attribution/pkg/leads/pull/protocal"
 )
 
 var (

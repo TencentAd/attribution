@@ -11,10 +11,10 @@ package hbase
 import (
 	"flag"
 
-	"attribution/pkg/common/define"
-	"attribution/pkg/storage"
-	"attribution/proto/click"
-	"attribution/proto/user"
+	"github.com/TencentAd/attribution/attribution/pkg/common/define"
+	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/proto/click"
+	"github.com/TencentAd/attribution/attribution/proto/user"
 
 	"github.com/golang/glog"
 	"github.com/golang/protobuf/proto"
