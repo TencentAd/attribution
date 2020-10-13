@@ -11,10 +11,15 @@ package amsconversion
 // 参考 转化归因 - api自归因接口
 // https://developers.e.qq.com/docs/guide/conversion/api?version=1.1
 type Request struct {
-	OuterActionId string       `json:"outer_action_id"`
-	ActionTime    int64        `json:"action_time"`
-	UserId        *UserId      `json:"user_id"`
-	ActionType    string       `json:"action_type"`
+	Actions []*Action `json:"actions"`
+}
+
+type Action struct {
+	OuterActionId string                 `json:"outer_action_id"`
+	ActionTime    int64                  `json:"action_time"`
+	UserId        *UserId                `json:"user_id"`
+	ActionType    string                 `json:"action_type"`
+	ActionParam   map[string]interface{} `json:"action_param"`
 }
 
 type UserId struct {
@@ -24,4 +29,3 @@ type UserId struct {
 	Oaid          string `json:"oaid"`
 	HashOaid      string `json:"hash_oaid"`
 }
-

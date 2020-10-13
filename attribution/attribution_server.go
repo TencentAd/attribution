@@ -19,7 +19,7 @@ import (
 	"attribution/pkg/handler/http/conv"
 	"attribution/pkg/parser"
 	"attribution/pkg/storage"
-	"attribution/pkg/storage/native"
+	_ "attribution/pkg/storage/all"
 
 	"github.com/golang/glog"
 )
@@ -78,10 +78,12 @@ func (s *ServerImpl) initConvHandle() error {
 		return err
 	}
 
+	attributionStores, err := storage.CreateAttributionStore()
+
 	convHttpHandle := conv.NewConvHttpHandle().
 		WithParser(convParser).
 		WithClickIndex(s.clickIndex).
-		WithAttributionStore(native.NewStdoutAttributionStore())
+		WithAttributionStore(attributionStores)
 	if err := convHttpHandle.Init(); err != nil {
 		return err
 	}

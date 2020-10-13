@@ -1,0 +1,18 @@
+{
+  "actions": [
+    {
+      "outer_action_id": "outer_action_identity",
+      "action_time": 1492998081,
+      "user_id": {
+        "hash_imei": "f9efca36a3c30e1cf28170d86ecbf5e9",
+        "hash_idfa": "f9efca36a3c30e1cf28170d86ecbf5e9",
+        "hash_android_id": "",
+        "oaid": "",
+        "hash_oaid": ""
+      },
+      "action_type": "ACTIVATE_APP",
+      "action_param": {
+      }
+    }
+  ]
+}

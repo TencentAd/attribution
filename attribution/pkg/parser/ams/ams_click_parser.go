@@ -13,6 +13,10 @@ import (
 
 	"attribution/pkg/common/httpx"
 	"attribution/proto/click"
+	"attribution/proto/user"
+
+	"github.com/golang/glog"
+	"github.com/golang/protobuf/proto"
 )
 
 // 接收点击转发的数据，协议参考文档
@@ -27,7 +31,10 @@ func NewAMSClickParser() *ClickParser {
 func (p *ClickParser) Parse(input interface{}) (*click.ClickLog, error) {
 	req := input.(*http.Request)
 
-	clickLog := &click.ClickLog{}
+	clickLog := &click.ClickLog{
+		UserData: &user.UserData{},
+	}
+	userData := clickLog.UserData
 	var err error
 
 	clickLog.ClickTime, err = httpx.HttpMustQueryInt64Param(req, "click_time")
@@ -112,6 +119,11 @@ func (p *ClickParser) Parse(input interface{}) (*click.ClickLog, error) {
 		return nil, err
 	}
 
+	clickLog.AppId, err = httpx.HttpQueryStringParam(req, "promoted_object_id", "")
+	if err != nil {
+		return nil, err
+	}
+
 	clickLog.PromotedObjectType, err = httpx.HttpQueryInt32Param(req, "promoted_object_type", 0)
 	if err != nil {
 		return nil, err
@@ -150,6 +162,43 @@ func (p *ClickParser) Parse(input interface{}) (*click.ClickLog, error) {
 	clickLog.SiteSetName, err = httpx.HttpQueryStringParam(req, "site_set_name", "")
 	if err != nil {
 		return nil, err
+	}
+
+	var muid string
+	muid, err = httpx.HttpQueryStringParam(req, "muid", "")
+	if clickLog.DeviceOsType == "android" {
+		userData.Imei = muid
+	} else if clickLog.DeviceOsType == "ios" {
+		userData.Idfa = muid
+	}
+
+	userData.AndroidId, err = httpx.HttpQueryStringParam(req, "hash_android_id", "")
+	if err != nil {
+		return nil, err
+	}
+
+	userData.Ip, err = httpx.HttpQueryStringParam(req, "ip", "")
+	if err != nil {
+		return nil, err
+	}
+
+	userData.Oaid, err = httpx.HttpQueryStringParam(req, "oaid", "")
+	if err != nil {
+		return nil, err
+	}
+
+	userData.Ipv6, err = httpx.HttpQueryStringParam(req, "ipv6", "")
+	if err != nil {
+		return nil, err
+	}
+
+	userData.HashOaid, err = httpx.HttpQueryStringParam(req, "hash_oaid", "")
+	if err != nil {
+		return nil, err
+	}
+
+	if glog.V(10) {
+		glog.V(10).Infof("%s", proto.MarshalTextString(clickLog))
 	}
 
 	return clickLog, nil

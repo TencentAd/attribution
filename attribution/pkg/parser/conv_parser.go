@@ -15,7 +15,7 @@ var (
 )
 
 type ConvParserInterface interface {
-	Parse(data interface{}) (*conv.ConversionLog, error)
+	Parse(data interface{}) ([]*conv.ConversionLog, error)
 }
 
 func CreateConvParser() (ConvParserInterface, error) {

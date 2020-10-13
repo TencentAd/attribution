@@ -17,6 +17,8 @@ import (
 	"attribution/pkg/protocal/ams/conversion"
 	"attribution/proto/conv"
 	"attribution/proto/user"
+
+	"github.com/golang/glog"
 )
 
 // 自归因转化上报接口
@@ -27,7 +29,7 @@ func NewConvParser() *ConvParser {
 	return &ConvParser{}
 }
 
-func (p *ConvParser) Parse(data interface{}) (*conv.ConversionLog, error) {
+func (p *ConvParser) Parse(data interface{}) ([]*conv.ConversionLog, error) {
 	r := data.(*http.Request)
 
 	requestBody, err := ioutil.ReadAll(r.Body)
@@ -44,21 +46,38 @@ func (p *ConvParser) Parse(data interface{}) (*conv.ConversionLog, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// 协议转换
-	convLog := &conv.ConversionLog{
-		UserData: &user.UserData{
-			Imei:      req.UserId.HashImei,
-			Idfa:      req.UserId.HashIdfa,
-			AndroidId: req.UserId.HashAndroidId,
-			HashOaid:  req.UserId.HashOaid,
-			Oaid:      req.UserId.Oaid,
-		},
-		AppId: appId,
-		EventTime: req.ActionTime,
-
-		OriginalContent: string(requestBody),
+	convId, err := httpx.HttpMustQueryStringParam(r, "conv_id")
+	if err != nil {
+		return nil, err
 	}
 
-	return convLog, nil
+	ret := make([]*conv.ConversionLog, 0, len(req.Actions))
+	for _, action := range req.Actions {
+		// 协议转换
+		convLog := &conv.ConversionLog{
+			UserData: &user.UserData{
+				Imei:      action.UserId.HashImei,
+				Idfa:      action.UserId.HashIdfa,
+				AndroidId: action.UserId.HashAndroidId,
+				HashOaid:  action.UserId.HashOaid,
+				Oaid:      action.UserId.Oaid,
+			},
+			AppId:     appId,
+			EventTime: action.ActionTime,
+			ConvId:    convId,
+		}
+
+		// 保留原始的信息
+		tmp := &amsconversion.Request{
+			Actions: []*amsconversion.Action{action},
+		}
+		content, err := json.Marshal(tmp)
+		if err != nil {
+			glog.Errorf("failed to marshal, err: %v", err)
+		}
+		convLog.OriginalContent =string(content)
+		ret = append(ret, convLog)
+	}
+
+	return ret, nil
 }

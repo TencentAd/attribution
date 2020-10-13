@@ -9,8 +9,6 @@
 package native
 
 import (
-	"fmt"
-
 	"attribution/pkg/common/define"
 	"attribution/pkg/storage"
 	"attribution/proto/click"
@@ -21,7 +19,6 @@ import (
 )
 
 func init() {
-	fmt.Println("here")
 	storage.ClickIndexFactory.Register("native", NewClickIndexNative)
 }
 
