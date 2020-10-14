@@ -1,6 +1,8 @@
-## About 
+# Attribution
 
-帮助广告主实现自归因，只需要简单的配置，就能快速使用。
+> 帮助广告主实现自归因，只需要简单的配置，就能快速使用。
+
+## Overview
 
 ![image-20200924172953477](README.assets/image-20200924172953477.png)
 
@@ -15,19 +17,14 @@ bash logic_test.sh
 
 默认执行归因example
 
-### 服务搭建
+### Installation
 
 我们提供docker，helm。推荐使用helm可以在k8s集群一键启动服务，且能自动扩缩容。
 
-#### 镜像构建
+#### install from docker image
 
 ```shell
-docker build -f attribution/Dockerfile -t attribution:latest attribution
-```
-
-#### 镜像启动
-
-```shell
+docker pull attribution:latest
 docker run -d -p 9081:9081 attribution:latest -conv_parser_name=ams -click_parser_name=ams -attribution_result_storage=stdout -server_address=:9081 -v=50 -logtostderr
 ```
 
