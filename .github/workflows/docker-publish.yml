@@ -15,6 +15,7 @@ on:
 
 env:
   IMAGE_NAME: attribution
+  USER_NAME: tencentad
 
 jobs:
   test:
@@ -38,28 +39,27 @@ jobs:
       - name: Build image
         run: docker build attribution --file attribution/Dockerfile --tag $IMAGE_NAME
 
-#       - name: Log into GitHub Container Registry
-#       # TODO: Create a PAT with `read:packages` and `write:packages` scopes and save it as an Actions secret `CR_PAT`
-#         run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Log into GitHub Container Registry
+        run: echo "${{ secrets.DOCKERHUB_PAT }}" | docker login --username $USER_NAME --password-stdin
 
-#       - name: Push image to GitHub Container Registry
-#         run: |
-#           IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+      - name: Push image to GitHub Container Registry
+        run: |
+          IMAGE_ID=$USER_NAME/$IMAGE_NAME
 
-#           # Change all uppercase to lowercase
-#           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
 
-#           # Strip git ref prefix from version
-#           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
 
-#           # Strip "v" prefix from tag name
-#           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
 
-#           # Use Docker `latest` tag convention
-#           [ "$VERSION" == "master" ] && VERSION=latest
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
 
-#           echo IMAGE_ID=$IMAGE_ID
-#           echo VERSION=$VERSION
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
 
-#           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-#           docker push $IMAGE_ID:$VERSION
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
