@@ -59,7 +59,7 @@ jobs:
     - name: Test
       run: |
         cd attribution
-        go test -covermode=atomic -coverpkg=./... ./... -bench . -benchmem
+        go test ./... -bench . -benchmem
     
     - name: Go vet
       run: |
