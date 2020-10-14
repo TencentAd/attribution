@@ -69,7 +69,7 @@ jobs:
     - name: Staticcheck
       run: |
         cd attribution
-        staticcheck ./...
+        staticcheck -checks all,-ST1003,-ST1000,-S1002,-U1000,-ST1008,-SA9003,-SA1019,-ST1005,-ST1016,-S1008,-SA4009,-ST1017,-S1000,-ST1012,-SA4004,-ST1006,-ST1020,-ST1021 ./...
 
   push:
     needs: 
