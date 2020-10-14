@@ -72,7 +72,7 @@ func (c *LeadsPullClient) formatRequestUrl() (string, error) {
 }
 
 func (c *LeadsPullClient) Pull() error {
-
+	return nil
 }
 
 func (c *LeadsPullClient) pullRoutine() error {
