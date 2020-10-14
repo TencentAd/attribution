@@ -38,10 +38,9 @@ type LeadsPullClient struct {
 	pullInterval time.Duration // 拉取间隔
 	intervalDone bool          // 拉取时间段已经完成
 
-	nextPage     int // 下次拉取第几页
-	currentCount int // 当前时间段总共的线索数
-
-	lastSearch [2]string // 最后查到的线索，用户深度翻页
+	nextPage     int       // 下次拉取第几页
+	currentCount int       // 当前时间段总共的线索数
+	lastSearch   [2]string // 最后查到的线索，用户深度翻页
 }
 
 type PullConfig struct {
@@ -52,12 +51,22 @@ type PullConfig struct {
 
 func NewLeadsPullClient(config *PullConfig) *LeadsPullClient {
 	return &LeadsPullClient{
-		config:     config,
-		httpClient: &http.Client{},
+		config:       config,
+		httpClient:   &http.Client{},
+		beginTime:    time.Unix(0, 0),
+		endTime:      time.Now(),
+		intervalDone: false,
+		nextPage:     0,
+		currentCount: 0,
+		lastSearch:   [2]string{"", ""},
 	}
 }
 func (c *LeadsPullClient) WithStorage(storage storage.LeadsStorage) *LeadsPullClient {
 	c.storage = storage
+	return c
+}
+func (c *LeadsPullClient) WithPullInterval(interval time.Duration) *LeadsPullClient {
+	c.pullInterval = interval
 	return c
 }
 
@@ -72,22 +81,33 @@ func (c *LeadsPullClient) formatRequestUrl() (string, error) {
 }
 
 func (c *LeadsPullClient) Pull() error {
+	go c.pullRoutine()
 	return nil
 }
 
 func (c *LeadsPullClient) pullRoutine() error {
 	for {
-		if time.Now().Sub(c.beginTime) >= c.pullInterval {
+		if time.Since(c.beginTime) >= c.pullInterval {
 			if err := c.requestInterval(); err != nil {
 				glog.Errorf("failed to pull interval, begin: %v, end: %v", c.beginTime, c.endTime)
 			} else {
-				c.beginTime = c.endTime
-				c.endTime = c.endTime.Add(c.pullInterval)
+				c.onIntervalDone()
 			}
 		} else {
 			time.Sleep(time.Second)
 		}
 	}
+}
+
+func (c *LeadsPullClient) onIntervalDone() error {
+	c.beginTime = c.endTime
+	c.endTime = c.endTime.Add(c.pullInterval)
+
+	c.nextPage = 0
+	c.currentCount = 0
+	c.intervalDone = false
+	c.lastSearch = [2]string{"", ""}
+	return nil
 }
 
 func (c *LeadsPullClient) requestInterval() error {
@@ -152,6 +172,9 @@ func (c *LeadsPullClient) requestPage() error {
 		return fmt.Errorf("http response status[%s] not valid", httpResp.Status)
 	}
 	respBody, err := ioutil.ReadAll(httpResp.Body)
+	if err != nil {
+		return err
+	}
 
 	var resp protocal.LeadsResponse
 	if err := json.Unmarshal(respBody, &resp); err != nil {

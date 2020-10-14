@@ -6,6 +6,7 @@
  * Last Modify: 9/9/20, 9:28 AM
  */
 
+// Package workflow 把业务流程抽象成dag
 package workflow
 
 import (
@@ -47,7 +48,7 @@ func NewTaskNode(Task Runnable) *TaskNode {
 	}
 }
 
-// 用于等待前面所有的任务执行完成，然后同时执行后面的任务
+// NewNilTaskNode 用于等待前面所有的任务执行完成，然后同时执行后面的任务
 func NewNilTaskNode() *TaskNode {
 	return &TaskNode{
 		Task: nil,
@@ -180,17 +181,17 @@ func NewWorkFlow() *WorkFlow {
 	return wf
 }
 
-// 直接开始任务，所有的task必须都执行
+// Start 直接开始任务，所有的task必须都执行
 func (wf *WorkFlow) Start(i interface{}) {
 	wf.root.ExecuteTask(i)
 }
 
-// 开始执行，如果ctx出现错误，中断workflow
+// StartWithContext 开始执行，如果ctx出现错误，中断workflow
 func (wf *WorkFlow) StartWithContext(ctx context.Context, i interface{}) {
 	wf.root.ExecuteTaskWithContext(ctx, wf, i)
 }
 
-// 将任务放到队列中执行，使用固定的goroutine执行task
+// StartWithJobQueue 将任务放到队列中执行，使用固定的goroutine执行task
 func (wf *WorkFlow) StartWithJobQueue(jobQueue JobQueue, ctx context.Context, i interface{}) {
 	wf.jobQueue = jobQueue
 	wf.root.SubmitTask(ctx, wf, i)
@@ -231,7 +232,7 @@ func (wf *WorkFlow) ConnectToEnd(node *TaskNode) {
 	wf.edges = append(wf.edges, AddEdge(node, wf.End))
 }
 
-// 检查是否是正常的DAG, 用于检查逻辑,实际运行可以关闭
+// CheckDAG 检查是否是正常的DAG, 用于检查逻辑,实际运行可以关闭
 func (wf *WorkFlow) CheckDAG() bool {
 	visitEdge := make(map[*TaskEdge]bool)
 	var sortedNode []*TaskNode

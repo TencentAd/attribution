@@ -4,12 +4,6 @@ import (
 	"github.com/go-redis/redis"
 )
 
-const (
-	defaultMode    = 0 //使用 isTencentCloudRedis 传递参数
-	clusterMode    = 1
-	singleNodeMode = 2
-)
-
 type Option struct {
 	ClusterOptions *redis.ClusterOptions
 	Options        *redis.Options
