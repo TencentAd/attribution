@@ -21,22 +21,28 @@ jobs:
 
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
-    
-    - name: To Workspace
-      run: cd attribution
         
     - name: Get dependencies
       run: |
+        cd attribution
         go get honnef.co/go/tools/cmd/staticcheck
         
     - name: Build
-      run: go install -v attribution_server.go
+      run: |
+        cd attribution
+        go install -v attribution_server.go
 
     - name: Test
-      run: go test -covermode=atomic -coverpkg=./... ./... -bench . -benchmem
+      run: |
+        cd attribution
+        go test -covermode=atomic -coverpkg=./... ./... -bench . -benchmem
     
     - name: Go vet
-      run: go vet -httpresponse -assign -nilfunc -printf -unreachable -atomic ./...
+      run: |
+        cd attribution
+        go vet -httpresponse -assign -nilfunc -printf -unreachable -atomic ./...
       
     - name: Staticcheck
-      run: staticcheck ./...
+      run: |
+        cd attribution
+        staticcheck ./...
