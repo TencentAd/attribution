@@ -65,4 +65,3 @@ func HttpMustQueryStringParam(r *http.Request, key string) (string, error) {
 	}
 	return values[0], nil
 }
-
