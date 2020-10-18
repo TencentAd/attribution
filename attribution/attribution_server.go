@@ -79,6 +79,9 @@ func (s *ServerImpl) initConvHandle() error {
 	}
 
 	attributionStores, err := storage.CreateAttributionStore()
+	if err != nil {
+		return err
+	}
 
 	convHttpHandle := conv.NewConvHttpHandle().
 		WithParser(convParser).

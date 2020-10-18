@@ -17,7 +17,7 @@ import (
 type job func()
 
 var (
-	PushQueueTimeout = fmt.Errorf("push queue timeout")
+	ErrPushQueueTimeout = fmt.Errorf("push queue timeout")
 )
 
 type JobQueue interface {
@@ -48,16 +48,20 @@ func NewDefaultJobQueue(option *QueueOption) *DefaultJobQueue {
 func (queue *DefaultJobQueue) Start() error {
 	for i := 0; i < queue.option.WorkerCount; i++ {
 		go func() {
-			for {
-				select {
-				case job, ok := <-queue.queue:
-					if !ok {
-						return
-					}
-
-					job()
-				}
+			for job := range queue.queue {
+				job()
 			}
+
+			//for {
+			//	select {
+			//	case job, ok := <-queue.queue:
+			//		if !ok {
+			//			return
+			//		}
+			//
+			//		job()
+			//	}
+			//}
 		}()
 	}
 
@@ -71,7 +75,7 @@ func (queue *DefaultJobQueue) PushJob(j job) error {
 	case queue.queue <- j:
 		return nil
 	case <-timer.C:
-		return PushQueueTimeout
+		return ErrPushQueueTimeout
 	}
 }
 

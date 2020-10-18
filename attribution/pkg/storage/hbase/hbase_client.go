@@ -33,7 +33,7 @@ type Scanner struct {
 //当出现其他错误时，err会返回详细错误信息，并且在下一次调用Next时返回io.EOF
 func (o *Scanner) Next() (r *Row, err error) {
 	//startTime := time.Now()
-	m.Lock()
+	o.m.Lock()
 	defer m.Unlock()
 	r = new(Row)
 	r.R, err = o.S.Next()
@@ -258,7 +258,7 @@ func GetInstance(name string, quorum string, zkparent string) (c *ClientX, err e
 	if err != nil {
 		return
 	}
-	c, _ = clientMap[name]
+	c = clientMap[name]
 	return
 }
 

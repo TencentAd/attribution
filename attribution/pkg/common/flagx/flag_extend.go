@@ -12,6 +12,7 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -42,14 +43,23 @@ func init() {
 	flag.Var(&FlagFiles, "flagfile", "")
 }
 
-func visitFlag(f *flag.Flag) {
-	fmt.Println(f.Name + "=" + f.Value.String())
+func printFlag(f *flag.Flag) {
+	fmt.Println("-" + f.Name + "=" + f.Value.String())
+}
+
+func replaceWithEnv(f *flag.Flag) {
+	if value, ok := os.LookupEnv(f.Name); ok {
+		f.Value.Set(value)
+	}
 }
 
 // 自带的flag库不支持传入文件，这个接口支持传入"-flagfile"方便传入配置文件
 func Parse() error {
 	flag.Parse()
+	// 1. 读取环境变量
+	flag.VisitAll(replaceWithEnv)
 
+	// 2. 读取flagfile
 	var validFlagLines []string
 	for f := range FlagFiles {
 		flagContents, err := ioutil.ReadFile(f)
@@ -79,9 +89,9 @@ func Parse() error {
 		return fmt.Errorf("failed to parse flagfile[%s], err:%s", FlagFiles.String(), err)
 	}
 
-	// 主动在命令行设置的参数具有更高的优先级
+	// 3. 主动在命令行设置的参数
 	flag.Parse()
-	flag.VisitAll(visitFlag)
+	flag.VisitAll(printFlag)
 
 	return nil
 }

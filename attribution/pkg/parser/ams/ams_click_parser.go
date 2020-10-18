@@ -166,6 +166,9 @@ func (p *ClickParser) Parse(input interface{}) (*click.ClickLog, error) {
 
 	var muid string
 	muid, err = httpx.HttpQueryStringParam(req, "muid", "")
+	if err != nil {
+		return nil, err
+	}
 	if clickLog.DeviceOsType == "android" {
 		userData.Imei = muid
 	} else if clickLog.DeviceOsType == "ios" {

@@ -17,7 +17,7 @@ import (
 )
 
 var (
-	QueueTimeoutErr = errors.New("queue full")
+	ErrQueueTimeout = errors.New("queue full")
 )
 
 type LineProcess struct {
@@ -99,19 +99,12 @@ func (p *LineProcess) startWorker() error {
 	for i := 0; i < p.parallelism; i++ {
 		go func() {
 			defer p.doneWG.Done()
-			for {
-				select {
-				case line, ok := <-p.dataQueue:
-					if !ok {
-						return
-					}
+			for line := range p.dataQueue {
 
-					if err := p.processFunc(line); err != nil && p.errCallback != nil {
-						p.errCallback(line, err)
-					}
+				if err := p.processFunc(line); err != nil && p.errCallback != nil {
+					p.errCallback(line, err)
 				}
 			}
-
 		}()
 	}
 	return nil
@@ -128,7 +121,7 @@ func (p *LineProcess) addLine(line string) error {
 	case p.dataQueue <- line:
 		return nil
 	case <-tm.C:
-		return QueueTimeoutErr
+		return ErrQueueTimeout
 	}
 }
 
@@ -142,4 +135,3 @@ func (p *LineProcess) close() {
 func (p *LineProcess) WaitDone() {
 	p.doneWG.Wait()
 }
-
