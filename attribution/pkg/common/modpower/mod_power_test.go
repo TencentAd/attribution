@@ -26,6 +26,7 @@ func TestModPower_Decrypt(t *testing.T) {
 
 	modPower := NewModPower(prime, big.NewInt(1143421))
 	encData := modPower.Encrypt(data)
+	t.Log(encData.Text(16))
 	decData := modPower.Decrypt(encData)
 	assert.EqualValues(t, originalText, decData.Text(16))
 }

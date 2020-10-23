@@ -8,7 +8,7 @@ source script/common.sh
 
 mkdir -p .build
 cd .build || { exit 1; }
-go build -o attribution_server "${root}/attribution_server.go"
+go build -o attribution_server "${root}/pkg/modules/attribution/attribution_server.go"
 
 # 启动服务
 ./attribution_server \

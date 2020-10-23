@@ -16,6 +16,9 @@ type ModPower struct {
 	DecKey *big.Int
 }
 
+// Requirement
+// 1. (prime - 1) / 2 must also be prime
+// 2. encKey must be an odd number
 func NewModPower(prime *big.Int, encKey *big.Int) *ModPower {
 	e := &ModPower{
 		Prime:  prime,
