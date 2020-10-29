@@ -49,6 +49,20 @@ type PullConfig struct {
 	PageSize  int                      `json:"page_size"`
 }
 
+const defaultPageSize = 100
+func NewPullConfig(conf string) (*PullConfig, error) {
+	var pc PullConfig
+	if err := json.Unmarshal([]byte(conf), &pc); err != nil {
+		return nil, err
+	}
+
+	if pc.PageSize == 0 {
+		pc.PageSize = defaultPageSize
+	}
+
+	return &pc, nil
+}
+
 func NewLeadsPullClient(config *PullConfig) *LeadsPullClient {
 	return &LeadsPullClient{
 		config:       config,
@@ -81,7 +95,9 @@ func (c *LeadsPullClient) formatRequestUrl() (string, error) {
 }
 
 func (c *LeadsPullClient) Pull() error {
-	go c.pullRoutine()
+	if err := c.pullRoutine(); err != nil {
+		return err
+	}
 	return nil
 }
 

@@ -5,6 +5,6 @@ ENV TZ "PRC"
 WORKDIR /app
 ADD . .
 
-RUN go install -v attribution_server.go
+RUN bash build/build.sh
 
 ENTRYPOINT ["attribution_server"]

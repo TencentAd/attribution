@@ -53,8 +53,7 @@ jobs:
         
     - name: Build
       run: |
-        cd attribution
-        go install -v attribution_server.go
+        bash attribution/build/build.sh
 
     - name: Test
       run: |
