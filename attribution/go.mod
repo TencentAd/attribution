@@ -3,6 +3,7 @@ module github.com/TencentAd/attribution/attribution
 go 1.14
 
 require (
+	github.com/aerospike/aerospike-client-go v3.1.0+incompatible
 	github.com/avast/retry-go v2.6.1+incompatible
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
@@ -15,6 +16,7 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/testify v1.6.1
 	github.com/tsuna/gohbase v0.0.0-20200831170559-79db14850535
+	github.com/yuin/gopher-lua v0.0.0-20200816102855-ee81675732da // indirect
 	modernc.org/mathutil v1.1.1 // indirect
 	modernc.org/strutil v1.1.0 // indirect
 )
