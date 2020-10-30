@@ -2,10 +2,10 @@ package kv
 
 import (
     "fmt"
-    "time"
-
+    
     "github.com/TencentAd/attribution/attribution/pkg/impression/kv/aerospike"
     "github.com/TencentAd/attribution/attribution/pkg/impression/kv/leveldb"
+    "github.com/TencentAd/attribution/attribution/pkg/impression/kv/opt"
     "github.com/TencentAd/attribution/attribution/pkg/impression/kv/redis"
 )
 
@@ -15,11 +15,6 @@ const (
     StorageTypeAerospike StorageType = "AEROSPIKE"
 )
 
-var (
-    DefaultExpiration = 7*24*time.Hour
-    Prefix = "impression::"
-)
-
 type KV interface {
     Has(string) (bool, error)
     Set(string) error
@@ -27,15 +22,9 @@ type KV interface {
 
 type StorageType string
 
-type Option struct {
-    Address  string          `json:"address"`
-    Password string          `json:"password"`
-    Expiration time.Duration `json:"expiration"`
-}
-
-func CreateKV(storageType StorageType, option *Option) (KV, error) {
+func CreateKV(storageType StorageType, option *opt.Option) (KV, error) {
     if option.Expiration == 0 {
-        option.Expiration = DefaultExpiration
+        option.Expiration = opt.DefaultExpiration
     }
 
     switch storageType {

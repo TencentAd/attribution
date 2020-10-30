@@ -2,13 +2,14 @@ package main
 
 import (
 	"flag"
-	"github.com/TencentAd/attribution/attribution/pkg/impression/handler"
-	"github.com/TencentAd/attribution/attribution/pkg/impression/kv"
 	"log"
 	"net/http"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/flagx"
 	"github.com/TencentAd/attribution/attribution/pkg/common/metricutil"
+	"github.com/TencentAd/attribution/attribution/pkg/impression/handler"
+	"github.com/TencentAd/attribution/attribution/pkg/impression/kv"
+	"github.com/TencentAd/attribution/attribution/pkg/impression/kv/opt"
 )
 
 var (
@@ -20,7 +21,7 @@ var (
 )
 
 func serveHttp() error {
-	storage, err := kv.CreateKV(kv.StorageType(*kvType), &kv.Option{
+	storage, err := kv.CreateKV(kv.StorageType(*kvType), &opt.Option{
 		Address: *kvAddress,
 		Password: *kvPassword,
 	})

@@ -1,22 +1,22 @@
 package leveldb
 
 import (
-    "github.com/TencentAd/attribution/attribution/pkg/impression/kv"
-    "github.com/syndtr/goleveldb/leveldb/util"
     "time"
 
+    "github.com/TencentAd/attribution/attribution/pkg/impression/kv/opt"
     "github.com/syndtr/goleveldb/leveldb"
     "github.com/syndtr/goleveldb/leveldb/filter"
-    "github.com/syndtr/goleveldb/leveldb/opt"
+    dbopt "github.com/syndtr/goleveldb/leveldb/opt"
+    "github.com/syndtr/goleveldb/leveldb/util"
 )
 
 type LevelDb struct {
     db *leveldb.DB
-    option *kv.Option
+    option *opt.Option
 }
 
 func (s *LevelDb) Has(key string) (bool, error) {
-    value, err := s.db.Get([]byte(kv.Prefix + key), nil)
+    value, err := s.db.Get([]byte(opt.Prefix + key), nil)
     if err != nil {
         return false, err
     }
@@ -26,11 +26,11 @@ func (s *LevelDb) Has(key string) (bool, error) {
 }
 
 func (s *LevelDb) Set(key string) error {
-    return s.db.Put([]byte(kv.Prefix + key), getTimeBytes(time.Now()), nil)
+    return s.db.Put([]byte(opt.Prefix + key), getTimeBytes(time.Now()), nil)
 }
 
 func (s *LevelDb) cronjob() {
-    iter := s.db.NewIterator(util.BytesPrefix([]byte(kv.Prefix)), nil)
+    iter := s.db.NewIterator(util.BytesPrefix([]byte(opt.Prefix)), nil)
     for iter.Next() {
         t := getBytesTime(iter.Value())
         if time.Since(t) > s.option.Expiration {
@@ -49,8 +49,8 @@ func getBytesTime(bytes []byte) time.Time {
     return t
 }
 
-func New(option *kv.Option) (*LevelDb, error) {
-    db, err := leveldb.OpenFile(option.Address, &opt.Options{
+func New(option *opt.Option) (*LevelDb, error) {
+    db, err := leveldb.OpenFile(option.Address, &dbopt.Options{
         Filter: filter.NewBloomFilter(32),
     })
 
