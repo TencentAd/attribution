@@ -21,7 +21,7 @@ type Aerospike struct {
 func (a *Aerospike) Has(key string) (bool, error) {
     k, _ := aerospike.NewKey(Namespace, opt.Prefix, key)
     r, err := a.client.Get(nil, k)
-    if r == nil || err != err {
+    if r == nil || err != nil {
         return false, err
     }
     return true, nil
