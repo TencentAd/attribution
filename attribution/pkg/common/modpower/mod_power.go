@@ -8,7 +8,11 @@
 
 package modpower
 
-import "math/big"
+import (
+	"crypto/rand"
+	"fmt"
+	"math/big"
+)
 
 type ModPower struct {
 	Prime  *big.Int
@@ -38,4 +42,26 @@ func (e *ModPower) Decrypt(data *big.Int) *big.Int {
 
 func (e *ModPower) findDecKey() *big.Int {
 	return big.NewInt(0).ModInverse(e.EncKey, big.NewInt(0).Sub(e.Prime, big.NewInt(1)))
+}
+
+func Hex2BigInt(hex string) (*big.Int, error) {
+	data, ok := big.NewInt(0).SetString(hex, 16)
+	if !ok {
+		return nil, fmt.Errorf("not valid hex")
+	} else {
+		return data, nil
+	}
+}
+
+func MustHex2BigInt(hex string) *big.Int {
+	data, _ := big.NewInt(0).SetString(hex, 16)
+	return data
+}
+
+func Encrypt(data *big.Int, encKey *big.Int, prime *big.Int) *big.Int {
+	return big.NewInt(0).Exp(data, encKey, prime)
+}
+
+func RandBigInt() *big.Int {
+	return rand.Int()
 }
