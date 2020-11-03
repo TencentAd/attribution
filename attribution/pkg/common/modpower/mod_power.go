@@ -9,7 +9,6 @@
 package modpower
 
 import (
-	"crypto/rand"
 	"fmt"
 	"math/big"
 )
@@ -60,8 +59,4 @@ func MustHex2BigInt(hex string) *big.Int {
 
 func Encrypt(data *big.Int, encKey *big.Int, prime *big.Int) *big.Int {
 	return big.NewInt(0).Exp(data, encKey, prime)
-}
-
-func RandBigInt() *big.Int {
-	return rand.Int()
 }
