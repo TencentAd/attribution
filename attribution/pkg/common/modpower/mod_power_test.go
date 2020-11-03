@@ -63,6 +63,16 @@ func TestModPower_Exchange(t *testing.T) {
 	}
 }
 
+func BenchmarkNewModPower(b *testing.B) {
+	originalText := `277cf7d3d25be8165aba097ff4c599e001a316b2654acd757ca80b1ea56012a7`
+	data, ok := big.NewInt(0).SetString(originalText, 16)
+	modPower1 := NewModPower(prime, big.NewInt(114343212421))
+	assert.True(b, ok)
+
+	for i :=0 ; i< b.N; i++ {
+		modPower1.Encrypt(data)
+	}
+}
 
 func hex2Int(hex string) *big.Int {
 	data, _ := big.NewInt(0).SetString(hex, 16)
