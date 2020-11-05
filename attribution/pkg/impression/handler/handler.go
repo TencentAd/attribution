@@ -7,17 +7,25 @@ import (
     "github.com/TencentAd/attribution/attribution/pkg/impression/kv"
 )
 
+var (
+    idList = []string{"hash_imei", "hash_idfa", "hash_phone", "oaid", "hash_oaid", "hash_android_id"}
+)
+
 type set struct {
     kv kv.KV
 }
 
 func (s *set) ServeHTTP(w http.ResponseWriter, req *http.Request) {
     values := req.URL.Query()
-    key := values.Get("id")
-    if err := s.kv.Set(key); err != nil {
-        log.Print(err)
-        _, _ = w.Write([]byte(err.Error()))
+    for _, v := range idList {
+        key := values.Get(v)
+        if err := s.kv.Set(key); err != nil {
+            log.Print(err)
+            _, _ = w.Write([]byte(err.Error()))
+            return
+        }
     }
+
 }
 
 func NewSetHandler(kv kv.KV) *set {
