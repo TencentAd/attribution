@@ -10,12 +10,12 @@ package httpx
 
 import (
 	"fmt"
-	"net/http"
+	"net/url"
 	"strconv"
 )
 
-func HttpMustQueryInt64Param(r *http.Request, key string) (int64, error) {
-	values, ok := r.URL.Query()[key]
+func HttpMustQueryInt64Param(query url.Values, key string) (int64, error) {
+	values, ok := query[key]
 	if !ok || len(values) == 0 {
 		return 0, fmt.Errorf("'%s' param not exist", key)
 	}
@@ -26,8 +26,8 @@ func HttpMustQueryInt64Param(r *http.Request, key string) (int64, error) {
 	return v, nil
 }
 
-func HttpQueryInt64Param(r *http.Request, key string, def int64) (int64, error) {
-	values, ok := r.URL.Query()[key]
+func HttpQueryInt64Param(query url.Values, key string, def int64) (int64, error) {
+	values, ok := query[key]
 	if !ok || len(values) == 0 {
 		return def, nil
 	}
@@ -38,8 +38,8 @@ func HttpQueryInt64Param(r *http.Request, key string, def int64) (int64, error) 
 	return v, nil
 }
 
-func HttpQueryInt32Param(r *http.Request, key string, def int32) (int32, error) {
-	values, ok := r.URL.Query()[key]
+func HttpQueryInt32Param(query url.Values, key string, def int32) (int32, error) {
+	values, ok := query[key]
 	if !ok || len(values) == 0 {
 		return def, nil
 	}
@@ -50,16 +50,16 @@ func HttpQueryInt32Param(r *http.Request, key string, def int32) (int32, error) 
 	return int32(v), nil
 }
 
-func HttpQueryStringParam(r *http.Request, key string, def string) (string, error) {
-	values, ok := r.URL.Query()[key]
+func HttpQueryStringParam(query url.Values, key string, def string) string {
+	values, ok := query[key]
 	if !ok || len(values) == 0 {
-		return def, nil
+		return def
 	}
-	return values[0], nil
+	return values[0]
 }
 
-func HttpMustQueryStringParam(r *http.Request, key string) (string, error) {
-	values, ok := r.URL.Query()[key]
+func HttpMustQueryStringParam(query url.Values, key string) (string, error) {
+	values, ok := query[key]
 	if !ok || len(values) == 0 {
 		return "", fmt.Errorf("'%s' param not exist", key)
 	}

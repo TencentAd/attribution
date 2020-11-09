@@ -10,9 +10,10 @@ package storage
 
 import (
 	"flag"
-	"fmt"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/factory"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/hbase"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/native"
 	"github.com/TencentAd/attribution/attribution/proto/click"
 	"github.com/TencentAd/attribution/attribution/proto/user"
 )
@@ -20,8 +21,13 @@ import (
 var (
 	clickIndexName = flag.String("click_index_name", "native", "support native|redis|hbase")
 
-	ClickIndexFactory = factory.NewFactory()
+	clickIndexFactory = factory.NewFactory("click_index")
 )
+
+func init() {
+	clickIndexFactory.Register("hbase", hbase.NewClickIndexHbase)
+	clickIndexFactory.Register("native", native.NewClickIndexNative)
+}
 
 type ClickIndex interface {
 	Set(idType user.IdType, key string, click *click.ClickLog) error
@@ -30,9 +36,9 @@ type ClickIndex interface {
 }
 
 func CreateClickIndex() (ClickIndex, error) {
-	clickIndex := ClickIndexFactory.Create(*clickIndexName)
-	if clickIndex == nil {
-		return nil, fmt.Errorf("click index[%s] not support", *clickIndexName)
+	if clickIndex, err := clickIndexFactory.Create(*clickIndexName); err != nil {
+		return nil, err
+	} else {
+		return clickIndex.(ClickIndex), nil
 	}
-	return clickIndex.(ClickIndex), nil
 }

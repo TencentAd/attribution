@@ -9,6 +9,7 @@ require (
 	github.com/go-redis/redis/v8 v8.3.3
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/golang/protobuf v1.4.2
+	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/orcaman/concurrent-map v0.0.0-20190826125027-8c72a8bb44f6
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.7.1

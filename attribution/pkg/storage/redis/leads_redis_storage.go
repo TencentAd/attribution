@@ -15,6 +15,7 @@ import (
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/redisx"
 	"github.com/TencentAd/attribution/attribution/pkg/leads/pull/protocal"
+	"github.com/golang/glog"
 
 	"github.com/go-redis/redis"
 )
@@ -32,8 +33,14 @@ type LeadsRedisStorage struct {
 	redisClient redis.Cmdable
 }
 
-func NewLeadsRedisStorage() *LeadsRedisStorage {
-	return &LeadsRedisStorage{}
+func NewLeadsRedisStorage() interface{} {
+	s := &LeadsRedisStorage{}
+	if err := s.Init(); err != nil {
+		glog.Errorf("failed to init leads redis, err: %s", err)
+		return nil
+	}
+
+	return s
 }
 
 func (s *LeadsRedisStorage) Init() error {
