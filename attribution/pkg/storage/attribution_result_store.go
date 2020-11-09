@@ -10,21 +10,27 @@ package storage
 
 import (
 	"flag"
-	"fmt"
 	"strings"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/factory"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/http"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/native"
 	"github.com/TencentAd/attribution/attribution/proto/conv"
 )
 
 var (
 	attributionStoresNames = flag.String("attribution_result_storage", "stdout", "multiple storage split by comma")
 
-	AttributionStoreFactory = factory.NewFactory()
+	attributionStoreFactory = factory.NewFactory("attribution_result")
 )
 
 type AttributionStore interface {
 	Store(conv *conv.ConversionLog) error
+}
+
+func init() {
+	attributionStoreFactory.Register("ams", http.NewAmsAttributionForward)
+	attributionStoreFactory.Register("stdout", native.NewStdoutAttributionStore)
 }
 
 func CreateAttributionStore() ([]AttributionStore, error) {
@@ -41,9 +47,9 @@ func CreateAttributionStore() ([]AttributionStore, error) {
 }
 
 func createSingleAttributionStore(name string) (AttributionStore, error) {
-	s := AttributionStoreFactory.Create(name)
-	if s == nil {
-		return nil, fmt.Errorf("attribution store[%s] not register", name)
+	if s, err := attributionStoreFactory.Create(name); err != nil {
+		return nil, err
+	} else {
+		return s.(AttributionStore), nil
 	}
-	return s.(AttributionStore), nil
 }

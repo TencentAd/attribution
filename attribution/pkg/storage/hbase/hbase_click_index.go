@@ -12,7 +12,6 @@ import (
 	"flag"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/define"
-	"github.com/TencentAd/attribution/attribution/pkg/storage"
 	"github.com/TencentAd/attribution/attribution/proto/click"
 	"github.com/TencentAd/attribution/attribution/proto/user"
 
@@ -25,10 +24,6 @@ var (
 	hbaseZkPath    = flag.String("hbase_zk_path", "", "")
 	hbaseTableName = flag.String("hbase_table_name", "", "")
 )
-
-func init()  {
-	storage.ClickIndexFactory.Register("hbase", NewClickIndexHbase)
-}
 
 const hbaseColumnFamilyName string = "click_family"
 const hbaseColumnName string = "click"

@@ -8,13 +8,17 @@
 
 package factory
 
+import "fmt"
+
 type Factory struct {
-	Registered map[string]creator
+	factoryName string
+	Registered  map[string]creator
 }
 
-func NewFactory() *Factory {
+func NewFactory(factoryName string) *Factory {
 	return &Factory{
-		Registered: make(map[string]creator),
+		factoryName: factoryName,
+		Registered:  make(map[string]creator),
 	}
 }
 
@@ -24,10 +28,14 @@ func (r *Factory) Register(name string, c creator) {
 	r.Registered[name] = c
 }
 
-func (r *Factory) Create(name string) interface{} {
+func (r *Factory) Create(name string) (interface{}, error) {
 	if c, ok := r.Registered[name]; ok {
-		return c()
+		if obj :=  c(); obj == nil {
+			return nil, fmt.Errorf("failed to create factory[%s] name[%s]", r.factoryName, name)
+		} else {
+			return obj, nil
+		}
 	} else {
-		return nil
+		return nil, fmt.Errorf("factory[%s] not support [%s]", r.factoryName, name)
 	}
 }

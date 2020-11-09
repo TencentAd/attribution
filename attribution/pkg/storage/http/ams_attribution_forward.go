@@ -17,7 +17,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/TencentAd/attribution/attribution/pkg/storage"
 	"github.com/TencentAd/attribution/attribution/proto/conv"
 
 	"github.com/golang/glog"
@@ -40,8 +39,6 @@ var (
 )
 
 func init() {
-	storage.AttributionStoreFactory.Register("ams", NewAmsAttributionForward)
-
 	prometheus.MustRegister(AmsConvReportCount)
 }
 

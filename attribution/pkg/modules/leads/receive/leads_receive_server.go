@@ -15,8 +15,7 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/common/flagx"
 	"github.com/TencentAd/attribution/attribution/pkg/common/metricutil"
 	"github.com/TencentAd/attribution/attribution/pkg/leads/server/handle"
-	"github.com/TencentAd/attribution/attribution/pkg/storage/redis"
-
+	"github.com/TencentAd/attribution/attribution/pkg/storage"
 	"github.com/golang/glog"
 )
 
@@ -26,8 +25,8 @@ var (
 )
 
 func serveHttp() error {
-	leadsStorage := redis.NewLeadsRedisStorage()
-	if err := leadsStorage.Init(); err != nil {
+	leadsStorage, err := storage.CreateLeadsStorage()
+	if err != nil {
 		return err
 	}
 	receiveLeads := handle.NewReceiveLeadsHandle().
