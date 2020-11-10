@@ -2,7 +2,6 @@ package storage
 
 import (
 	"context"
-	"errors"
 	"github.com/TencentAd/attribution/attribution/pkg/crypto/conf"
 	"github.com/bsm/redislock"
 	"github.com/go-redis/redis/v8"
@@ -16,12 +15,11 @@ type RedisStorage struct {
 }
 
 // 该方法用于构造一个新的RedisStorage并返回
-func NewRedisStorage(redisConf *conf.RedisConf) (*RedisStorage, *redislock.Client) {
+func NewRedisStorage(redisConf *conf.RedisConf) *RedisStorage {
 	var client redislock.RedisClient
 	if redisConf.RedisMode == conf.RedisSingleNode {
 		client = redis.NewClient(&redis.Options{
-			Addr: redisConf.NodeAddresses[0],
-			// TODO 将这个的配置加到配置文件中
+			Addr:         redisConf.NodeAddresses[0],
 			DialTimeout:  10 * time.Second,
 			ReadTimeout:  10 * time.Second,
 			WriteTimeout: 10 * time.Second,
@@ -38,35 +36,26 @@ func NewRedisStorage(redisConf *conf.RedisConf) (*RedisStorage, *redislock.Clien
 	return &RedisStorage{
 		client:    client,
 		redisMode: redisConf.RedisMode,
-	}, redislock.New(client)
+	}
+}
+
+func (r *RedisStorage) GetLock() *redislock.Client {
+	return redislock.New(r.client)
 }
 
 func (r *RedisStorage) Storage(groupId string, encryptKey string) error {
 	ctx := context.Background()
-	ok, err := r.client.SetNX(ctx, groupId, encryptKey, 0).Result()
+	_, err := r.client.(redis.Cmdable).Set(ctx, groupId, encryptKey, 0).Result()
 	if err != nil {
 		glog.Errorf("fail to set key, err[%v]", err)
 		return err
-	}
-	if !ok {
-		glog.Errorf("key already exists")
-		return errors.New("key already exists")
 	}
 	return nil
 }
 
 func (r *RedisStorage) Fetch(groupId string) (string, error) {
 	ctx := context.Background()
-	var value string
-	var err error
-	if r.redisMode == conf.RedisSingleNode {
-		client := r.client.(*redis.Client)
-		value, err = client.Get(ctx, groupId).Result()
-	}
-	if r.redisMode == conf.RedisCluster {
-		client := r.client.(*redis.ClusterClient)
-		value, err = client.Get(ctx, groupId).Result()
-	}
+	value, err := r.client.(redis.Cmdable).Get(ctx, groupId).Result()
 	if err != nil {
 		glog.Errorf("fail to get encrypt key, err[%v]", err)
 		return "", err
