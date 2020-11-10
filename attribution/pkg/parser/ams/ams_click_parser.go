@@ -135,8 +135,7 @@ func (p *ClickParser) Parse(input interface{}) (*click.ClickLog, error) {
 
 	clickLog.SiteSetName = httpx.HttpQueryStringParam(query, "site_set_name", "")
 
-	var muid string
-	muid = httpx.HttpQueryStringParam(query, "muid", "")
+	muid := httpx.HttpQueryStringParam(query, "muid", "")
 	if clickLog.DeviceOsType == "android" {
 		userData.Imei = muid
 	} else if clickLog.DeviceOsType == "ios" {

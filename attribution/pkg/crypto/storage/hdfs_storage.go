@@ -7,6 +7,7 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/crypto/conf"
 	"github.com/colinmarc/hdfs"
 	"github.com/golang/glog"
+	"os"
 	"strings"
 )
 
@@ -15,7 +16,7 @@ type HdfsStorage struct {
 	fileName string
 }
 
-func NewHdfsStorage(hdfsConf conf.HdfsConf) (*HdfsStorage, error) {
+func NewHdfsStorage(hdfsConf *conf.HdfsConf) (*HdfsStorage, error) {
 	client, err := hdfs.NewClient(hdfs.ClientOptions{
 		Addresses: hdfsConf.NodeAddress,
 		User:      hdfsConf.User,
@@ -25,9 +26,22 @@ func NewHdfsStorage(hdfsConf conf.HdfsConf) (*HdfsStorage, error) {
 		return nil, err
 	}
 
+	fileName := hdfsConf.FileName
+
+	err = client.CreateEmptyFile(fileName)
+	if err != nil && err.(*os.PathError).Err == os.ErrExist {
+		// 有可能文件已经存在，那么这不算错误
+		glog.Info("file already exists")
+	} else if err != nil {
+		// 如果不是文件已经存在的错误，但是err不为空，说明有其他的错误，那么得处理
+		fmt.Printf("%T", err)
+		fmt.Printf("%s", err.Error())
+		glog.Errorf("fail to create file, err[%v]", err)
+		return nil, err
+	}
 	return &HdfsStorage{
 		client:   client,
-		fileName: hdfsConf.FileName,
+		fileName: fileName,
 	}, nil
 }
 
@@ -37,7 +51,8 @@ func (h HdfsStorage) Storage(groupId string, encryptKey string) error {
 		glog.Errorf("fail to open file for writing, err[%v]", err)
 		return err
 	}
-	str := fmt.Sprintf("%s\t%s\n\r", groupId, encryptKey)
+	defer writer.Close()
+	str := fmt.Sprintf("%s\t%s\r\n", groupId, encryptKey)
 	_, err = writer.Write([]byte(str))
 	return err
 }
@@ -48,6 +63,7 @@ func (h HdfsStorage) Fetch(groupId string) (string, error) {
 		glog.Errorf("fail to open file for reading, err[%v]", err)
 		return "", err
 	}
+	defer reader.Close()
 	scanner := bufio.NewScanner(reader)
 	for scanner.Scan() {
 		line := scanner.Text()
