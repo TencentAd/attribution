@@ -12,13 +12,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/TencentAd/attribution/attribution/pkg/storage"
 	"github.com/TencentAd/attribution/attribution/proto/conv"
 )
-
-func init() {
-	storage.AttributionStoreFactory.Register("stdout", NewStdoutAttributionStore)
-}
 
 type StdoutAttributionStore struct {
 }

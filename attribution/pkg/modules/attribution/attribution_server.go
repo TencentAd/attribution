@@ -19,7 +19,6 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/conv"
 	"github.com/TencentAd/attribution/attribution/pkg/parser"
 	"github.com/TencentAd/attribution/attribution/pkg/storage"
-	_ "github.com/TencentAd/attribution/attribution/pkg/storage/all"
 
 	"github.com/golang/glog"
 )

@@ -10,17 +10,12 @@ package native
 
 import (
 	"github.com/TencentAd/attribution/attribution/pkg/common/define"
-	"github.com/TencentAd/attribution/attribution/pkg/storage"
 	"github.com/TencentAd/attribution/attribution/proto/click"
 	"github.com/TencentAd/attribution/attribution/proto/user"
 
 	"github.com/golang/glog"
 	cmap "github.com/orcaman/concurrent-map"
 )
-
-func init() {
-	storage.ClickIndexFactory.Register("native", NewClickIndexNative)
-}
 
 type ClickIndexNative struct {
 	data []cmap.ConcurrentMap

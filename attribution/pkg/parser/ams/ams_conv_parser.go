@@ -42,11 +42,12 @@ func (p *ConvParser) Parse(data interface{}) ([]*conv.ConversionLog, error) {
 		return nil, err
 	}
 
-	appId, err := httpx.HttpMustQueryStringParam(r, "app_id")
+	query := r.URL.Query()
+	appId, err := httpx.HttpMustQueryStringParam(query, "app_id")
 	if err != nil {
 		return nil, err
 	}
-	convId, err := httpx.HttpMustQueryStringParam(r, "conv_id")
+	convId, err := httpx.HttpMustQueryStringParam(query, "conv_id")
 	if err != nil {
 		return nil, err
 	}

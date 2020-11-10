@@ -10,16 +10,20 @@ package storage
 
 import (
 	"flag"
-	"fmt"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/factory"
 	"github.com/TencentAd/attribution/attribution/pkg/leads/pull/protocal"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/redis"
 )
 
 var (
 	leadsStorageName    = flag.String("leads_storage_name", "redis", "")
-	LeadsStorageFactory = factory.NewFactory()
+	leadsStorageFactory = factory.NewFactory("leads_storage")
 )
+
+func init() {
+	leadsStorageFactory.Register("redis", redis.NewLeadsRedisStorage)
+}
 
 // 线索存储
 type LeadsStorage interface {
@@ -27,9 +31,9 @@ type LeadsStorage interface {
 }
 
 func CreateLeadsStorage() (LeadsStorage, error) {
-	s := LeadsStorageFactory.Create(*leadsStorageName)
-	if s == nil {
-		return nil, fmt.Errorf("leads storage[%s] not support", *leadsStorageName)
+	if s, err := leadsStorageFactory.Create(*leadsStorageName); err != nil {
+		return nil, err
+	} else {
+		return s.(LeadsStorage), nil
 	}
-	return s.(LeadsStorage), nil
 }
