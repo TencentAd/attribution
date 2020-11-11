@@ -8,6 +8,12 @@
 
 package define
 
+import "flag"
+
 const (
 	VLogLevel = 10
+)
+
+var (
+	LeadsExpireHour = flag.Int("leads_expire_hour", 720, "")
 )

@@ -18,9 +18,10 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/TencentAd/attribution/attribution/pkg/common/define"
 	"github.com/TencentAd/attribution/attribution/pkg/leads/pull/protocal"
 	"github.com/TencentAd/attribution/attribution/pkg/oauth"
-	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/leads"
 
 	"github.com/avast/retry-go"
 	"github.com/golang/glog"
@@ -30,7 +31,7 @@ import (
 type LeadsPullClient struct {
 	config     *PullConfig
 	httpClient *http.Client
-	storage    storage.LeadsStorage
+	storage    leads.Storage
 
 	// 进度
 	beginTime    time.Time     // 拉取开始的时间
@@ -75,7 +76,7 @@ func NewLeadsPullClient(config *PullConfig) *LeadsPullClient {
 		lastSearch:   [2]string{"", ""},
 	}
 }
-func (c *LeadsPullClient) WithStorage(storage storage.LeadsStorage) *LeadsPullClient {
+func (c *LeadsPullClient) WithStorage(storage leads.Storage) *LeadsPullClient {
 	c.storage = storage
 	return c
 }
@@ -214,7 +215,7 @@ func (c *LeadsPullClient) requestPage() error {
 
 func (c *LeadsPullClient) store(resp *protocal.LeadsResponse) error {
 	for _, info := range resp.Data {
-		if err := c.storage.Store(info); err != nil {
+		if err := c.storage.Store(info, time.Hour * time.Duration(*define.LeadsExpireHour)); err != nil {
 			return err
 		}
 	}

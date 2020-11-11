@@ -21,7 +21,8 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/conv/data"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/conv/response"
 	"github.com/TencentAd/attribution/attribution/pkg/parser"
-	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/attribution"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/clickindex"
 	"github.com/TencentAd/attribution/attribution/proto/conv"
 
 	"github.com/golang/glog"
@@ -35,8 +36,8 @@ var (
 
 type HttpHandle struct {
 	parser            parser.ConvParserInterface
-	ClickIndex        storage.ClickIndex
-	attributionStores []storage.AttributionStore
+	ClickIndex        clickindex.ClickIndex
+	attributionStores []attribution.Storage
 	jobQueue          workflow.JobQueue
 
 	// 定义所有的action，如增加id mapping等完善id信息
@@ -62,12 +63,12 @@ func (handle *HttpHandle) WithParser(parser parser.ConvParserInterface) *HttpHan
 	return handle
 }
 
-func (handle *HttpHandle) WithClickIndex(clickIndex storage.ClickIndex) *HttpHandle {
+func (handle *HttpHandle) WithClickIndex(clickIndex clickindex.ClickIndex) *HttpHandle {
 	handle.ClickIndex = clickIndex
 	return handle
 }
 
-func (handle *HttpHandle) WithAttributionStore(attributionStores []storage.AttributionStore) *HttpHandle {
+func (handle *HttpHandle) WithAttributionStore(attributionStores []attribution.Storage) *HttpHandle {
 	handle.attributionStores = attributionStores
 	return handle
 }

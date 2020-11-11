@@ -64,6 +64,5 @@ func (h *HttpHandle) doServeHttp(w http.ResponseWriter, r *http.Request) error {
 
 
 	// TODO encrypt
-
 	return nil
 }

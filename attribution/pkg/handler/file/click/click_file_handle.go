@@ -13,18 +13,18 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/logic"
 	"github.com/TencentAd/attribution/attribution/pkg/parser"
 	"github.com/TencentAd/attribution/attribution/pkg/parser/jsonline"
-	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/clickindex"
 
 	"github.com/golang/glog"
 )
 
 type FileHandle struct {
 	parser     parser.ClickParserInterface
-	clickIndex storage.ClickIndex
+	clickIndex clickindex.ClickIndex
 	filename   string
 }
 
-func NewClickFileHandle(filename string, clickIndex storage.ClickIndex) *FileHandle {
+func NewClickFileHandle(filename string, clickIndex clickindex.ClickIndex) *FileHandle {
 	return &FileHandle{
 		parser:     jsonline.NewJsonClickParser(),
 		filename:   filename,

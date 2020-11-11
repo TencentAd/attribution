@@ -11,7 +11,6 @@ package redis
 import (
 	"flag"
 	"strconv"
-	"time"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/redisx"
 	"github.com/go-redis/redis"
@@ -19,11 +18,7 @@ import (
 )
 
 var (
-	counterRedisAddress        = flag.String("counter_redis_address", "", "")
-	counterRedisServerPassword = flag.String("counter_redis_password", "", "counterRedis server password")
-	counterRedisWriteTimeout   = flag.Int("counter_redis_write_timeout_ms", 50, "counterRedis write timeout")
-	counterRedisReadTimeout    = flag.Int64("counter_redis_read_timeout_ms", 50, "counterRedis read timeout")
-	counterRedisIsCluster      = flag.Bool("counter_redis_is_cluster", false, "")
+	counterRedisConfig = flag.String("counter_redis_config", "", "")
 )
 
 const (
@@ -35,21 +30,7 @@ type Counter struct {
 }
 
 func NewCounter() interface{} {
-	redisClient, err := redisx.CreateRedisClient(&redisx.Option{
-		ClusterOptions: &redis.ClusterOptions{
-			Addrs:        []string{*counterRedisAddress},
-			Password:     *counterRedisServerPassword,
-			WriteTimeout: time.Millisecond * time.Duration(*counterRedisWriteTimeout),
-			ReadTimeout:  time.Millisecond * time.Duration(*counterRedisReadTimeout),
-		},
-		Options: &redis.Options{
-			Addr:         *counterRedisAddress,
-			Password:     *counterRedisServerPassword,
-			WriteTimeout: time.Millisecond * time.Duration(*counterRedisWriteTimeout),
-			ReadTimeout:  time.Millisecond * time.Duration(*counterRedisReadTimeout),
-		},
-		IsCluster: *counterRedisIsCluster,
-	})
+	redisClient, err := redisx.CreateRedisClientV2(*counterRedisConfig)
 
 	if err != nil {
 		glog.Errorf("failed to create counter redis, err: %v", err)

@@ -15,7 +15,7 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/common/flagx"
 	"github.com/TencentAd/attribution/attribution/pkg/common/metricutil"
 	"github.com/TencentAd/attribution/attribution/pkg/leads/server/handle"
-	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/leads"
 	"github.com/golang/glog"
 )
 
@@ -25,7 +25,7 @@ var (
 )
 
 func serveHttp() error {
-	leadsStorage, err := storage.CreateLeadsStorage()
+	leadsStorage, err := leads.CreateLeadsStorage()
 	if err != nil {
 		return err
 	}

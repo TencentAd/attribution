@@ -9,18 +9,18 @@
 package action
 
 import (
-	"github.com/TencentAd/attribution/attribution/pkg/logic"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/click/data"
-	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/logic"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/clickindex"
 
 	"github.com/golang/glog"
 )
 
 type ClickLogIndexAction struct {
-	index storage.ClickIndex
+	index clickindex.ClickIndex
 }
 
-func NewClickLogIndexAction(index storage.ClickIndex) *ClickLogIndexAction {
+func NewClickLogIndexAction(index clickindex.ClickIndex) *ClickLogIndexAction {
 	return &ClickLogIndexAction{
 		index: index,
 	}

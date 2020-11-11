@@ -3,37 +3,38 @@
  * All rights reserved.
  *
  * Author:  linceyou@tencent.com
- * Last Modify: 9/25/20, 5:05 PM
+ * Last Modify: 11/10/20, 5:16 PM
  */
 
-package storage
+package leads
 
 import (
 	"flag"
+	"time"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/factory"
 	"github.com/TencentAd/attribution/attribution/pkg/leads/pull/protocal"
-	"github.com/TencentAd/attribution/attribution/pkg/storage/redis"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/leads/redis"
 )
 
 var (
-	leadsStorageName    = flag.String("leads_storage_name", "redis", "")
+	leadsStorageName    = flag.String("leads_storage_name", "redis", "support [redis]")
 	leadsStorageFactory = factory.NewFactory("leads_storage")
 )
 
 func init() {
-	leadsStorageFactory.Register("redis", redis.NewLeadsRedisStorage)
+	leadsStorageFactory.Register("redis", redis.NewLeadsRedis)
 }
 
 // 线索存储
-type LeadsStorage interface {
-	Store(leads *protocal.LeadsInfo) error
+type Storage interface {
+	Store(leads *protocal.LeadsInfo, expire time.Duration) error
 }
 
-func CreateLeadsStorage() (LeadsStorage, error) {
+func CreateLeadsStorage() (Storage, error) {
 	if s, err := leadsStorageFactory.Create(*leadsStorageName); err != nil {
 		return nil, err
 	} else {
-		return s.(LeadsStorage), nil
+		return s.(Storage), nil
 	}
 }

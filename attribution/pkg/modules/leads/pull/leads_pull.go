@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  * Author:  linceyou@tencent.com
- * Last Modify: 9/25/20, 10:22 AM
+ * Last Modify: 11/11/20, 4:48 PM
  */
 
 package main
@@ -13,7 +13,7 @@ import (
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/flagx"
 	"github.com/TencentAd/attribution/attribution/pkg/leads/pull/client"
-	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/leads"
 )
 
 var (
@@ -26,7 +26,7 @@ func run() error {
 		return err
 	}
 
-	leadsStorage, err := storage.CreateLeadsStorage()
+	leadsStorage, err := leads.CreateLeadsStorage()
 	if err != nil {
 		return err
 	}

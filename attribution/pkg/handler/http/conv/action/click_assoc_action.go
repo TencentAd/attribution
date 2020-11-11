@@ -12,17 +12,17 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/association"
 	"github.com/TencentAd/attribution/attribution/pkg/association/validation"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/conv/data"
-	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/clickindex"
 
 	"github.com/golang/glog"
 )
 
 type ClickAssocAction struct {
-	index storage.ClickIndex
+	index clickindex.ClickIndex
 	assoc *association.ClickAssociation
 }
 
-func NewClickAssocAction(index storage.ClickIndex) *ClickAssocAction {
+func NewClickAssocAction(index clickindex.ClickIndex) *ClickAssocAction {
 	return &ClickAssocAction{
 		index: index,
 		assoc: association.NewClickAssociation().

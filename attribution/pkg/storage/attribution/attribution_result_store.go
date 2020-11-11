@@ -1,20 +1,20 @@
 /*
- * copyright (c) 2019, Tencent Inc.
+ * copyright (c) 2020, Tencent Inc.
  * All rights reserved.
  *
- * Author:  yuanweishi@tencent.com
- * Last Modify: 9/16/20, 4:26 PM
+ * Author:  linceyou@tencent.com
+ * Last Modify: 11/11/20, 4:30 PM
  */
 
-package storage
+package attribution
 
 import (
 	"flag"
 	"strings"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/factory"
-	"github.com/TencentAd/attribution/attribution/pkg/storage/http"
-	"github.com/TencentAd/attribution/attribution/pkg/storage/native"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/attribution/http"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/attribution/native"
 	"github.com/TencentAd/attribution/attribution/proto/conv"
 )
 
@@ -24,7 +24,7 @@ var (
 	attributionStoreFactory = factory.NewFactory("attribution_result")
 )
 
-type AttributionStore interface {
+type Storage interface {
 	Store(conv *conv.ConversionLog) error
 }
 
@@ -33,9 +33,9 @@ func init() {
 	attributionStoreFactory.Register("stdout", native.NewStdoutAttributionStore)
 }
 
-func CreateAttributionStore() ([]AttributionStore, error) {
+func CreateAttributionStore() ([]Storage, error) {
 	names := strings.Split(*attributionStoresNames, ",")
-	ret := make([]AttributionStore, 0, len(names))
+	ret := make([]Storage, 0, len(names))
 	for _, name := range names {
 		if s, err := createSingleAttributionStore(name); err != nil {
 			return nil, err
@@ -46,10 +46,10 @@ func CreateAttributionStore() ([]AttributionStore, error) {
 	return ret, nil
 }
 
-func createSingleAttributionStore(name string) (AttributionStore, error) {
+func createSingleAttributionStore(name string) (Storage, error) {
 	if s, err := attributionStoreFactory.Create(name); err != nil {
 		return nil, err
 	} else {
-		return s.(AttributionStore), nil
+		return s.(Storage), nil
 	}
 }
