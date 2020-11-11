@@ -12,28 +12,30 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"time"
 
+	"github.com/TencentAd/attribution/attribution/pkg/common/define"
 	"github.com/TencentAd/attribution/attribution/pkg/leads/pull/protocal"
-	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/leads"
 
 	"github.com/golang/glog"
 )
 
 type ReceiveLeadsHandle struct {
-	leadsStorage storage.LeadsStorage
+	leadsStorage leads.Storage
 }
 
 func NewReceiveLeadsHandle() *ReceiveLeadsHandle {
 	return &ReceiveLeadsHandle{}
 }
 
-func (handle *ReceiveLeadsHandle) WithLeadsStorage(storage storage.LeadsStorage) *ReceiveLeadsHandle {
+func (handle *ReceiveLeadsHandle) WithLeadsStorage(storage leads.Storage) *ReceiveLeadsHandle {
 	handle.leadsStorage = storage
 	return handle
 }
 
 type Resp struct {
-	Code int `json:"code"`
+	Code    int    `json:"code"`
 	Message string `json:"message"`
 }
 
@@ -44,12 +46,12 @@ func (handle *ReceiveLeadsHandle) ServeHTTP(w http.ResponseWriter, r *http.Reque
 		// TODO(监控)
 
 		resp = &Resp{
-			Code: -1,
+			Code:    -1,
 			Message: err.Error(),
 		}
 	} else {
 		resp = &Resp{
-			Code: 0,
+			Code:    0,
 			Message: "success",
 		}
 	}
@@ -71,15 +73,14 @@ func (handle *ReceiveLeadsHandle) doServeHttp(_ http.ResponseWriter, r *http.Req
 		return err
 	}
 
-	var leads protocal.LeadsInfo
-	if err := json.Unmarshal(body, &leads); err != nil {
+	var leadsInfo protocal.LeadsInfo
+	if err := json.Unmarshal(body, &leadsInfo); err != nil {
 		return err
 	}
 
-	if err := handle.leadsStorage.Store(&leads); err != nil {
+	if err := handle.leadsStorage.Store(&leadsInfo, time.Duration(*define.LeadsExpireHour) * time.Hour); err != nil {
 		return err
 	}
 
 	return nil
 }
-

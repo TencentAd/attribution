@@ -18,7 +18,8 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/click"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/conv"
 	"github.com/TencentAd/attribution/attribution/pkg/parser"
-	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/attribution"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/clickindex"
 
 	"github.com/golang/glog"
 )
@@ -29,7 +30,7 @@ var (
 )
 
 func serveHttp() error {
-	clickIndex, err := storage.CreateClickIndex()
+	clickIndex, err := clickindex.CreateClickIndex()
 	if err != nil {
 		return err
 	}
@@ -53,7 +54,7 @@ func serveHttp() error {
 }
 
 type ServerImpl struct {
-	clickIndex storage.ClickIndex
+	clickIndex clickindex.ClickIndex
 }
 
 func (s *ServerImpl) initClickHandle() error {
@@ -77,7 +78,7 @@ func (s *ServerImpl) initConvHandle() error {
 		return err
 	}
 
-	attributionStores, err := storage.CreateAttributionStore()
+	attributionStores, err := attribution.CreateAttributionStore()
 	if err != nil {
 		return err
 	}

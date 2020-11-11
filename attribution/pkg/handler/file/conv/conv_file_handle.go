@@ -16,7 +16,8 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/handler/file/line"
 	"github.com/TencentAd/attribution/attribution/pkg/parser"
 	"github.com/TencentAd/attribution/attribution/pkg/parser/jsonline"
-	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/attribution"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/clickindex"
 
 	"github.com/golang/glog"
 )
@@ -24,12 +25,12 @@ import (
 type FileHandle struct {
 	filename         string
 	parser           parser.ConvParserInterface
-	clickIndex       storage.ClickIndex
-	attributionStore []storage.AttributionStore
+	clickIndex       clickindex.ClickIndex
+	attributionStore []attribution.Storage
 	assoc            *association.ClickAssociation
 }
 
-func NewConvFileHandle(filename string, clickIndex storage.ClickIndex, attributionStore []storage.AttributionStore) *FileHandle {
+func NewConvFileHandle(filename string, clickIndex clickindex.ClickIndex, attributionStore []attribution.Storage) *FileHandle {
 	assoc := association.NewClickAssociation().
 		WithClickIndex(clickIndex).
 		WithValidation(&validation.DefaultClickLogValidation{})

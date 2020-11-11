@@ -11,11 +11,11 @@ package logic
 import (
 	"github.com/TencentAd/attribution/attribution/pkg/common/key"
 	"github.com/TencentAd/attribution/attribution/pkg/data/user"
-	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/clickindex"
 	"github.com/TencentAd/attribution/attribution/proto/click"
 )
 
-func ProcessClickLog(clickLog *click.ClickLog, index storage.ClickIndex) error {
+func ProcessClickLog(clickLog *click.ClickLog, index clickindex.ClickIndex) error {
 	userIds, err := user.GenerateNormalIdsByPriority(clickLog.UserData)
 	if err != nil {
 		return err

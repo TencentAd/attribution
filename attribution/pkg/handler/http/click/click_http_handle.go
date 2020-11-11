@@ -20,7 +20,7 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/click/data"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/click/response"
 	"github.com/TencentAd/attribution/attribution/pkg/parser"
-	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/clickindex"
 	"github.com/TencentAd/attribution/attribution/proto/click"
 
 	"github.com/golang/glog"
@@ -34,7 +34,7 @@ var (
 
 type HttpHandle struct {
 	parser     parser.ClickParserInterface
-	ClickIndex storage.ClickIndex
+	ClickIndex clickindex.ClickIndex
 
 	jobQueue workflow.JobQueue
 
@@ -61,7 +61,7 @@ func (handle *HttpHandle) WithParser(parser parser.ClickParserInterface) *HttpHa
 	return handle
 }
 
-func (handle *HttpHandle) WithClickIndex(clickIndex storage.ClickIndex) *HttpHandle {
+func (handle *HttpHandle) WithClickIndex(clickIndex clickindex.ClickIndex) *HttpHandle {
 	handle.ClickIndex = clickIndex
 	return handle
 }

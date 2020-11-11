@@ -14,7 +14,8 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/common/flagx"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/file/click"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/file/conv"
-	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/attribution"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/clickindex"
 
 	"github.com/golang/glog"
 )
@@ -25,7 +26,7 @@ var (
 )
 
 func run() error {
-	clickIndex, err := storage.CreateClickIndex()
+	clickIndex, err := clickindex.CreateClickIndex()
 	if err != nil {
 		return err
 	}
@@ -36,7 +37,7 @@ func run() error {
 		return err
 	}
 
-	attrStore, err := storage.CreateAttributionStore()
+	attrStore, err := attribution.CreateAttributionStore()
 	if err != nil {
 		return err
 	}

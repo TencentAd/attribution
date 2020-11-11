@@ -6,14 +6,14 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/association/validation"
 	"github.com/TencentAd/attribution/attribution/pkg/common/key"
 	"github.com/TencentAd/attribution/attribution/pkg/data/user"
-	"github.com/TencentAd/attribution/attribution/pkg/storage"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/clickindex"
 	"github.com/TencentAd/attribution/attribution/proto/click"
 	"github.com/TencentAd/attribution/attribution/proto/conv"
 )
 
 // 将点击信息关联到转化日志
 type ClickAssociation struct {
-	clickIndex storage.ClickIndex
+	clickIndex clickindex.ClickIndex
 	validation validation.ClickLogValidation
 }
 
@@ -21,7 +21,7 @@ func NewClickAssociation() *ClickAssociation {
 	return &ClickAssociation{}
 }
 
-func (ass *ClickAssociation) WithClickIndex(clickIndex storage.ClickIndex) *ClickAssociation {
+func (ass *ClickAssociation) WithClickIndex(clickIndex clickindex.ClickIndex) *ClickAssociation {
 	ass.clickIndex = clickIndex
 	return ass
 }

@@ -1,19 +1,19 @@
 /*
- * copyright (c) 2019, Tencent Inc.
+ * copyright (c) 2020, Tencent Inc.
  * All rights reserved.
  *
  * Author:  linceyou@tencent.com
- * Last Modify: 8/13/20, 4:26 PM
+ * Last Modify: 11/11/20, 4:35 PM
  */
 
-package storage
+package clickindex
 
 import (
 	"flag"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/factory"
-	"github.com/TencentAd/attribution/attribution/pkg/storage/hbase"
-	"github.com/TencentAd/attribution/attribution/pkg/storage/native"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/clickindex/hbase"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/clickindex/native"
 	"github.com/TencentAd/attribution/attribution/proto/click"
 	"github.com/TencentAd/attribution/attribution/proto/user"
 )
