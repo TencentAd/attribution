@@ -30,6 +30,8 @@ func ExtractLeadsIndex(leads *protocal.LeadsInfo) ([]*LeadsIndexInfo, error) {
 		Key:   FormatKey(leads.LeadsTelephone),
 		Value: string(data),
 	})
+
+	return indexes, nil
 }
 
 const prefix = "leads::"
