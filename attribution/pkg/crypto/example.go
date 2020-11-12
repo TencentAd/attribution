@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/TencentAd/attribution/attribution/pkg/crypto/conf"
-	"github.com/TencentAd/attribution/attribution/pkg/crypto/uitl"
+	"github.com/TencentAd/attribution/attribution/pkg/crypto/util"
 	"math/big"
 )
 
@@ -57,7 +57,7 @@ func main() {
 
 func testHdfs() {
 	hdfsConf := conf.NewHdfsConf("/crypto", "v_zefanliu", []string{"localhost:9000"})
-	manager := uitl.NewHdfsKeyManager(hdfsConf)
+	manager := util.NewHdfsKeyManager(hdfsConf)
 	err := manager.StorageEncryptKey("123456", big.NewInt(123124))
 	if err != nil {
 		fmt.Println("fail to storage key", err)
