@@ -21,6 +21,9 @@ func (c *CryptoCache) Store(groupId string, pair *structure.CryptoPair) {
 // 该方法用于将数据存入本地的缓存中
 func (c *CryptoCache) Load(groupId string) (*structure.CryptoPair, bool) {
 	pair, ok := m.Load(groupId)
+	if !ok {
+		return nil, ok
+	}
 	return pair.(*structure.CryptoPair), ok
 }
 

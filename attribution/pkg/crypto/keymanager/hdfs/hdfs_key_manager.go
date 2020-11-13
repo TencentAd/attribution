@@ -34,9 +34,12 @@ func NewPairData() interface{} {
 }
 
 func NewHDFSKeyManager() interface{} {
+	l := loader.NewHdfsHotLoaderWithDefaultClient(*keyHdfsPath, loadData, NewPairData)
+	if l == nil {
+		return nil
+	}
 	return &KeyManager{
-		buffer: loader.NewFileDoubleBuffer(
-			loader.NewHdfsHotLoaderWithDefaultClient(*keyHdfsPath, loadData, NewPairData)),
+		buffer: loader.NewFileDoubleBuffer(l),
 	}
 }
 

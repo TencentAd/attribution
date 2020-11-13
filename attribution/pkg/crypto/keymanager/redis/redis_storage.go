@@ -39,7 +39,9 @@ func (r *KeyStorageRedis) Store(groupId string, encryptKey string) error {
 
 func (r *KeyStorageRedis) Load(groupId string) (string, error) {
 	value, err := r.client.Get(r.formatKey(groupId)).Result()
-	if err != nil {
+	if err == redis.Nil {
+		return "", nil
+	} else if err != nil {
 		glog.Errorf("fail to get encrypt key, err[%v]", err)
 		return "", err
 	}

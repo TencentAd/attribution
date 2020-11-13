@@ -49,9 +49,9 @@ func NewHdfsHotLoader(client *hdfs.Client, filePath string, loader fileLoadFunc,
 }
 
 func NewHdfsHotLoaderWithDefaultClient(filePath string, loader fileLoadFunc, alloc allocFunc) *HdfsHotLoader {
+	var err error
 	once.Do(
 		func() {
-			var err error
 			defaultClient, err = hdfs.NewClient(hdfs.ClientOptions{
 				Addresses: strings.Split(*hdfsAddress, ","),
 				User:      *hdfsUser,
@@ -61,6 +61,9 @@ func NewHdfsHotLoaderWithDefaultClient(filePath string, loader fileLoadFunc, all
 			}
 		},
 	)
+	if err != nil {
+		return nil
+	}
 	return NewHdfsHotLoader(defaultClient, filePath, loader, alloc)
 }
 
@@ -75,6 +78,7 @@ func (l *HdfsHotLoader) Reset() {
 func (l *HdfsHotLoader) DetectNewFile() (string, bool) {
 	statInfo, err := l.client.Stat(l.filePath)
 	if err != nil {
+		glog.Errorf("failed to stat[%s], err: %v", l.filePath, err)
 		return "", false
 	}
 

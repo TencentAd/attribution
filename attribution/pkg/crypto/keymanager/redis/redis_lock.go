@@ -41,7 +41,10 @@ func (lock *Lock) Obtain(key string) (*redislock.Lock, error) {
 	return lock.redisLock.Obtain(
 		context.Background(),
 		lock.formatKey(key),
-		time.Millisecond*time.Duration(*lockTTLMS), nil)
+		time.Millisecond*time.Duration(*lockTTLMS),
+		&redislock.Options{
+			RetryStrategy: redislock.LimitRetry(redislock.LinearBackoff(100*time.Millisecond), 10),
+		})
 }
 
 const keyLockPrefix = "keyLock::"

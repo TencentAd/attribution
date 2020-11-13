@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/TencentAd/attribution/attribution/pkg/common/define"
 	"github.com/go-redis/redis"
 )
 
@@ -37,10 +38,14 @@ type ShortOption struct {
 func CreateRedisClientV2(jsonConfig string) (redis.Cmdable, error) {
 	var so ShortOption
 
-	if err := json.Unmarshal([]byte(jsonConfig), &so); err != nil {
-		return nil, err
+	var config string
+	if jsonConfig == "" || jsonConfig == "{}" {
+		config = *define.DefaultRedisConfig
 	}
 
+	if err := json.Unmarshal([]byte(config), &so); err != nil {
+		return nil, err
+	}
 	return CreateRedisClientV3(&so)
 }
 
