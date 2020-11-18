@@ -41,7 +41,7 @@ docker run -d -p 9081:9081 attribution:latest -conv_parser_name=ams -click_parse
 
 ### 用户ID体系
 
-根据AMS点击下发，支持这些[ID体系](https://git.code.oa.com/tssp/attribution/blob/master/internal/data/user_data.go)
+根据AMS点击下发，支持这些[ID体系](https://github.com/TencentAd/attribution/blob/master/attribution/proto/user/user.proto#L8)
 
 
 
