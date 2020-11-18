@@ -6,7 +6,7 @@
  * Last Modify: 10/23/20, 11:39 AM
  */
 
-package uitl
+package util
 
 import "math/big"
 
@@ -38,6 +38,14 @@ func (e *ModPower) Decrypt(data *big.Int) *big.Int {
 	return big.NewInt(0).Exp(data, e.DecKey, e.Prime)
 }
 
+func ModPow(data *big.Int, e *big.Int, prime *big.Int) *big.Int {
+	return big.NewInt(0).Exp(data, e, prime)
+}
+
 func (e *ModPower) findDecKey() *big.Int {
 	return big.NewInt(0).ModInverse(e.EncKey, big.NewInt(0).Sub(e.Prime, big.NewInt(1)))
+}
+
+func FindDecKey(e *big.Int, p *big.Int) *big.Int {
+	return big.NewInt(0).ModInverse(e, big.NewInt(0).Sub(p, big.NewInt(1)))
 }
