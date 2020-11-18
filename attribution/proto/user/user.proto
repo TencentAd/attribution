@@ -20,7 +20,7 @@ message UserData {
   string hash_oaid = 12;        // hash oaid
   string uuid = 13;             // uuid
   string ip = 14;   // 媒体投放系统获取的用户终端的公共IPV4地址
-  string ipv6 = 15; // 媒体投放系统获取的用户终端的公共IPV4地址
+  string ipv6 = 15; // 媒体投放系统获取的用户终端的公共IPV6地址
 }
 
 // 用户id类型
