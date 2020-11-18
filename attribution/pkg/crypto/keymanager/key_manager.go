@@ -1,11 +1,3 @@
-/*
- * copyright (c) 2020, Tencent Inc.
- * All rights reserved.
- *
- * Author:  linceyou@tencent.com
- * Last Modify: 11/12/20, 10:08 AM
- */
-
 package keymanager
 
 import (
@@ -28,7 +20,6 @@ func init() {
 	keyManagerFactory.Register("hdfs", hdfs.NewHDFSKeyManager)
 }
 
-// 接口，实现类有redis的KeyManager和hdfs的KeyManager
 type KeyManager interface {
 	GetEncryptKey(string) (*big.Int, error)
 	GetDecryptKey(string) (*big.Int, error)

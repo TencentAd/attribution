@@ -15,7 +15,6 @@ type FileLoader interface {
 	Reset()
 }
 
-type loaderFunc func(string, interface{}) error
 type allocFunc func() interface{}
 
 type FileDoubleBuffer struct {
@@ -35,7 +34,7 @@ func NewFileDoubleBuffer(loader FileLoader) *FileDoubleBuffer {
 	return b
 }
 
-func (b *FileDoubleBuffer) SetNotify(fn func(error)) {
+func (b *FileDoubleBuffer) SetNotify(fn func(error))  {
 	b.notify = fn
 }
 

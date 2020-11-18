@@ -4,24 +4,6 @@
 
 ## Overview
 
-![image-20200924172953477](README.assets/image-20200924172953477.png)
-
-## Get Start
-
-### 简单测试，在根目录执行
-
-```shell
-cd attribution
-bash logic_test.sh
-```
-
-默认执行归因example
-
-### Installation
-
-我们提供docker，helm。推荐使用helm可以在k8s集群一键启动服务，且能自动扩缩容。
-
-#### install from docker image
 
 ```shell
 docker pull attribution:latest
@@ -84,10 +66,10 @@ docker run -d -p 9081:9081 attribution:latest -conv_parser_name=ams -click_parse
 这里实现了最普遍的策略
 
 - 点击时间 < 转化时间
-- 转化时间 - 点击事件 < 7天
+- 转化时间 - 点击事件 < x天
 
 
 
 #### 点击日志排序
 
-AMS的实现包含了打分逻辑，不过按照开会讨论的结果，只需要按照点击时间排序，所以目前的逻辑是取最新的点击时间
+可以实现打分逻辑，目前只按照点击时间排序，所以目前的逻辑是取最新的点击时间

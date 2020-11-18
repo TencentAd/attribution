@@ -12,6 +12,7 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/crypto/structure"
 	"github.com/TencentAd/attribution/attribution/pkg/crypto/util"
 	"github.com/colinmarc/hdfs"
+	"github.com/golang/glog"
 )
 
 var (
@@ -38,8 +39,13 @@ func NewHDFSKeyManager() interface{} {
 	if l == nil {
 		return nil
 	}
+	buffer := loader.NewFileDoubleBuffer(l)
+	buffer.SetNotify(
+		func(err error) {
+			glog.Errorf("failed to load hdfs keys, err: %v", err.Error())
+		})
 	return &KeyManager{
-		buffer: loader.NewFileDoubleBuffer(l),
+		buffer: buffer,
 	}
 }
 
