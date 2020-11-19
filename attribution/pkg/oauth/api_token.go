@@ -9,7 +9,7 @@
 package oauth
 
 import (
-	"github.com/satori/go.uuid"
+	"github.com/google/uuid"
 )
 
 var (
@@ -19,7 +19,8 @@ var (
 
 // 生成随机字符串标识，global unique
 func GenNonce() string {
-	return uuid.NewV4().String()
+	id, _ := uuid.NewRandom()
+	return id.String()
 }
 
 func GetToken() (string, error) {
