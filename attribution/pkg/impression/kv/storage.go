@@ -16,8 +16,8 @@ const (
 )
 
 type KV interface {
-    Has(string) (bool, error)
-    Set(string) error
+    Get(string) (string, error)
+    Set(string, string) error
 }
 
 type StorageType string
