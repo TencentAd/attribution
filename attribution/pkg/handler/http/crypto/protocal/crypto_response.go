@@ -15,7 +15,7 @@ type CryptoResponse struct {
 
 type ResponseData struct {
 	Imei      string `json:"imei"`
-	Idea      string `json:"idfa"`
+	Idfa      string `json:"idfa"`
 	AndroidId string `json:"androidId"`
 	Oaid      string `json:"oaid"`
 }

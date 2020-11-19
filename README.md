@@ -91,7 +91,7 @@ docker run -d -p 9081:9081 attribution:latest -conv_parser_name=ams -click_parse
 
 
 
-![img](README.assets/y5SjeOox98jQrOyN5EfexA.png)
+<img src="README.assets/y5SjeOox98jQrOyN5EfexA.png" alt="img" style="zoom:50%;" />
 
 
 

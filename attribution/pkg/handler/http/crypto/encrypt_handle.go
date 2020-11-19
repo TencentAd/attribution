@@ -12,8 +12,10 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/workflow"
+	"github.com/TencentAd/attribution/attribution/pkg/crypto"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/crypto/protocal"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/crypto/safeguard"
 )
@@ -38,7 +40,6 @@ func (h *HttpHandle) WithSafeguard(guard *safeguard.ConvEncryptSafeguard) *HttpH
 }
 
 func (h *HttpHandle) ServeHttp(w http.ResponseWriter, r *http.Request) {
-
 }
 
 func (h *HttpHandle) doServeHttp(w http.ResponseWriter, r *http.Request) error {
@@ -54,15 +55,46 @@ func (h *HttpHandle) doServeHttp(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	err = h.convEncryptSafeguard.Against(&safeguard.Parameter{
-		CryptoRequest: &req,
-	})
-
+	err = h.convEncryptSafeguard.Against(req.CampaignId)
 	if err != nil {
 		return err
 	}
 
+	groupId := strconv.FormatInt(req.CampaignId, 10)
+	var resp protocal.CryptoResponse
+	for _, reqData := range req.Data {
+		respData, err := ProcessData(groupId, reqData, crypto.Encrypt)
+		if err != nil {
+			return err
+		}
 
-	// TODO encrypt
+		resp.Data = append(resp.Data, respData)
+	}
+
 	return nil
+}
+
+func ProcessData(groupId string, reqData *protocal.RequestData,
+	cryptoFunc func(string, string) (string, error)) (*protocal.ResponseData, error) {
+
+	var err error
+	var resp protocal.ResponseData
+	resp.Imei, err = cryptoFunc(groupId, reqData.Imei)
+	if err != nil {
+		return nil, err
+	}
+	resp.Idfa, err = cryptoFunc(groupId, reqData.Idfa)
+	if err != nil {
+		return nil, err
+	}
+	resp.AndroidId, err = cryptoFunc(groupId, reqData.AndroidId)
+	if err != nil {
+		return nil, err
+	}
+	resp.Oaid, err = cryptoFunc(groupId, reqData.Oaid)
+	if err != nil {
+		return nil, err
+	}
+
+	return &resp, nil
 }

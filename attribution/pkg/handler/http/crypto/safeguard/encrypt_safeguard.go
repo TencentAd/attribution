@@ -14,12 +14,13 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/TencentAd/attribution/attribution/pkg/handler/http/crypto/freq"
-	"github.com/TencentAd/attribution/attribution/pkg/handler/http/crypto/metrics"
+	"github.com/TencentAd/attribution/attribution/pkg/common/redisx"
+	"github.com/go-redis/redis"
 	"github.com/golang/glog"
 )
 
 var (
+	minuteFreqRedisConfig    = flag.String("minute_freq_redis_config", "{}", "")
 	convEncryptMaxMinuteFreq = flag.Int("conv_encrypt_max_minute_freq", 10, "")
 
 	ErrConvEncryptSafeguardInternal = errors.New("conv encrypt safeguard internal error")
@@ -27,54 +28,43 @@ var (
 )
 
 type ConvEncryptSafeguard struct {
-	minuteFreqStorage freq.MinuteFreqStorage
+	redisClient redis.Cmdable
 }
 
-func NewConvEncryptSafeguard() *ConvEncryptSafeguard {
-	return &ConvEncryptSafeguard{}
-}
-
-func (g *ConvEncryptSafeguard) WithCounter(storage freq.MinuteFreqStorage) *ConvEncryptSafeguard {
-	g.minuteFreqStorage = storage
-	return g
-}
-
-func (g *ConvEncryptSafeguard) Against(opt *Parameter) error {
-	cid := opt.CryptoRequest.CampaignId
-	cidStr := strconv.FormatInt(cid, 10)
-
-	freqInfo, err := g.minuteFreqStorage.Get(g.formatResourceKey(cidStr))
+func NewConvEncryptSafeguard() (*ConvEncryptSafeguard, error) {
+	client, err := redisx.CreateRedisClientV2(*minuteFreqRedisConfig)
 	if err != nil {
-		glog.Errorf("failed to get freq info, err: %v", err)
-		metrics.ConvEncryptSafeguardErrCount.WithLabelValues("type", "get_freq").Add(1)
+		return nil, err
+	}
+	return &ConvEncryptSafeguard{
+		redisClient: client,
+	}, nil
+}
+
+func (g *ConvEncryptSafeguard) Against(campaignId int64) error {
+	key := g.formatResourceKey(campaignId)
+
+	cnt, err := g.redisClient.Incr(g.formatResourceKey(campaignId)).Result()
+	if err != nil {
+		glog.Errorf("failed to incr key, err: %v", err)
 		return ErrConvEncryptSafeguardInternal
 	}
 
-	curMinute := time.Now().Unix() / 60
-	if curMinute <= freqInfo.LastMinute {
-		freqInfo.LastMinute = curMinute
-		freqInfo.Count++
-	} else {
-		freqInfo.LastMinute = curMinute
-		freqInfo.Count = 1
+	if cnt == 1 {
+		if _, err := g.redisClient.Expire(key, time.Second*70).Result(); err != nil {
+			glog.Errorf("failed to expire key [%s]", key)
+		}
 	}
 
-	err = g.minuteFreqStorage.Set(g.formatResourceKey(cidStr), freqInfo)
-	if err != nil {
-		glog.Errorf("failed to set freq info, err: %v", err)
-		metrics.ConvEncryptSafeguardErrCount.WithLabelValues("type", "set_freq").Add(1)
-		return ErrConvEncryptSafeguardInternal
-	}
-
-	if freqInfo.Count > *convEncryptMaxMinuteFreq {
-		metrics.ConvEncryptSafeguardErrCount.WithLabelValues("type", "exceed_freq").Add(1)
+	if int(cnt) >= *convEncryptMaxMinuteFreq {
 		return ErrConvEncryptExceedFreq
 	}
+
 	return nil
 }
 
 const ConvEncryptResourcePrefix = "conv_encrypt::"
 
-func (g *ConvEncryptSafeguard) formatResourceKey(cidStr string) string {
-	return ConvEncryptResourcePrefix + cidStr
+func (g *ConvEncryptSafeguard) formatResourceKey(campaignId int64) string {
+	return ConvEncryptResourcePrefix + strconv.FormatInt(campaignId, 10)
 }
