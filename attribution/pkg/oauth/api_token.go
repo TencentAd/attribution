@@ -27,7 +27,7 @@ func (t *Token) Set(token string) error {
 	return t.store.Set(TokenPrefixKey, token)
 }
 
-func (t *Token) Start(ctx context.Context) {
+func (t *Token) FetchBackGround(ctx context.Context) {
 	go func() {
 		for {
 			select {
@@ -60,4 +60,9 @@ func NewToken(store store) (*Token, error) {
 	}
 	err := token.fetch()
 	return token, err
+}
+
+type store interface {
+	Get(string) (string, error)
+	Set(string, string) error
 }
