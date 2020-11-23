@@ -1,28 +1,61 @@
-/*
- * copyright (c) 2020, Tencent Inc.
- * All rights reserved.
- *
- * Author:  linceyou@tencent.com
- * Last Modify: 9/25/20, 2:20 PM
- */
-
 package oauth
 
 import (
-	"github.com/google/uuid"
+	"context"
+	"sync"
+	"time"
 )
 
 var (
-	// TODO(提供方法持续更新token)
-	Token string
+	DefaultIntervalTime = 31 * time.Second
+	TokenPrefixKey      = "marketing-api-access-token"
 )
 
-// 生成随机字符串标识，global unique
-func GenNonce() string {
-	id, _ := uuid.NewRandom()
-	return id.String()
+type Token struct {
+	lock  *sync.RWMutex
+	token string
+	store store
 }
 
-func GetToken() (string, error) {
-	return Token, nil
+func (t *Token) Get() string {
+	t.lock.RLock()
+	defer t.lock.RUnlock()
+	return t.token
+}
+
+func (t *Token) Set(token string) error {
+	return t.store.Set(TokenPrefixKey, token)
+}
+
+func (t *Token) Start(ctx context.Context) {
+	go func() {
+		for {
+			select {
+			case <- ctx.Done():
+				break
+			default:
+				_ = t.fetch()
+				time.Sleep(DefaultIntervalTime)
+			}
+		}
+	}()
+}
+
+func (t *Token) fetch() error {
+	token, err := t.store.Get(TokenPrefixKey)
+	if err != nil {
+		return err
+	}
+
+	t.lock.Lock()
+	t.token = token
+	t.lock.Unlock()
+	return nil
+}
+
+func NewToken(store store) *Token {
+	return &Token{
+		lock: &sync.RWMutex{},
+		store: store,
+	}
 }
