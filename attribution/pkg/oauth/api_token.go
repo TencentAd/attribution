@@ -11,6 +11,11 @@ var (
 	TokenPrefixKey      = "marketing-api-access-token"
 )
 
+type store interface {
+	Get(string) (string, error)
+	Set(string, string) error
+}
+
 type Token struct {
 	lock  *sync.RWMutex
 	token string
@@ -32,7 +37,7 @@ func (t *Token) FetchBackGround(ctx context.Context) {
 		for {
 			select {
 			case <- ctx.Done():
-				break
+				return
 			default:
 				_ = t.fetch()
 				time.Sleep(DefaultIntervalTime)
@@ -60,9 +65,4 @@ func NewToken(store store) (*Token, error) {
 	}
 	err := token.fetch()
 	return token, err
-}
-
-type store interface {
-	Get(string) (string, error)
-	Set(string, string) error
 }
