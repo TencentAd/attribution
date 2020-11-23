@@ -53,9 +53,11 @@ func (t *Token) fetch() error {
 	return nil
 }
 
-func NewToken(store store) *Token {
-	return &Token{
+func NewToken(store store) (*Token, error) {
+	token := &Token{
 		lock: &sync.RWMutex{},
 		store: store,
 	}
+	err := token.fetch()
+	return token, err
 }
