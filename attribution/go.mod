@@ -16,6 +16,9 @@ require (
 	github.com/prometheus/client_golang v1.8.0
 	github.com/stretchr/testify v1.6.1
 	github.com/syndtr/goleveldb v1.0.0
-	github.com/tsuna/gohbase v0.0.0-20201112192650-6cc39a9f3342
+	github.com/tencentad/marketing-api-go-sdk v1.4.0
+	github.com/tsuna/gohbase v0.0.0-20200831170559-79db14850535
 	github.com/yuin/gopher-lua v0.0.0-20200816102855-ee81675732da // indirect
+	modernc.org/mathutil v1.1.1 // indirect
+	modernc.org/strutil v1.1.0 // indirect
 )

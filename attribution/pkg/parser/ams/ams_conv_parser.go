@@ -15,6 +15,7 @@ import (
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/httpx"
 	"github.com/TencentAd/attribution/attribution/pkg/protocal/ams/conversion"
+	"github.com/TencentAd/attribution/attribution/pkg/protocal/parse"
 	"github.com/TencentAd/attribution/attribution/proto/conv"
 	"github.com/TencentAd/attribution/attribution/proto/user"
 
@@ -29,7 +30,7 @@ func NewConvParser() *ConvParser {
 	return &ConvParser{}
 }
 
-func (p *ConvParser) Parse(data interface{}) ([]*conv.ConversionLog, error) {
+func (p *ConvParser) Parse(data interface{}) (*parse.ConvParseResult, error) {
 	r := data.(*http.Request)
 
 	requestBody, err := ioutil.ReadAll(r.Body)
@@ -52,7 +53,7 @@ func (p *ConvParser) Parse(data interface{}) ([]*conv.ConversionLog, error) {
 		return nil, err
 	}
 
-	ret := make([]*conv.ConversionLog, 0, len(req.Actions))
+	convs := make([]*conv.ConversionLog, 0, len(req.Actions))
 	for _, action := range req.Actions {
 		// 协议转换
 		convLog := &conv.ConversionLog{
@@ -76,9 +77,14 @@ func (p *ConvParser) Parse(data interface{}) ([]*conv.ConversionLog, error) {
 		if err != nil {
 			glog.Errorf("failed to marshal, err: %v", err)
 		}
-		convLog.OriginalContent =string(content)
-		ret = append(ret, convLog)
+		convLog.OriginalContent = string(content)
+		convs = append(convs, convLog)
 	}
 
-	return ret, nil
+	return &parse.ConvParseResult{
+		AppId:    appId,
+		ConvId:   convId,
+		ConvLogs: convs,
+		Actions:  req.Actions,
+	}, nil
 }

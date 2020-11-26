@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/redisx"
-	"github.com/TencentAd/attribution/attribution/pkg/handler/http/crypto/freq/info"
+	"github.com/TencentAd/attribution/attribution/pkg/handler/http/encrypt/freq/info"
 	"github.com/go-redis/redis"
 	"github.com/golang/glog"
 )

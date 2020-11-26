@@ -6,12 +6,20 @@ option java_package = "com.tencent.attribution.proto.conv";
 import "attribution/proto/user/user.proto";
 import "attribution/proto/click/click.proto";
 
+// 日志信息
 message ConversionLog {
   user.UserData user_data = 1;
   int64 event_time = 2;
   string app_id = 3;
   string conv_id = 4;
+  int64 campaign_id = 5;
 
-  click.ClickLog match_click = 1000;
+  int32 index = 6; // 原始请求中的index
+  MatchClick match_click = 1000;
   string original_content = 1001; // 原始的信息
+}
+
+message MatchClick {
+  click.ClickLog click_log = 1;
+  user.IdType match_id_type = 2;
 }

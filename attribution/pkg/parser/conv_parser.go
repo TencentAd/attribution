@@ -7,7 +7,7 @@ import (
 
 	"github.com/TencentAd/attribution/attribution/pkg/parser/ams"
 	"github.com/TencentAd/attribution/attribution/pkg/parser/jsonline"
-	"github.com/TencentAd/attribution/attribution/proto/conv"
+	"github.com/TencentAd/attribution/attribution/pkg/protocal/parse"
 )
 
 var (
@@ -15,7 +15,7 @@ var (
 )
 
 type ConvParserInterface interface {
-	Parse(data interface{}) ([]*conv.ConversionLog, error)
+	Parse(data interface{}) (*parse.ConvParseResult, error)
 }
 
 func CreateConvParser() (ConvParserInterface, error) {

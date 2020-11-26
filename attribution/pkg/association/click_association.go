@@ -7,7 +7,6 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/common/key"
 	"github.com/TencentAd/attribution/attribution/pkg/data/user"
 	"github.com/TencentAd/attribution/attribution/pkg/storage/clickindex"
-	"github.com/TencentAd/attribution/attribution/proto/click"
 	"github.com/TencentAd/attribution/attribution/proto/conv"
 )
 
@@ -33,8 +32,8 @@ func (ass *ClickAssociation) WithValidation(validation validation.ClickLogValida
 
 type AssocContext struct {
 	ConvLog     *conv.ConversionLog // 转化数据
-	Candidates  []*click.ClickLog   // 关联上的点击数据
-	SelectClick *click.ClickLog     // 最终选择的点击数据
+	Candidates  []*conv.MatchClick  // 关联上的点击数据
+	SelectClick *conv.MatchClick    // 最终选择的点击数据
 }
 
 func NewAssocContext(convLog *conv.ConversionLog) *AssocContext {
@@ -62,14 +61,17 @@ func (ass *ClickAssociation) queryClicks(c *AssocContext) error {
 		return err
 	}
 
-	candidates := make([]*click.ClickLog, 0)
+	candidates := make([]*conv.MatchClick, 0)
 	for _, uid := range uids {
 		v, err := ass.clickIndex.Get(uid.T, key.FormatClickLogKey(convLog.AppId, uid.Id))
 		if err != nil {
 			return err
 		}
 		if v != nil {
-			candidates = append(candidates, v)
+			candidates = append(candidates, &conv.MatchClick{
+				ClickLog:    v,
+				MatchIdType: uid.T,
+			})
 		}
 	}
 	c.Candidates = candidates
@@ -77,10 +79,10 @@ func (ass *ClickAssociation) queryClicks(c *AssocContext) error {
 }
 
 func (ass *ClickAssociation) filterInvalidClick(c *AssocContext) {
-	valid := make([]*click.ClickLog, 0, len(c.Candidates))
+	valid := make([]*conv.MatchClick, 0, len(c.Candidates))
 	convLog := c.ConvLog
 	for _, cand := range c.Candidates {
-		if ass.validation.Check(convLog, cand) {
+		if ass.validation.Check(convLog, cand.ClickLog) {
 			valid = append(valid, cand)
 		}
 	}
@@ -92,7 +94,7 @@ func (ass *ClickAssociation) selectOneClick(c *AssocContext) {
 		return
 	}
 	sort.Slice(c.Candidates, func(i, j int) bool {
-		return c.Candidates[i].ClickTime > c.Candidates[j].ClickTime
+		return c.Candidates[i].ClickLog.ClickTime > c.Candidates[j].ClickLog.ClickTime
 	})
 	c.SelectClick = c.Candidates[0]
 }

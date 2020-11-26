@@ -32,6 +32,10 @@ func InitCrypto() error {
 }
 
 func Encrypt(groupId string, data string) (string, error) {
+	if len(data) == 0 {
+		return "", nil
+	}
+
 	var err error
 	var encKey *big.Int
 	encKey, err = km.GetEncryptKey(groupId)
@@ -49,6 +53,10 @@ func Encrypt(groupId string, data string) (string, error) {
 }
 
 func Decrypt(groupId string, data string) (string, error) {
+	if len(data) == 0 {
+		return "", nil
+	}
+
 	var err error
 	var decKey *big.Int
 	decKey, err = km.GetDecryptKey(groupId)

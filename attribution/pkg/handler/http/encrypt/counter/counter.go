@@ -12,7 +12,7 @@ import (
 	"flag"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/factory"
-	"github.com/TencentAd/attribution/attribution/pkg/handler/http/crypto/counter/redis"
+	"github.com/TencentAd/attribution/attribution/pkg/handler/http/encrypt/counter/redis"
 )
 
 var (
