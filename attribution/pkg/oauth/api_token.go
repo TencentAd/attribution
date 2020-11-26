@@ -1,27 +1,68 @@
-/*
- * copyright (c) 2020, Tencent Inc.
- * All rights reserved.
- *
- * Author:  linceyou@tencent.com
- * Last Modify: 9/25/20, 2:20 PM
- */
-
 package oauth
 
 import (
-	"github.com/satori/go.uuid"
+	"context"
+	"sync"
+	"time"
 )
 
 var (
-	// TODO(提供方法持续更新token)
-	Token string
+	DefaultIntervalTime = 31 * time.Second
+	TokenPrefixKey      = "marketing-api-access-token"
 )
 
-// 生成随机字符串标识，global unique
-func GenNonce() string {
-	return uuid.NewV4().String()
+type store interface {
+	Get(string) (string, error)
+	Set(string, string) error
 }
 
-func GetToken() (string, error) {
-	return Token, nil
+type Token struct {
+	lock  *sync.RWMutex
+	token string
+	store store
+}
+
+func (t *Token) Get() string {
+	t.lock.RLock()
+	defer t.lock.RUnlock()
+	return t.token
+}
+
+func (t *Token) Set(token string) error {
+	return t.store.Set(TokenPrefixKey, token)
+}
+
+func (t *Token) FetchBackGround(ctx context.Context) {
+	go func() {
+		for {
+			select {
+			case <- ctx.Done():
+				return
+			default:
+				_ = t.fetch()
+				time.Sleep(DefaultIntervalTime)
+			}
+		}
+	}()
+}
+
+func (t *Token) fetch() error {
+	token, err := t.store.Get(TokenPrefixKey)
+	if err != nil {
+		return err
+	}
+
+	t.lock.Lock()
+	t.token = token
+	t.lock.Unlock()
+	return nil
+}
+
+func NewToken(store store) (*Token, error) {
+	token := &Token{
+		lock: &sync.RWMutex{},
+		store: store,
+	}
+	err := token.fetch()
+	return token, err
 }

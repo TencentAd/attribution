@@ -30,7 +30,7 @@ func serveHttp() error {
 	}
 
 	http.Handle("/impression", handler.NewSetHandler(storage))
-	http.Handle("/impression/has", handler.NewHasHandler(storage))
+	http.Handle("/impression/get", handler.NewGetHandler(storage))
 	return http.ListenAndServe(*serverAddress, nil)
 }
 

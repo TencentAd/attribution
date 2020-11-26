@@ -32,6 +32,7 @@ type LeadsPullClient struct {
 	config     *PullConfig
 	httpClient *http.Client
 	storage    leads.Storage
+	token      *oauth.Token
 
 	// 进度
 	beginTime    time.Time     // 拉取开始的时间
@@ -86,13 +87,11 @@ func (c *LeadsPullClient) WithPullInterval(interval time.Duration) *LeadsPullCli
 }
 
 func (c *LeadsPullClient) formatRequestUrl() (string, error) {
-	token, err := oauth.GetToken()
-	if err != nil {
-		return "", err
-	}
-
-	return fmt.Sprintf(`https://api.e.qq.com/v1.3/lead_clues/get?access_token=%s&timestamp=%d&nonce=%s`,
-		token, time.Now().Unix(), oauth.GenNonce()), nil
+	// token := c.token.Get()
+	//
+	// return fmt.Sprintf(`https://api.e.qq.com/v1.3/lead_clues/get?access_token=%s&timestamp=%d&nonce=%s`,
+	// 	token, time.Now().Unix(), oauth.GenNonce()), nil
+	return "", nil
 }
 
 func (c *LeadsPullClient) Pull() error {

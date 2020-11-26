@@ -1,16 +1,19 @@
 package opt
 
 import (
-    "time"
+	"time"
 )
 
 var (
-    DefaultExpiration = 7*24*time.Hour
-    Prefix = "impression::"
+	// DefaultExpiration : default kv storage expiration
+	DefaultExpiration = 7 * 24 * time.Hour
+	// Prefix : default key's prefix for kv storage
+	Prefix = "impression::"
 )
 
+// Option : option to kv storage configuration
 type Option struct {
-    Address  string          `json:"address"`
-    Password string          `json:"password"`
-    Expiration time.Duration `json:"expiration"`
+	Address    string        `json:"address"`
+	Password   string        `json:"password"`
+	Expiration time.Duration `json:"expiration"`
 }

@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package impression;
+option java_package = "com.tencent.attribution.proto.impression";
+option go_package = "github.com/TencentAd/attribution/attribution/proto/impression";
+
+message Request {
+    string campaign_id = 1;
+    repeated Record records = 2;
+}
+
+message Response {
+    repeated Record records = 1;
+}
+
+message Record {
+    IdType id_type = 1;
+    string id_value = 2;
+    uint64 impression_time = 3;
+}
+
+enum IdType {
+    invalid = 0;
+    encrypted_hash_imei = 1;
+    encrypted_hash_idfa = 2;
+    encrypted_hash_oaid = 3;
+    encrypted_hash_android_id = 4;
+}

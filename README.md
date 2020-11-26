@@ -3,6 +3,7 @@
 > 帮助广告主实现自归因，只需要简单的配置，就能快速使用。
 
 ## Overview
+
 ![image-20200924172953477](README.assets/image-20200924172953477.png)
 
 ```shell
@@ -24,8 +25,6 @@ docker run -d -p 9081:9081 attribution:latest -conv_parser_name=ams -click_parse
 - 和AMS归因逻辑整体保持一致
 - 支持在线server，离线batch两种方式，支持不同的场景
 
-
-
 ## 点击归因整体逻辑
 
 整体逻辑为：
@@ -37,19 +36,13 @@ docker run -d -p 9081:9081 attribution:latest -conv_parser_name=ams -click_parse
   - 点击日志筛选
   - 点击日志排序
 
-
-
 ### 用户ID体系
 
 根据AMS点击下发，支持这些[ID体系](https://github.com/TencentAd/attribution/blob/master/attribution/proto/user/user.proto#L8)
 
-
-
 ### 点击日志索引
 
 根据量级可以选用不同的存储，如hbase、ckv、local memory等
-
-
 
 ### 归因匹配
 
@@ -59,8 +52,6 @@ docker run -d -p 9081:9081 attribution:latest -conv_parser_name=ams -click_parse
 
 根据点击日志索引，根据appid和用户id，匹配所有的点击日志
 
-
-
 #### 点击日志过滤
 
 这里实现了最普遍的策略
@@ -68,19 +59,13 @@ docker run -d -p 9081:9081 attribution:latest -conv_parser_name=ams -click_parse
 - 点击时间 < 转化时间
 - 转化时间 - 点击事件 < x天
 
-
-
 #### 点击日志排序
 
 可以实现打分逻辑，目前只按照点击时间排序，所以目前的逻辑是取最新的点击时间
 
-
-
 ## 曝光归因
 
 对于点击归因，品牌广告主只能了解从广告曝光后last click（平均大概2%的点击率）能影响到的转化，但忽略了98%的人群曝光的价值。曝光归因能触达更多的转化人群，一些广告主希望能通过曝光更好的衡量合约的“转化”效果
-
-
 
 出于隐私保护，对于有标签的曝光数据，AMS不能提供给广告主。广告主也不希望把自己所有的转化数据传给广告平台。最终导致不能执行曝光归因。
 
@@ -90,16 +75,11 @@ docker run -d -p 9081:9081 attribution:latest -conv_parser_name=ams -click_parse
 - 基于曝光数据实现归因，平台拿到转化明细，用于合约结案报告和效果提升
 
 
-
 <img src="README.assets/y5SjeOox98jQrOyN5EfexA.png" alt="img" style="zoom:50%;" />
-
-
-
+=======
 方案不依赖渠道包，所以同时解决了android渠道包拦截，ios不能区分渠道包的问题。
 
 同时，方案包含了广告主部分的建设，能让广告主更低成本，更自动地对接。
-
-
 
 ### **方案流程**
 
