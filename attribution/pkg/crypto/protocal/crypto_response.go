@@ -9,6 +9,8 @@
 package protocal
 
 type CryptoResponse struct {
+	Code       int
+	Message    string
 	CampaignId int64
 	Data       []*ResponseData `json:"data"`
 }
@@ -18,4 +20,11 @@ type ResponseData struct {
 	Idfa      string `json:"idfa"`
 	AndroidId string `json:"androidId"`
 	Oaid      string `json:"oaid"`
+}
+
+func CreateErrCryptoResponse(err error) *CryptoResponse {
+	return &CryptoResponse{
+		Code:       -1,
+		Message:    err.Error(),
+	}
 }

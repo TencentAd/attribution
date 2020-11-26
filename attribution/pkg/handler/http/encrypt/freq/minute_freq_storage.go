@@ -12,8 +12,8 @@ import (
 	"flag"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/factory"
-	"github.com/TencentAd/attribution/attribution/pkg/handler/http/crypto/freq/info"
-	"github.com/TencentAd/attribution/attribution/pkg/handler/http/crypto/freq/redis"
+	"github.com/TencentAd/attribution/attribution/pkg/handler/http/encrypt/freq/info"
+	"github.com/TencentAd/attribution/attribution/pkg/handler/http/encrypt/freq/redis"
 )
 
 var (

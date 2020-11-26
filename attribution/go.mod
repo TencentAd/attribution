@@ -18,6 +18,7 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/testify v1.6.1
 	github.com/syndtr/goleveldb v1.0.0
+	github.com/tencentad/marketing-api-go-sdk v1.4.0
 	github.com/tsuna/gohbase v0.0.0-20200831170559-79db14850535
 	github.com/yuin/gopher-lua v0.0.0-20200816102855-ee81675732da // indirect
 	modernc.org/mathutil v1.1.1 // indirect

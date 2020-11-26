@@ -95,8 +95,10 @@ func (s *ServerImpl) initConvHandle() error {
 }
 
 func main() {
-	flagx.Parse()
-	metricutil.ServeMetrics(*metricsServerAddress)
+	if err := flagx.Parse(); err != nil {
+		panic(err)
+	}
+	_ = metricutil.ServeMetrics(*metricsServerAddress)
 	if err := serveHttp(); err != nil {
 		glog.Errorf("failed to start server, err: %v", err)
 		os.Exit(1)
