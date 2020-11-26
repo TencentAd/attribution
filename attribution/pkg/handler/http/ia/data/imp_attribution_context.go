@@ -1,6 +1,7 @@
 package data
 
 import (
+	"math"
 	"strconv"
 
 	"github.com/TencentAd/attribution/attribution/pkg/data"
@@ -21,6 +22,8 @@ type ImpAttributionContext struct {
 	FinalDecryptData []*IdSet // 明文数据
 
 	OriginalIndex map[string][]int //原始用户ID => 下标
+	MinActionTime int64
+	MaxActionTime int64
 }
 
 func NewImpAttributionContext(pr *parse.ConvParseResult) (*ImpAttributionContext, error) {
@@ -51,4 +54,20 @@ func (c *ImpAttributionContext) buildOriginalIndex() {
 		c.OriginalIndex[userData.AndroidId] = append(c.OriginalIndex[userData.AndroidId], i)
 		c.OriginalIndex[userData.Oaid] = append(c.OriginalIndex[userData.Oaid], i)
 	}
+}
+
+// 取最新的行为时间作为action time，尽量多的归因
+func (c *ImpAttributionContext) InitActionTime() {
+	var minActionTime int64 = math.MaxInt64
+	var maxActionTime int64 = 0
+	for _, convLog := range c.ConvParseResult.ConvLogs {
+		if convLog.EventTime < minActionTime {
+			minActionTime = convLog.EventTime
+		}
+		if convLog.EventTime > maxActionTime {
+			maxActionTime = convLog.EventTime
+		}
+	}
+	c.MinActionTime = minActionTime
+	c.MaxActionTime = maxActionTime
 }

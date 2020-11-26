@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/TencentAd/attribution/attribution/pkg/impression/kv"
 	"github.com/golang/glog"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/workflow"
@@ -44,6 +45,11 @@ func (handle *ImpAttributionHandle) WithConvParser(convParser parser.ConvParserI
 	return handle
 }
 
+func (handle *ImpAttributionHandle) WithImpStorage(impStorage kv.KV) *ImpAttributionHandle {
+	handle.attributionAction.WithImpStorage(impStorage)
+	return handle
+}
+
 func (handle *ImpAttributionHandle) WithJobQueue(queue workflow.JobQueue) *ImpAttributionHandle {
 	handle.jobQueue = queue
 	return handle
@@ -72,7 +78,8 @@ func (handle *ImpAttributionHandle) process(r *http.Request) error {
 		return err
 	}
 
-	c, err := data.NewImpAttributionContext(pr)
+	var c *data.ImpAttributionContext
+	c, err = data.NewImpAttributionContext(pr)
 	if err != nil {
 		return err
 	}

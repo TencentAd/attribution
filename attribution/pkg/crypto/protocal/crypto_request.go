@@ -24,7 +24,6 @@ type CryptoRequest struct {
 type RequestData struct {
 	Imei      string `json:"imei"`
 	Idfa      string `json:"idfa"`
-	AndroidId string `json:"androidId"`
+	AndroidId string `json:"android_id"`
 	Oaid      string `json:"oaid"`
-	EventTime int64  `json:"eventTime"`
 }

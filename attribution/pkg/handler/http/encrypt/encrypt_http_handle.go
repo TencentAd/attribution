@@ -35,13 +35,14 @@ func (handle *HttpHandle) WithSafeguard(guard *safeguard.ConvEncryptSafeguard) *
 	return handle
 }
 
-func (handle *HttpHandle) ServeHttp(w http.ResponseWriter, r *http.Request) {
+func (handle *HttpHandle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	startTime := time.Now()
-	defer func() {
-		metrics.ConvEncryptHandleCost.Observe(metricutil.CalcTimeUsedMilli(startTime))
-	}()
-	var resp *protocal.CryptoResponse
 	var err error
+	defer func() {
+		metricutil.CollectMetrics(metrics.ConvEncryptErrCount, metrics.ConvEncryptHandleCost, startTime, err)
+	}()
+
+	var resp *protocal.CryptoResponse
 	if resp, err = handle.doServeHttp(r); err != nil {
 		resp = protocal.CreateErrCryptoResponse(err)
 	}
@@ -68,7 +69,9 @@ func (handle *HttpHandle) doServeHttp(r *http.Request) (*protocal.CryptoResponse
 	}
 
 	groupId := strconv.FormatInt(req.CampaignId, 10)
-	var resp protocal.CryptoResponse
+	resp := &protocal.CryptoResponse{
+		Message:    "success",
+	}
 	for _, reqData := range req.Data {
 		respData, err := protocal.ProcessData(groupId, reqData, crypto.Encrypt)
 		if err != nil {
@@ -78,7 +81,7 @@ func (handle *HttpHandle) doServeHttp(r *http.Request) (*protocal.CryptoResponse
 		resp.Data = append(resp.Data, respData)
 	}
 
-	return &resp, nil
+	return resp, nil
 }
 
 func (handle *HttpHandle) writeResponse(w http.ResponseWriter, resp *protocal.CryptoResponse) {
