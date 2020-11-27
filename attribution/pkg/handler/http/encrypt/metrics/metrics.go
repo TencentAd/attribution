@@ -25,7 +25,7 @@ var (
 		Subsystem: "conv_encrypt",
 		Name:      "http_handle_cost",
 		Help:      "http handle cost",
-		Buckets:   []float64{1, 5, 10, 20, 50, 80, 100},
+		Buckets:   []float64{1, 5, 10, 20, 50, 80, 100, 200, 500, 1000},
 	})
 	ConvEncryptErrCount = prometheus.NewCounter(prometheus.CounterOpts{
 		Namespace: "attribution",
