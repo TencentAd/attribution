@@ -6,15 +6,15 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/TencentAd/attribution/attribution/pkg/impression/kv"
-	"github.com/golang/glog"
-
 	"github.com/TencentAd/attribution/attribution/pkg/common/workflow"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/ia/action"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/ia/data"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/ia/metrics"
+	"github.com/TencentAd/attribution/attribution/pkg/impression/kv"
+	"github.com/TencentAd/attribution/attribution/pkg/oauth"
 	"github.com/TencentAd/attribution/attribution/pkg/parser"
 	"github.com/TencentAd/attribution/attribution/pkg/protocal/parse"
+	"github.com/golang/glog"
 )
 
 var (
@@ -59,6 +59,12 @@ func (handle *ImpAttributionHandle) WithJobQueue(queue workflow.JobQueue) *ImpAt
 	handle.jobQueue = queue
 	return handle
 }
+
+func (handle *ImpAttributionHandle) WithToken(token *oauth.Token) *ImpAttributionHandle {
+	handle.sendAction.WithToken(token)
+	return handle
+}
+
 
 func (handle *ImpAttributionHandle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	startTime := time.Now()
