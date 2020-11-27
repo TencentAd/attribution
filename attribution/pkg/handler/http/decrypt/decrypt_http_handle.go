@@ -32,15 +32,14 @@ func (handle *HttpHandle) WithSafeguard(sg *safeguard.DecryptSafeguard) *HttpHan
 
 func (handle *HttpHandle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	startTime := time.Now()
+	var err error
 	defer func() {
-		metrics.DecryptHttpCost.Observe(metricutil.CalcTimeUsedMilli(startTime))
+		metricutil.CollectMetrics(metrics.DecryptErrCount, metrics.DecryptHttpCost, startTime, err)
 	}()
 	var resp *protocal.CryptoResponse
-	var err error
 	if resp, err = handle.process(r); err != nil {
 		resp = protocal.CreateErrCryptoResponse(err)
 		glog.Errorf("failed to decrypt, err: %v", err)
-		metrics.DecryptErrCount.Add(1)
 	}
 
 	handle.writeResponse(w, resp)
