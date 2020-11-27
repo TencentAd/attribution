@@ -62,7 +62,7 @@ func (p *FileHandle) processLine(line string) error {
 		return err
 	}
 
-	for _, convLog := range convLogs {
+	for _, convLog := range convLogs.ConvLogs {
 		c := &association.AssocContext{
 			ConvLog: convLog,
 		}

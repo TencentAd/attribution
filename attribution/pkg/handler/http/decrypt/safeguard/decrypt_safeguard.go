@@ -9,12 +9,13 @@
 package safeguard
 
 import (
+	"context"
 	"errors"
 	"flag"
 	"strconv"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/redisx"
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 	"github.com/golang/glog"
 )
 
@@ -52,7 +53,7 @@ func NewDecryptSafeguard() (*DecryptSafeguard, error) {
 func (g *DecryptSafeguard) Against(campaignId int64, count int64) error {
 	key := g.formatDecryptKey(campaignId)
 
-	current, err := g.impTransferRedisClient.IncrBy(key, count).Result()
+	current, err := g.impTransferRedisClient.IncrBy(context.Background(), key, count).Result()
 	if err != nil {
 		glog.Errorf("failed to incr decrypt count")
 		return ErrDecryptSafeguardInternal
@@ -89,7 +90,7 @@ func (g *DecryptSafeguard) formatImpTransferKey(campaignId int64) string {
 }
 
 func (g *DecryptSafeguard) loadImpTransferCntFromRedis(campaignId int64) (int64, error) {
-	cnt, err := g.impTransferRedisClient.Get(g.formatImpTransferKey(campaignId)).Result()
+	cnt, err := g.impTransferRedisClient.Get(context.Background(), g.formatImpTransferKey(campaignId)).Result()
 	if err == redis.Nil {
 		return 0, nil
 	}
