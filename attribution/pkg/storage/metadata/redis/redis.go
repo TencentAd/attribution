@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/TencentAd/attribution/attribution/pkg/storage/metadata/opt"
 	"github.com/go-redis/redis/v8"
 )
 
 var (
+	Prefix = "metadata::"
 	DefaultClientTimeOut = 30 * time.Second
 )
 
@@ -19,12 +19,12 @@ type Redis struct {
 
 func (r *Redis) Get(key string) (string, error) {
 	ctx, _ := context.WithTimeout(context.Background(), DefaultClientTimeOut)
-	return r.client.Get(ctx, opt.Prefix+key).Result()
+	return r.client.Get(ctx, Prefix+key).Result()
 }
 
 func (r *Redis) Set(key string, value string) error {
 	ctx, _ := context.WithTimeout(context.Background(), DefaultClientTimeOut)
-	return r.client.Set(ctx, opt.Prefix+key, value, redis.KeepTTL).Err()
+	return r.client.Set(ctx, Prefix+key, value, redis.KeepTTL).Err()
 }
 
 func New(config map[string]interface{}) (*Redis, error) {

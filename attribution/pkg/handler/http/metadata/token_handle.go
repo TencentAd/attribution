@@ -9,7 +9,7 @@ import (
 )
 
 const (
-    token = "metadata"
+    token = "token"
 )
 
 type tokenHandle struct {
@@ -34,7 +34,7 @@ func (t *tokenHandle) ServeHTTP(w http.ResponseWriter, req *http.Request) {
         return
     }
 
-    current := t.token.Get()
+    current := t.token.Get(true)
     _, _ = w.Write([]byte(fmt.Sprintf("current access metadata is %v", current)))
 }
 
