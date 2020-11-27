@@ -9,22 +9,21 @@
 package protocal
 
 type CryptoResponse struct {
-	Code       int
-	Message    string
-	CampaignId int64
-	Data       []*ResponseData `json:"data"`
+	Code       int             `json:"code"`
+	Message    string          `json:"message"`
+	Data       []*ResponseData `json:"data,omitempty"`
 }
 
 type ResponseData struct {
 	Imei      string `json:"imei"`
 	Idfa      string `json:"idfa"`
-	AndroidId string `json:"androidId"`
+	AndroidId string `json:"android_id"`
 	Oaid      string `json:"oaid"`
 }
 
 func CreateErrCryptoResponse(err error) *CryptoResponse {
 	return &CryptoResponse{
-		Code:       -1,
-		Message:    err.Error(),
+		Code:    -1,
+		Message: err.Error(),
 	}
 }

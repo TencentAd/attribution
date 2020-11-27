@@ -1,6 +1,7 @@
 package data
 
 import (
+	"math"
 	"strconv"
 
 	"github.com/TencentAd/attribution/attribution/pkg/data"
@@ -21,6 +22,8 @@ type ImpAttributionContext struct {
 	FinalDecryptData []*IdSet // 明文数据
 
 	OriginalIndex map[string][]int //原始用户ID => 下标
+	MinActionTime int64
+	MaxActionTime int64
 }
 
 func NewImpAttributionContext(pr *parse.ConvParseResult) (*ImpAttributionContext, error) {
@@ -34,6 +37,7 @@ func NewImpAttributionContext(pr *parse.ConvParseResult) (*ImpAttributionContext
 	}
 
 	c.buildOriginalIndex()
+	c.InitActionTime()
 	return c, nil
 }
 
@@ -46,9 +50,33 @@ func (c *ImpAttributionContext) buildOriginalIndex() {
 
 	for i, convLog := range c.ConvParseResult.ConvLogs {
 		userData := convLog.UserData
-		c.OriginalIndex[userData.Imei] = append(c.OriginalIndex[userData.Imei], i)
-		c.OriginalIndex[userData.Idfa] = append(c.OriginalIndex[userData.Idfa], i)
-		c.OriginalIndex[userData.AndroidId] = append(c.OriginalIndex[userData.AndroidId], i)
-		c.OriginalIndex[userData.Oaid] = append(c.OriginalIndex[userData.Oaid], i)
+		if userData.Imei != "" {
+			c.OriginalIndex[userData.Imei] = append(c.OriginalIndex[userData.Imei], i)
+		}
+		if userData.Idfa != "" {
+			c.OriginalIndex[userData.Idfa] = append(c.OriginalIndex[userData.Idfa], i)
+		}
+		if userData.AndroidId != "" {
+			c.OriginalIndex[userData.AndroidId] = append(c.OriginalIndex[userData.AndroidId], i)
+		}
+		if userData.Oaid != "" {
+			c.OriginalIndex[userData.Oaid] = append(c.OriginalIndex[userData.Oaid], i)
+		}
 	}
+}
+
+// 取最新的行为时间作为action time，尽量多的归因
+func (c *ImpAttributionContext) InitActionTime() {
+	var minActionTime int64 = math.MaxInt64
+	var maxActionTime int64 = 0
+	for _, convLog := range c.ConvParseResult.ConvLogs {
+		if convLog.EventTime < minActionTime {
+			minActionTime = convLog.EventTime
+		}
+		if convLog.EventTime > maxActionTime {
+			maxActionTime = convLog.EventTime
+		}
+	}
+	c.MinActionTime = minActionTime
+	c.MaxActionTime = maxActionTime
 }

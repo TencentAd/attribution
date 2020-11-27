@@ -44,7 +44,7 @@ func NewConvEncryptSafeguard() (*ConvEncryptSafeguard, error) {
 func (g *ConvEncryptSafeguard) Against(campaignId int64) error {
 	key := g.formatResourceKey(campaignId)
 
-	cnt, err := g.redisClient.Incr(g.formatResourceKey(campaignId)).Result()
+	cnt, err := g.redisClient.Incr(key).Result()
 	if err != nil {
 		glog.Errorf("failed to incr key, err: %v", err)
 		return ErrConvEncryptSafeguardInternal
@@ -56,15 +56,16 @@ func (g *ConvEncryptSafeguard) Against(campaignId int64) error {
 		}
 	}
 
-	if int(cnt) >= *convEncryptMaxMinuteFreq {
+	if int(cnt) > *convEncryptMaxMinuteFreq {
 		return ErrConvEncryptExceedFreq
 	}
 
 	return nil
 }
 
-const ConvEncryptResourcePrefix = "conv_encrypt::"
+const ConvEncryptResourcePrefix = "convEncrypt::"
 
 func (g *ConvEncryptSafeguard) formatResourceKey(campaignId int64) string {
-	return ConvEncryptResourcePrefix + strconv.FormatInt(campaignId, 10)
+	return ConvEncryptResourcePrefix + strconv.FormatInt(campaignId, 10) + "_" +
+		strconv.FormatInt(time.Now().Unix()/60, 10)
 }

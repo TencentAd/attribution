@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/TencentAd/attribution/attribution/pkg/common/define"
 	"github.com/golang/glog"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/metricutil"
@@ -51,6 +52,9 @@ func (handle *HttpHandle) process(r *http.Request) (*protocal.CryptoResponse, er
 	body, err = ioutil.ReadAll(r.Body)
 	if err != nil {
 		return nil, err
+	}
+	if glog.V(define.VLogLevel) {
+		glog.V(define.VLogLevel).Infof("decrypt body: %s", string(body))
 	}
 
 	var req protocal.CryptoRequest

@@ -39,7 +39,7 @@ var (
 			Namespace: "attribution",
 			Subsystem: "imp_attribution",
 			Name:      "action_cost",
-			Help:      "action_cost",
+			Help:      "action cost",
 			Buckets:   []float64{1, 2, 5, 10, 20, 50, 100, 500, 1000, 2000, 5000},
 		},
 		[]string{"name"})

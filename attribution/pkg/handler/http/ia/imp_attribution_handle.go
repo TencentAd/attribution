@@ -2,9 +2,11 @@ package ia
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"time"
 
+	"github.com/TencentAd/attribution/attribution/pkg/impression/kv"
 	"github.com/golang/glog"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/workflow"
@@ -13,6 +15,10 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/ia/metrics"
 	"github.com/TencentAd/attribution/attribution/pkg/parser"
 	"github.com/TencentAd/attribution/attribution/pkg/protocal/parse"
+)
+
+var (
+	ErrEmptyAction = errors.New("empty action")
 )
 
 type ImpAttributionHandle struct {
@@ -44,6 +50,11 @@ func (handle *ImpAttributionHandle) WithConvParser(convParser parser.ConvParserI
 	return handle
 }
 
+func (handle *ImpAttributionHandle) WithImpStorage(impStorage kv.KV) *ImpAttributionHandle {
+	handle.attributionAction.WithImpStorage(impStorage)
+	return handle
+}
+
 func (handle *ImpAttributionHandle) WithJobQueue(queue workflow.JobQueue) *ImpAttributionHandle {
 	handle.jobQueue = queue
 	return handle
@@ -71,8 +82,12 @@ func (handle *ImpAttributionHandle) process(r *http.Request) error {
 	if err != nil {
 		return err
 	}
+	if len(pr.ConvLogs) == 0 {
+		return ErrEmptyAction
+	}
 
-	c, err := data.NewImpAttributionContext(pr)
+	var c *data.ImpAttributionContext
+	c, err = data.NewImpAttributionContext(pr)
 	if err != nil {
 		return err
 	}
@@ -100,6 +115,7 @@ func (handle *ImpAttributionHandle) buildWorkflow() *workflow.WorkFlow {
 	wf.AddEdge(firstDecryptTask, attributionTask)
 	wf.AddEdge(attributionTask, finalDecryptTask)
 	wf.AddEdge(finalDecryptTask, sendTask)
+	wf.ConnectToEnd(sendTask)
 
 	return wf
 }

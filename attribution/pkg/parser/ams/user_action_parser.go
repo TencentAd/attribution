@@ -40,7 +40,7 @@ func (p *UserActionAddRequestParser) Parse(data interface{}) (*parse.ConvParseRe
 		return nil, err
 	}
 
-	convs := make([]*conv.ConversionLog, 0, len(*req.Actions))
+	convLogs := make([]*conv.ConversionLog, 0, len(*req.Actions))
 	for i, action := range *req.Actions {
 		convLog := &conv.ConversionLog{
 			UserData: &user.UserData{
@@ -52,12 +52,12 @@ func (p *UserActionAddRequestParser) Parse(data interface{}) (*parse.ConvParseRe
 			EventTime: action.ActionTime,
 			Index:     int32(i),
 		}
-		convs = append(convs, convLog)
+		convLogs = append(convLogs, convLog)
 	}
 
 	return &parse.ConvParseResult{
 		CampaignId:           campaignId,
 		UserActionAddRequest: &req,
-
+		ConvLogs:             convLogs,
 	}, nil
 }
