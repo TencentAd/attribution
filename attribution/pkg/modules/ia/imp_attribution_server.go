@@ -12,7 +12,7 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/common/workflow"
 	"github.com/TencentAd/attribution/attribution/pkg/crypto"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/ia"
-	"github.com/TencentAd/attribution/attribution/pkg/handler/http/token"
+	mh "github.com/TencentAd/attribution/attribution/pkg/handler/http/metadata"
 	"github.com/TencentAd/attribution/attribution/pkg/impression/handler"
 	"github.com/TencentAd/attribution/attribution/pkg/impression/kv"
 	"github.com/TencentAd/attribution/attribution/pkg/impression/kv/opt"
@@ -57,7 +57,7 @@ func serveHttp() error {
 	t.FetchBackGround(context.Background())
 
 	http.Handle("/impression", handler.NewSetHandler(storage))
-	http.Handle("/token/set", token.NewHandler(t))
+	http.Handle("/token/set", mh.NewTokenHandler(t))
 
 	convParser := ams.NewUserActionAddRequestParser()
 	jq := workflow.NewDefaultJobQueue(
