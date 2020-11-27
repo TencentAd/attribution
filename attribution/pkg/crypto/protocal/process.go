@@ -1,26 +1,12 @@
 package protocal
 
-func ProcessData(groupId string, reqData *RequestData,
-	cryptoFunc func(string, string) (string, error)) (*ResponseData, error) {
+import "github.com/TencentAd/attribution/attribution/pkg/crypto"
 
-	var err error
-	var resp ResponseData
-	resp.Imei, err = cryptoFunc(groupId, reqData.Imei)
-	if err != nil {
-		return nil, err
-	}
-	resp.Idfa, err = cryptoFunc(groupId, reqData.Idfa)
-	if err != nil {
-		return nil, err
-	}
-	resp.AndroidId, err = cryptoFunc(groupId, reqData.AndroidId)
-	if err != nil {
-		return nil, err
-	}
-	resp.Oaid, err = cryptoFunc(groupId, reqData.Oaid)
-	if err != nil {
-		return nil, err
-	}
+func ProcessData(p *crypto.Parallel, groupId string, reqData *RequestData,
+	cryptoFunc func(string, string) (string, error), resp *ResponseData)  {
 
-	return &resp, nil
+	p.AddTask(cryptoFunc, groupId, reqData.Imei, &resp.Imei)
+	p.AddTask(cryptoFunc, groupId, reqData.Idfa, &resp.Idfa)
+	p.AddTask(cryptoFunc, groupId, reqData.AndroidId, &resp.AndroidId)
+	p.AddTask(cryptoFunc, groupId, reqData.Oaid, &resp.Oaid)
 }

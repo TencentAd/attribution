@@ -21,38 +21,19 @@ func (s *IdSet) ToRequestData() *protocal.RequestData {
 	}
 }
 
-func (s *IdSet) Crypt(cryptoFunc func(string, string) (string, error), groupId string) (*IdSet, error) {
-	imei, err := cryptoFunc(groupId, s.Imei)
-	if err != nil {
-		return nil, err
-	}
-	idfa, err := cryptoFunc(groupId, s.Idfa)
-	if err != nil {
-		return nil, err
-	}
-	androidId, err := cryptoFunc(groupId, s.AndroidId)
-	if err != nil {
-		return nil, err
-	}
-	oaid, err := cryptoFunc(groupId, s.Oaid)
-	if err != nil {
-		return nil, err
-	}
-
-	return &IdSet{
-		Imei:      imei,
-		Idfa:      idfa,
-		AndroidId: androidId,
-		Oaid:      oaid,
-	}, nil
+func (s *IdSet) Crypt(p *crypto.Parallel, cryptoFunc func(string, string) (string, error), groupId string, result *IdSet) {
+	p.AddTask(cryptoFunc, groupId, s.Imei, &result.Imei)
+	p.AddTask(cryptoFunc, groupId, s.Idfa, &result.Idfa)
+	p.AddTask(cryptoFunc, groupId, s.AndroidId, &result.AndroidId)
+	p.AddTask(cryptoFunc, groupId, s.Oaid, &result.Oaid)
 }
 
-func (s *IdSet) Encrypt(groupId string) (*IdSet, error) {
-	return s.Crypt(crypto.Encrypt, groupId)
+func (s *IdSet) Encrypt(p *crypto.Parallel, groupId string, result *IdSet) {
+	s.Crypt(p, crypto.Encrypt, groupId, result)
 }
 
-func (s *IdSet) Decrypt(groupId string) (*IdSet, error) {
-	return s.Crypt(crypto.Decrypt, groupId)
+func (s *IdSet) Decrypt(p *crypto.Parallel, groupId string, result *IdSet) {
+	s.Crypt(p, crypto.Decrypt, groupId, result)
 }
 
 func ResponseData2IdSet(d *protocal.ResponseData) *IdSet {

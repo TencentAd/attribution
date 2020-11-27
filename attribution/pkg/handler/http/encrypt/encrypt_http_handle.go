@@ -77,20 +77,21 @@ func (handle *HttpHandle) doServeHttp(r *http.Request) (*protocal.CryptoResponse
 	resp := &protocal.CryptoResponse{
 		Message:    "success",
 	}
+	var p crypto.Parallel
 	for _, reqData := range req.Data {
-		respData, err := protocal.ProcessData(groupId, reqData, crypto.Encrypt)
-		if err != nil {
-			return nil, err
-		}
-
-		resp.Data = append(resp.Data, respData)
+		var respData protocal.ResponseData
+		protocal.ProcessData(&p, groupId, reqData, crypto.Encrypt, &respData)
+		resp.Data = append(resp.Data, &respData)
 	}
 
-	return resp, nil
+	return resp, p.WaitAndCheck()
 }
 
 func (handle *HttpHandle) writeResponse(w http.ResponseWriter, resp *protocal.CryptoResponse) {
 	data, err := json.Marshal(resp)
+	if glog.V(define.VLogLevel) {
+		glog.V(define.VLogLevel).Infof("encrypt response: %s", string(data))
+	}
 	if err != nil {
 		w.WriteHeader(500)
 	} else {

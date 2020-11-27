@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -76,6 +77,9 @@ func (action *FinalDecryptAction) doHttpRequest(c *data.ImpAttributionContext, r
 	var resp protocal.CryptoResponse
 	if err := json.Unmarshal(respBody, &resp); err != nil {
 		return err
+	}
+	if resp.Code != 0 {
+		return fmt.Errorf("encrypt twice err: %s", resp.Message)
 	}
 
 	for _, d := range resp.Data {
