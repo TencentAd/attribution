@@ -1,6 +1,7 @@
 package action
 
 import (
+	"github.com/TencentAd/attribution/attribution/pkg/crypto"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/ia/data"
 )
 
@@ -21,6 +22,7 @@ func (action *EncryptAction) Run(i interface{}) {
 }
 
 func (action *EncryptAction) run(c *data.ImpAttributionContext) error {
+	var p crypto.Parallel
 	for _, convLog := range c.ConvParseResult.ConvLogs {
 		userData := convLog.UserData
 		idSet := &data.IdSet{
@@ -30,13 +32,9 @@ func (action *EncryptAction) run(c *data.ImpAttributionContext) error {
 			Oaid:      userData.Oaid,
 		}
 
-		encryptIdSet, err := idSet.Encrypt(c.GroupId())
-		if err != nil {
-			return err
-		}
-
-		c.EncryptData = append(c.EncryptData, encryptIdSet)
+		var encryptIdSet data.IdSet
+		idSet.Encrypt(&p, c.GroupId(), &encryptIdSet)
+		c.EncryptData = append(c.EncryptData, &encryptIdSet)
 	}
-
-	return nil
+	return p.WaitAndCheck()
 }
