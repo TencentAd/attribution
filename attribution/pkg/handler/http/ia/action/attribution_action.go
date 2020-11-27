@@ -54,22 +54,31 @@ func (action *AttributionAction) checkIntersect(c *data.ImpAttributionContext, f
 	req := &impression.Request{
 		CampaignId: c.CampaignIdStr,
 	}
-	req.Records = append(req.Records, &impression.Record{
-		IdType:  impression.IdType_encrypted_hash_imei,
-		IdValue: fd.Imei,
-	})
-	req.Records = append(req.Records, &impression.Record{
-		IdType:  impression.IdType_encrypted_hash_idfa,
-		IdValue: fd.Idfa,
-	})
-	req.Records = append(req.Records, &impression.Record{
-		IdType:  impression.IdType_encrypted_hash_oaid,
-		IdValue: fd.Oaid,
-	})
-	req.Records = append(req.Records, &impression.Record{
-		IdType:  impression.IdType_encrypted_hash_android_id,
-		IdValue: fd.AndroidId,
-	})
+	if fd.Imei != "" {
+		req.Records = append(req.Records, &impression.Record{
+			IdType:  impression.IdType_encrypted_hash_imei,
+			IdValue: fd.Imei,
+		})
+	}
+
+	if fd.Idfa != "" {
+		req.Records = append(req.Records, &impression.Record{
+			IdType:  impression.IdType_encrypted_hash_idfa,
+			IdValue: fd.Idfa,
+		})
+	}
+	if fd.Oaid != "" {
+		req.Records = append(req.Records, &impression.Record{
+			IdType:  impression.IdType_encrypted_hash_oaid,
+			IdValue: fd.Oaid,
+		})
+	}
+	if fd.AndroidId != "" {
+		req.Records = append(req.Records, &impression.Record{
+			IdType:  impression.IdType_encrypted_hash_android_id,
+			IdValue: fd.AndroidId,
+		})
+	}
 
 	if err := handler.Query(action.impKV, req, &resp); err != nil {
 		return false, err

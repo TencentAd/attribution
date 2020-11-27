@@ -1,8 +1,11 @@
 package action
 
 import (
+	"encoding/json"
 	"net/http"
 
+	"github.com/TencentAd/attribution/attribution/pkg/common/define"
+	"github.com/golang/glog"
 	"github.com/tencentad/marketing-api-go-sdk/pkg/model"
 
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/ia/data"
@@ -60,6 +63,10 @@ func (action *SendAction) run(c *data.ImpAttributionContext) error {
 
 	// TODO
 	// 调用sdk上报
+	if glog.V(define.VLogLevel) {
+		bytes, _ := json.Marshal(req)
+		glog.V(define.VLogLevel).Infof("marketing api request: %s", string(bytes))
+	}
 
 	return nil
 }

@@ -2,6 +2,7 @@ package ia
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"time"
 
@@ -14,6 +15,10 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/ia/metrics"
 	"github.com/TencentAd/attribution/attribution/pkg/parser"
 	"github.com/TencentAd/attribution/attribution/pkg/protocal/parse"
+)
+
+var (
+	ErrEmptyAction = errors.New("empty action")
 )
 
 type ImpAttributionHandle struct {
@@ -77,6 +82,9 @@ func (handle *ImpAttributionHandle) process(r *http.Request) error {
 	if err != nil {
 		return err
 	}
+	if len(pr.ConvLogs) == 0 {
+		return ErrEmptyAction
+	}
 
 	var c *data.ImpAttributionContext
 	c, err = data.NewImpAttributionContext(pr)
@@ -107,6 +115,7 @@ func (handle *ImpAttributionHandle) buildWorkflow() *workflow.WorkFlow {
 	wf.AddEdge(firstDecryptTask, attributionTask)
 	wf.AddEdge(attributionTask, finalDecryptTask)
 	wf.AddEdge(finalDecryptTask, sendTask)
+	wf.ConnectToEnd(sendTask)
 
 	return wf
 }

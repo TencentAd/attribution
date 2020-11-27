@@ -15,11 +15,13 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/TencentAd/attribution/attribution/pkg/common/define"
 	"github.com/TencentAd/attribution/attribution/pkg/common/metricutil"
 	"github.com/TencentAd/attribution/attribution/pkg/crypto"
 	"github.com/TencentAd/attribution/attribution/pkg/crypto/protocal"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/encrypt/metrics"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/encrypt/safeguard"
+	"github.com/golang/glog"
 )
 
 type HttpHandle struct {
@@ -56,6 +58,9 @@ func (handle *HttpHandle) doServeHttp(r *http.Request) (*protocal.CryptoResponse
 	body, err = ioutil.ReadAll(r.Body)
 	if err != nil {
 		return nil, err
+	}
+	if glog.V(define.VLogLevel) {
+		glog.V(define.VLogLevel).Infof("encrypt body: %s", string(body))
 	}
 
 	var req protocal.CryptoRequest

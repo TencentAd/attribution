@@ -11,10 +11,11 @@ package safeguard
 import (
 	"errors"
 	"flag"
+	"strconv"
+
 	"github.com/TencentAd/attribution/attribution/pkg/common/redisx"
 	"github.com/go-redis/redis"
 	"github.com/golang/glog"
-	"strconv"
 )
 
 var (
@@ -57,7 +58,7 @@ func (g *DecryptSafeguard) Against(campaignId int64, count int64) error {
 		return ErrDecryptSafeguardInternal
 	}
 
-	if g.getThreshold(campaignId) < current {
+	if current > g.getThreshold(campaignId) {
 		return ErrDecryptExceedThreshold
 	}
 

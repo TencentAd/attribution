@@ -37,6 +37,7 @@ func NewImpAttributionContext(pr *parse.ConvParseResult) (*ImpAttributionContext
 	}
 
 	c.buildOriginalIndex()
+	c.InitActionTime()
 	return c, nil
 }
 
@@ -49,10 +50,18 @@ func (c *ImpAttributionContext) buildOriginalIndex() {
 
 	for i, convLog := range c.ConvParseResult.ConvLogs {
 		userData := convLog.UserData
-		c.OriginalIndex[userData.Imei] = append(c.OriginalIndex[userData.Imei], i)
-		c.OriginalIndex[userData.Idfa] = append(c.OriginalIndex[userData.Idfa], i)
-		c.OriginalIndex[userData.AndroidId] = append(c.OriginalIndex[userData.AndroidId], i)
-		c.OriginalIndex[userData.Oaid] = append(c.OriginalIndex[userData.Oaid], i)
+		if userData.Imei != "" {
+			c.OriginalIndex[userData.Imei] = append(c.OriginalIndex[userData.Imei], i)
+		}
+		if userData.Idfa != "" {
+			c.OriginalIndex[userData.Idfa] = append(c.OriginalIndex[userData.Idfa], i)
+		}
+		if userData.AndroidId != "" {
+			c.OriginalIndex[userData.AndroidId] = append(c.OriginalIndex[userData.AndroidId], i)
+		}
+		if userData.Oaid != "" {
+			c.OriginalIndex[userData.Oaid] = append(c.OriginalIndex[userData.Oaid], i)
+		}
 	}
 }
 
