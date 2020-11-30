@@ -9,13 +9,14 @@
 package safeguard
 
 import (
+	"context"
 	"errors"
 	"flag"
 	"strconv"
 	"time"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/redisx"
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 	"github.com/golang/glog"
 )
 
@@ -44,14 +45,14 @@ func NewConvEncryptSafeguard() (*ConvEncryptSafeguard, error) {
 func (g *ConvEncryptSafeguard) Against(campaignId int64) error {
 	key := g.formatResourceKey(campaignId)
 
-	cnt, err := g.redisClient.Incr(key).Result()
+	cnt, err := g.redisClient.Incr(context.Background(), key).Result()
 	if err != nil {
 		glog.Errorf("failed to incr key, err: %v", err)
 		return ErrConvEncryptSafeguardInternal
 	}
 
 	if cnt == 1 {
-		if _, err := g.redisClient.Expire(key, time.Second*70).Result(); err != nil {
+		if _, err := g.redisClient.Expire(context.Background(), key, time.Second*70).Result(); err != nil {
 			glog.Errorf("failed to expire key [%s]", key)
 		}
 	}

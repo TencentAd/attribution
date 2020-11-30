@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"log"
 	"net/http"
@@ -11,10 +12,13 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/common/workflow"
 	"github.com/TencentAd/attribution/attribution/pkg/crypto"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/ia"
+	mh "github.com/TencentAd/attribution/attribution/pkg/handler/http/metadata"
 	"github.com/TencentAd/attribution/attribution/pkg/impression/handler"
 	"github.com/TencentAd/attribution/attribution/pkg/impression/kv"
 	"github.com/TencentAd/attribution/attribution/pkg/impression/kv/opt"
+	"github.com/TencentAd/attribution/attribution/pkg/oauth"
 	"github.com/TencentAd/attribution/attribution/pkg/parser/ams"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/metadata"
 	"github.com/golang/glog"
 )
 
@@ -43,7 +47,17 @@ func serveHttp() error {
 	if err != nil {
 		return err
 	}
+
+	store := metadata.GetStore(nil)
+	t, err := oauth.NewToken(store)
+	if err != nil {
+		return err
+	}
+
+	t.FetchBackGround(context.Background())
+
 	http.Handle("/impression", handler.NewSetHandler(storage))
+	http.Handle("/token/set", mh.NewTokenHandler(t))
 
 	convParser := ams.NewUserActionAddRequestParser()
 	jq := workflow.NewDefaultJobQueue(
@@ -57,7 +71,9 @@ func serveHttp() error {
 	impAttributionHandle := ia.NewImpAttributionHandle().
 		WithConvParser(convParser).
 		WithImpStorage(storage).
-		WithJobQueue(jq)
+		WithJobQueue(jq).
+		WithToken(t)
+
 	http.Handle("/conv", impAttributionHandle)
 
 	return http.ListenAndServe(*serverAddress, nil)

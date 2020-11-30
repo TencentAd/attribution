@@ -9,12 +9,13 @@
 package redis
 
 import (
+	"context"
 	"flag"
 	"time"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/redisx"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/encrypt/freq/info"
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 	"github.com/golang/glog"
 )
 
@@ -49,7 +50,7 @@ func (c *MinuteFreqRedis) Set(resource string, info *info.MinuteFreqInfo) error 
 	if err != nil {
 		return err
 	}
-	_, err = c.redisClient.Set(
+	_, err = c.redisClient.Set(context.Background(),
 		c.formatKey(resource),
 		str,
 		time.Duration(*minuteFreqRedisExpiration)*time.Second).Result()
@@ -57,7 +58,7 @@ func (c *MinuteFreqRedis) Set(resource string, info *info.MinuteFreqInfo) error 
 }
 
 func (c *MinuteFreqRedis) Get(resource string) (*info.MinuteFreqInfo, error) {
-	val, err := c.redisClient.Get(c.formatKey(resource)).Result()
+	val, err := c.redisClient.Get(context.Background(), c.formatKey(resource)).Result()
 
 	if err == redis.Nil {
 		return &info.MinuteFreqInfo{

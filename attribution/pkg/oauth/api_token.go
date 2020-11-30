@@ -22,7 +22,11 @@ type Token struct {
 	store store
 }
 
-func (t *Token) Get() string {
+func (t *Token) Get(sync... bool) string {
+	if len(sync) > 0 && sync[0] {
+		_ = t.fetch()
+	}
+
 	t.lock.RLock()
 	defer t.lock.RUnlock()
 	return t.token
