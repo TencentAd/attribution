@@ -23,11 +23,11 @@ type SendAction struct {
 }
 
 func NewSendAction() *SendAction {
-	return &SendAction{
-		client: ads.Init(&config.SDKConfig{
-			IsDebug: DefaultMarketingApiIsDebug,
-		}),
-	}
+	client := ads.Init(&config.SDKConfig{
+		IsDebug: DefaultMarketingApiIsDebug,
+	})
+	client.UseProduction()
+	return &SendAction{client: client}
 }
 
 func (action *SendAction) WithToken(token *oauth.Token) *SendAction {
