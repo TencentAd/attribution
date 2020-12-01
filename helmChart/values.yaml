@@ -81,8 +81,8 @@ affinity: {}
 servers: 
   attribution: attribution_server
   impression: impression_server
-
+  ia: imp_attribution_server
 serversName: 
   attribution: attribution-server
   impression: impression-server
-  
+  ia: imp-attribution-server

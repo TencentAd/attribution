@@ -13,3 +13,5 @@ go install -v pkg/modules/leads/receive/leads_receive_server.go
 
 # install impression server
 go install -v pkg/modules/impression/impression_server.go
+
+go install -v pkg/modules/ia/imp_attribution_server.go
