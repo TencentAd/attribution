@@ -2,6 +2,14 @@ apiVersion: v2
 name: attribution
 version: 0.1.0
 appVersion: 0.1.0
-home: https://github.com/TencentAd/attribution
+home: https://github.com/TencentAd
+sources:
+  - https://github.com/TencentAd/attribution
 description: "帮助广告主实现自归因，只需要简单的配置，就能快速使用"
 type: application
+
+dependencies:
+  - name: redis
+    version: "12.*.*"
+    repository: https://charts.bitnami.com/bitnami
+    condition: redirs.enabled

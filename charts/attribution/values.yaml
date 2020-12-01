@@ -11,6 +11,9 @@ serviceAccount:
   enabled: true
   annotations: {}
 
+redirs:
+  enabled: true
+
 ia:
   name: imp-attribution-server
   # exec command after image loaded
