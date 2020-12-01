@@ -21,6 +21,7 @@ import (
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/conv/data"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/conv/response"
 	"github.com/TencentAd/attribution/attribution/pkg/parser"
+	"github.com/TencentAd/attribution/attribution/pkg/protocal/parse"
 	"github.com/TencentAd/attribution/attribution/pkg/storage/attribution"
 	"github.com/TencentAd/attribution/attribution/pkg/storage/clickindex"
 	"github.com/TencentAd/attribution/attribution/proto/conv"
@@ -98,15 +99,16 @@ func (handle *HttpHandle) doServeHTTP(w http.ResponseWriter, r *http.Request) er
 	defer func() {
 		handle.serveResponse(w, err)
 	}()
-	var convLogs []*conv.ConversionLog
-	convLogs, err = handle.parser.Parse(r)
+	var pr *parse.ConvParseResult
+	pr, err = handle.parser.Parse(r)
 	if err != nil {
 		return err
 	}
 
+	// 并行处理所有的转化
 	var wg sync.WaitGroup
-	wg.Add(len(convLogs))
-	for _, convLog := range convLogs {
+	wg.Add(len(pr.ConvLogs))
+	for _, convLog := range pr.ConvLogs {
 		go func(convLog *conv.ConversionLog) {
 			defer wg.Add(1)
 
@@ -115,7 +117,7 @@ func (handle *HttpHandle) doServeHTTP(w http.ResponseWriter, r *http.Request) er
 			handle.run(c)
 			for _, s := range handle.attributionStores {
 				if err = s.Store(c.AssocContext.ConvLog); err != nil {
-					glog.Errorf("failed to stare, err: %v", err)
+					glog.Errorf("failed to store, err: %v", err)
 				}
 			}
 
@@ -155,7 +157,7 @@ func (handle *HttpHandle) serveResponse(w http.ResponseWriter, err error) {
 
 	bytes, err := json.Marshal(resp)
 	if err == nil {
-		w.Write(bytes)
+		_, _ = w.Write(bytes)
 	} else {
 		glog.Errorf("failed to marshal response, err: %v", err)
 	}

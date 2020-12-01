@@ -62,7 +62,7 @@ func (p *FileHandle) processLine(line string) error {
 		return err
 	}
 
-	for _, convLog := range convLogs {
+	for _, convLog := range convLogs.ConvLogs {
 		c := &association.AssocContext{
 			ConvLog: convLog,
 		}
@@ -73,7 +73,9 @@ func (p *FileHandle) processLine(line string) error {
 		}
 
 		for _, s := range p.attributionStore {
-			s.Store(c.ConvLog)
+			if err = s.Store(c.ConvLog); err != nil {
+				glog.Errorf("failed to store attribution result, err: %v", err)
+			}
 		}
 	}
 

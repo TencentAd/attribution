@@ -45,7 +45,7 @@ func NewDefaultJobQueue(option *QueueOption) *DefaultJobQueue {
 	return queue
 }
 
-func (queue *DefaultJobQueue) Start() error {
+func (queue *DefaultJobQueue) Start() {
 	for i := 0; i < queue.option.WorkerCount; i++ {
 		go func() {
 			for job := range queue.queue {
@@ -64,8 +64,6 @@ func (queue *DefaultJobQueue) Start() error {
 			//}
 		}()
 	}
-
-	return nil
 }
 
 func (queue *DefaultJobQueue) PushJob(j job) error {

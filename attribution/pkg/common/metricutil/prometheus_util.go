@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/golang/glog"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -37,4 +38,23 @@ func ServeMetrics(metricsServerAddress string) error {
 	}()
 
 	return nil
+}
+
+func CollectActionMetrics(errCounter *prometheus.CounterVec,
+	cost *prometheus.HistogramVec, name string, startTime time.Time, err error) {
+
+	cost.WithLabelValues(name).Observe(CalcTimeUsedMilli(startTime))
+	if err != nil {
+		errCounter.WithLabelValues(name).Add(1)
+	}
+}
+
+
+func CollectMetrics(errCounter prometheus.Counter,
+	cost prometheus.Observer, startTime time.Time, err error) {
+
+	cost.Observe(CalcTimeUsedMilli(startTime))
+	if err != nil {
+		errCounter.Add(1)
+	}
 }

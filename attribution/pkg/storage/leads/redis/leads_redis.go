@@ -9,13 +9,14 @@
 package redis
 
 import (
+	"context"
 	"flag"
 	"time"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/redisx"
 	"github.com/TencentAd/attribution/attribution/pkg/leads/pull/protocal"
 	"github.com/TencentAd/attribution/attribution/pkg/storage/leads/util"
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 	"github.com/golang/glog"
 )
 
@@ -47,7 +48,7 @@ func (lr *LeadsRedis) Store(leads *protocal.LeadsInfo, expire time.Duration) err
 	}
 
 	for _, index := range indexes {
-		_, err = lr.redisClient.Set(index.Key, index.Value, expire).Result()
+		_, err = lr.redisClient.Set(context.Background(), index.Key, index.Value, expire).Result()
 		if err != nil {
 			return err
 		}

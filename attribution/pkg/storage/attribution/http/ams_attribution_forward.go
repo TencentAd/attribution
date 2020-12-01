@@ -76,7 +76,7 @@ func (f *AmsAttributionForward) Store(convLog *conv.ConversionLog) error {
 
 func (f *AmsAttributionForward) doStore(convLog *conv.ConversionLog) error {
 	matchClick := convLog.MatchClick
-	url := formatConvRequestUrl(matchClick.Callback, convLog.ConvId)
+	url := formatConvRequestUrl(matchClick.ClickLog.Callback, convLog.ConvId)
 
 	req, err := http.NewRequest("POST", url, bytes.NewBufferString(convLog.OriginalContent))
 	if err != nil {

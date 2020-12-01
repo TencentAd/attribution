@@ -74,8 +74,9 @@ docker run -d -p 9081:9081 attribution:latest -conv_parser_name=ams -click_parse
 - 数据加密，保证双方数据安全
 - 基于曝光数据实现归因，平台拿到转化明细，用于合约结案报告和效果提升
 
-![img](README.assets/y5SjeOox98jQrOyN5EfexA.png)
 
+<img src="README.assets/y5SjeOox98jQrOyN5EfexA.png" alt="img" style="zoom:50%;" />
+=======
 方案不依赖渠道包，所以同时解决了android渠道包拦截，ios不能区分渠道包的问题。
 
 同时，方案包含了广告主部分的建设，能让广告主更低成本，更自动地对接。
