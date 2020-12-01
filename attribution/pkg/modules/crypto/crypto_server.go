@@ -38,6 +38,7 @@ func serveHttp() error {
 		return err
 	}
 	http.Handle("/decrypt", decrypt.NewHttpHandle().WithSafeguard(decryptSafeguard))
+	glog.Info("init done")
 
 	return http.ListenAndServe(*serverAddress, nil)
 }
