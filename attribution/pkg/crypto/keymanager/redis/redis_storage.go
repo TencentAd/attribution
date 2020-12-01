@@ -1,10 +1,11 @@
 package redis
 
 import (
+	"context"
 	"flag"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/redisx"
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 	"github.com/golang/glog"
 )
 
@@ -29,7 +30,7 @@ func NewKeyStorageRedis() (*KeyStorageRedis, error) {
 }
 
 func (r *KeyStorageRedis) Store(groupId string, encryptKey string) error {
-	_, err := r.client.Set(r.formatKey(groupId), encryptKey, 0).Result()
+	_, err := r.client.Set(context.Background(), r.formatKey(groupId), encryptKey, 0).Result()
 	if err != nil {
 		glog.Errorf("fail to set key, err[%v]", err)
 		return err
@@ -38,7 +39,7 @@ func (r *KeyStorageRedis) Store(groupId string, encryptKey string) error {
 }
 
 func (r *KeyStorageRedis) Load(groupId string) (string, error) {
-	value, err := r.client.Get(r.formatKey(groupId)).Result()
+	value, err := r.client.Get(context.Background(), r.formatKey(groupId)).Result()
 	if err == redis.Nil {
 		return "", nil
 	} else if err != nil {

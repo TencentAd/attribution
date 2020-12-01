@@ -1,25 +1,38 @@
 package action
 
 import (
-	"encoding/json"
-	"net/http"
-
-	"github.com/TencentAd/attribution/attribution/pkg/common/define"
-	"github.com/golang/glog"
-	"github.com/tencentad/marketing-api-go-sdk/pkg/model"
+	"context"
+	"time"
 
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/ia/data"
+	"github.com/TencentAd/attribution/attribution/pkg/oauth"
+	"github.com/tencentad/marketing-api-go-sdk/pkg/ads"
+	"github.com/tencentad/marketing-api-go-sdk/pkg/config"
+	"github.com/tencentad/marketing-api-go-sdk/pkg/model"
+)
+
+var (
+	DefaultMarketingApiTimeout = 60 * time.Second
+	DefaultMarketingApiIsDebug = false
 )
 
 // 将归因后的数据发送给ams
 type SendAction struct {
-	client *http.Client
+	client *ads.SDKClient
+	token  *oauth.Token
 }
 
 func NewSendAction() *SendAction {
-	return &SendAction{
-		client: &http.Client{},
-	}
+	client := ads.Init(&config.SDKConfig{
+		IsDebug: DefaultMarketingApiIsDebug,
+	})
+	client.UseProduction()
+	return &SendAction{client: client}
+}
+
+func (action *SendAction) WithToken(token *oauth.Token) *SendAction {
+	action.token = token
+	return action
 }
 
 func (action *SendAction) name() string {
@@ -61,12 +74,8 @@ func (action *SendAction) run(c *data.ImpAttributionContext) error {
 		*req.Actions = append(*req.Actions, (*originalReq.Actions)[idx])
 	}
 
-	// TODO
-	// 调用sdk上报
-	if glog.V(define.VLogLevel) {
-		bytes, _ := json.Marshal(req)
-		glog.V(define.VLogLevel).Infof("marketing api request: %s", string(bytes))
-	}
-
-	return nil
+	action.client.SetAccessToken(action.token.Get())
+	ctx, _ := context.WithTimeout(context.Background(), DefaultMarketingApiTimeout)
+	_, _, err := action.client.UserActions().Add(ctx, *req)
+	return err
 }

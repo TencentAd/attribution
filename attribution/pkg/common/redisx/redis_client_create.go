@@ -1,12 +1,13 @@
 package redisx
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"time"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/define"
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 )
 
 type Option struct {
@@ -23,7 +24,7 @@ func CreateRedisClient(option *Option) (redis.Cmdable, error) {
 		ret = redis.NewClient(option.Options)
 	}
 
-	_, err := ret.Ping().Result()
+	_, err := ret.Ping(context.Background()).Result()
 	return ret, err
 }
 

@@ -9,11 +9,12 @@
 package redis
 
 import (
+	"context"
 	"flag"
 	"strconv"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/redisx"
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 	"github.com/golang/glog"
 )
 
@@ -43,11 +44,11 @@ func NewCounter() interface{} {
 }
 
 func (c *Counter) Inc(resource string) (int64, error) {
-	 return c.redisClient.Incr(c.formatKey(resource)).Result()
+	 return c.redisClient.Incr(context.Background(), c.formatKey(resource)).Result()
 }
 
 func (c *Counter) Get(resource string) (int64, error) {
-	val, err := c.redisClient.Get(c.formatKey(resource)).Result()
+	val, err := c.redisClient.Get(context.Background(), c.formatKey(resource)).Result()
 	if err != nil {
 		return -1, err
 	} else {
