@@ -1,6 +1,6 @@
-{{- if .Values.ingress.enabled -}}
-{{- $fullName := include "helmtest.fullname" . -}}
-{{- $svcPort := .Values.service.port -}}
+{{- if .Values.ia.ingress.enabled -}}
+{{- $fullName := include "attribution.fullname" . -}}
+{{- $svcPort := .Values.ia.service.port -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1beta1
 {{- else -}}
@@ -10,15 +10,15 @@ kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "helmtest.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
+    {{- include "attribution.labels" . | nindent 4 }}
+  {{- with .Values.ia.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.ingress.tls }}
+  {{- if .Values.ia.ingress.tls }}
   tls:
-    {{- range .Values.ingress.tls }}
+    {{- range .Values.ia.ingress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -27,7 +27,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.hosts }}
+    {{- range .Values.ia.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:

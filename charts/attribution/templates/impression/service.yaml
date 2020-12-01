@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.impression.name }}
+  labels:
+    {{- include "attribution.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.impression.service.type }}
+  ports:
+    - port: {{ .Values.impression.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "attribution.selectorLabels" . | nindent 4 }}
