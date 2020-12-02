@@ -33,14 +33,19 @@ spec:
             {{- toYaml .Values.ia.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: 
-            - {{ .Values.ia.command }}
+          command:
+            {{ range .Values.ia.commands }}
+            - {{ . }}
+            {{ end }}
           ports:
             - name: http
               containerPort: 80
               protocol: TCP
           resources:
             {{- toYaml .Values.ia.resources | nindent 12 }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "attribution.ia.cmname" . }}
       {{- with .Values.ia.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
