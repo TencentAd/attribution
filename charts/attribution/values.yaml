@@ -11,8 +11,8 @@ serviceAccount:
   enabled: true
   annotations: {}
 
-redirs:
-  enabled: true
+redis:
+  enabled: false
 
 ia:
   name: imp-attribution-server
@@ -38,6 +38,12 @@ ia:
     tls: []
 
   resources: {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
 
   autoscaling:
     enabled: false
@@ -56,7 +62,7 @@ ia:
   persistentVolume:
     ## If true, ia will create/use a Persistent Volume Claim
     ##
-    enabled: true
+    enabled: false
 
     ## ia data Persistent Volume access modes
     ## Must match those of existing PV or dynamic provisioner

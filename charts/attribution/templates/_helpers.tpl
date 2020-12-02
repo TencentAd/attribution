@@ -89,11 +89,3 @@ component: {{ .Values.ia.name | quote }}
 {{- end -}}
 {{- end -}}
 {{- end -}}
-
-{{/*
-Define the attribution.namespace template if set with forceNamespace or .Release.Namespace is set
-*/}}
-{{- define "attribution.namespace" -}}
-namespace: {{ .Release.Namespace }}
-{{- end -}}
-

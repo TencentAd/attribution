@@ -12,4 +12,4 @@ dependencies:
   - name: redis
     version: "12.*.*"
     repository: https://charts.bitnami.com/bitnami
-    condition: redirs.enabled
+    condition: redis.enabled
