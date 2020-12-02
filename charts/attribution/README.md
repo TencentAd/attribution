@@ -1,7 +1,8 @@
 # Attribution
 
-Attribution, 帮助广告主实现自归因的项目，只需要简单的配置，就能快速使用。
-本chart将会在[Kubernetes](http://kubernetes.io) cluster 使用[Helm](https://helm.sh) 部署一个Attribution deployment。
+Attribution, a project helps advertisers achieve self-attribution, only cost some simply configuration to quickly use.
+
+This chart bootstraps a [Prometheus](https://prometheus.io/) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
