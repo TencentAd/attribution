@@ -8,11 +8,8 @@ image:
 imagePullSecrets: []
 
 serviceAccount:
-  enabled: true
-  annotations: {}
-
-redis:
   enabled: false
+  annotations: {}
 
 ia:
   name: imp-attribution-server
@@ -108,3 +105,7 @@ ia:
     ## Useful if the volume's root directory is not empty
     ##
     subPath: ""
+
+redis:
+  enabled: false
+
