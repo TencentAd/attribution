@@ -8,27 +8,19 @@ image:
 imagePullSecrets: []
 
 serviceAccount:
-  # Specifies whether a service account should be created
-  enabled: true
+  enabled: false
   annotations: {}
 
 ia:
   name: imp-attribution-server
-
+  # exec command after image loaded
   command: imp_attribution_server
 
   podAnnotations: {}
 
   podSecurityContext: {}
-  # fsGroup: 2000
 
   securityContext: {}
-#     capabilities:
-#       drop:
-#       - ALL
-#     readOnlyRootFilesystem: true
-#   runAsNonRoot: true
-#   runAsUser: 1000
 
   service:
     type: ClusterIP
@@ -37,21 +29,16 @@ ia:
   ingress:
     enabled: false
     annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
     hosts:
       - host: chart-example.local
         paths: []
     tls: []
-    #  - secretName: chart-example-tls
-    #    hosts:
-    #      - chart-example.local
 
   resources: {}
     # limits:
     #   cpu: 100m
     #   memory: 128Mi
-    # requests:
+  # requests:
   #   cpu: 100m
   #   memory: 128Mi
 
@@ -67,3 +54,58 @@ ia:
   tolerations: []
 
   affinity: {}
+
+
+  persistentVolume:
+    ## If true, ia will create/use a Persistent Volume Claim
+    ##
+    enabled: false
+
+    ## ia data Persistent Volume access modes
+    ## Must match those of existing PV or dynamic provisioner
+    ## Ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    ##
+    accessModes:
+      - ReadWriteOnce
+
+    ## ia data Persistent Volume Claim annotations
+    ##
+    annotations: { }
+
+    ## ia data Persistent Volume existing claim name
+    ## Requires ia.persistentVolume.enabled: true
+    ## If defined, PVC must be created manually before volume will be bound
+    existingClaim: ""
+
+    ## ia data Persistent Volume mount root path
+    ##
+    mountPath: /data
+
+    ## ia data Persistent Volume size
+    ##
+    size: 2Gi
+
+    ## ia data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+
+    ## ia data Persistent Volume Binding Mode
+    ## If defined, volumeBindingMode: <volumeBindingMode>
+    ## If undefined (the default) or set to null, no volumeBindingMode spec is
+    ##   set, choosing the default mode.
+    ##
+    # volumeBindingMode: ""
+
+    ## Subdirectory of ia data Persistent Volume to mount
+    ## Useful if the volume's root directory is not empty
+    ##
+    subPath: ""
+
+redis:
+  enabled: false
+

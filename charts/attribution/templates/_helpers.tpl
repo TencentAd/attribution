@@ -52,3 +52,40 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Create unified labels for components
+*/}}
+{{- define "attribution.common.matchLabels" -}}
+app: {{ template "attribution.name" . }}
+release: {{ .Release.Name }}
+{{- end -}}
+
+{{- define "attribution.common.metaLabels" -}}
+chart: {{ template "attribution.chart" . }}
+heritage: {{ .Release.Service }}
+{{- end -}}
+
+
+{{- define "attribution.ia.labels" -}}
+{{ include "attribution.ia.matchLabels" . }}
+{{ include "attribution.common.metaLabels" . }}
+{{- end -}}
+
+{{- define "attribution.ia.matchLabels" -}}
+component: {{ .Values.ia.name | quote }}
+{{ include "attribution.common.matchLabels" . }}
+{{- end -}}
+
+{{- define "attribution.ia.fullname" -}}
+{{- if .Values.ia.fullnameOverride -}}
+{{- .Values.ia.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- if contains $name .Release.Name -}}
+{{- printf "%s-%s" .Release.Name .Values.ia.name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s-%s" .Release.Name $name .Values.ia.name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
