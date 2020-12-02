@@ -1,31 +1,28 @@
-{{- if .Values.pushgateway.persistentVolume.enabled -}}
-  {{- if not .Values.pushgateway.persistentVolume.existingClaim -}}
+{{- if .Values.ia.persistentVolume.enabled -}}
+  {{- if not .Values.ia.persistentVolume.existingClaim -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  {{- if .Values.pushgateway.persistentVolume.annotations }}
+  {{- if .Values.ia.persistentVolume.annotations }}
   annotations:
-  {{ toYaml .Values.pushgateway.persistentVolume.annotations | indent 4 }}
+  {{ toYaml .Values.ia.persistentVolume.annotations | indent 4 }}
   {{- end }}
   labels:
-  {{- include "prometheus.pushgateway.labels" . | nindent 4 }}
-  name: {{ template "prometheus.pushgateway.fullname" . }}
-  {{ include "prometheus.namespace" . | indent 2 }}
+  {{ include "attribution.ia.labels" . | nindent 4 }}
+  name: {{ template "attribution.ia.fullname" . }}
+  namespace: {{ .Release.Namespace }}
 spec:
   accessModes:
-  {{ toYaml .Values.pushgateway.persistentVolume.accessModes | indent 4 }}
-  {{- if .Values.pushgateway.persistentVolume.storageClass }}
-  {{- if (eq "-" .Values.pushgateway.persistentVolume.storageClass) }}
+  {{ toYaml .Values.ia.persistentVolume.accessModes | indent 4 }}
+  {{- if .Values.ia.persistentVolume.storageClass }}
+  {{- if (eq "-" .Values.ia.persistentVolume.storageClass) }}
   storageClassName: ""
   {{- else }}
-  storageClassName: "{{ .Values.pushgateway.persistentVolume.storageClass }}"
+  storageClassName: "{{ .Values.ia.persistentVolume.storageClass }}"
   {{- end }}
-  {{- end }}
-  {{- if .Values.pushgateway.persistentVolume.volumeBindingMode }}
-  volumeBindingModeName: "{{ .Values.pushgateway.persistentVolume.volumeBindingMode }}"
   {{- end }}
   resources:
     requests:
-      storage: "{{ .Values.pushgateway.persistentVolume.size }}"
+      storage: "{{ .Values.ia.persistentVolume.size }}"
   {{- end -}}
   {{- end -}}
