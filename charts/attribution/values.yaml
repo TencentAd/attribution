@@ -108,5 +108,5 @@ ia:
     subPath: ""
 
 redis:
-  enabled: true
+  enabled: false
 
