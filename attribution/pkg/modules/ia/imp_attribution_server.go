@@ -32,6 +32,9 @@ var (
 	workerCount    = flag.Int("imp_attribution_worker_count", 50, "")
 	queueSize      = flag.Int("imp_attribution_queue_size", 200, "")
 	queueTimeoutMS = flag.Int("imp_attribution_queue_timeout_ms", 1000, "")
+
+	storeType   = flag.String("store_type", "SQLITE", "")
+	storeOption = flag.String("store_option", "{\"dsn\": \"sqlite.db\"}", "")
 )
 
 func serveHttp() error {
@@ -48,7 +51,7 @@ func serveHttp() error {
 		return err
 	}
 
-	store := metadata.GetStore(nil)
+	store := metadata.GetStore(storeType, storeOption)
 	t, err := oauth.NewToken(store)
 	if err != nil {
 		return err
