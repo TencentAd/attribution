@@ -71,4 +71,3 @@ ia:
 
 redis:
   enabled: false
-
