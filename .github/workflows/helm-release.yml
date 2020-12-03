@@ -34,9 +34,6 @@ jobs:
       - name: Helm Chart Testing
         uses: helm/chart-testing-action@v2.0.1
       
-      - name: Add dependency chart repos
-        run:  helm repo add bitnami https://charts.bitnami.com/bitnami
-
       - name: Run chart-testing (list-changed)
         id: list-changed
         run: |
@@ -44,6 +41,9 @@ jobs:
           if [[ -n "$changed" ]]; then
             echo "::set-output name=changed::true"
           fi
+
+      - name: Add dependency chart repos
+        run:  helm repo add bitnami https://charts.bitnami.com/bitnami
 
       - name: Run chart-testing (lint)
         run: |
