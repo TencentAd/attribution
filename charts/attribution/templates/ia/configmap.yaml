@@ -6,10 +6,10 @@ metadata:
 data:
   default_redis_config: '{"address":["127.0.0.1:6379"],"is_cluster":1}'
   key_manager_name: redis
-  serverAddress: :9020
-  metric_server_address: :9025
+  serverAddress: :80
+  metric_server_address: :8080
   imp_kv_type: LEVELDB
-  imp_kv_address: ./db
+  imp_kv_address: /data/db
   imp_kv_password: ''
   imp_attribution_worker_count: "50"
   imp_attribution_queue_size: "200"
@@ -20,4 +20,4 @@ data:
   hdfs_user: ''
   v: "100"
   store_type: "SQLITE"
-  store_option: "{\"dsn\": \"sqlite.db\"}"
+  store_option: '{"dsn":"/data/sqlite.db"}''

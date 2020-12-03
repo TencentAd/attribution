@@ -1,5 +1,3 @@
-replicaCount: 1
-
 image:
   repository: tencentad/attribution
   pullPolicy: Always
@@ -13,9 +11,11 @@ serviceAccount:
 
 ia:
   name: imp-attribution-server
+  replicaCount: 1
+
   # exec command after image loaded
   commands:
-    - imp_attribution_server
+  - imp_attribution_server
 
   podAnnotations: {}
 

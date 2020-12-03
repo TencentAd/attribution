@@ -16,9 +16,11 @@ This chart bootstraps a [Attribution](https://github.com/TencentAd/attribution) 
 $ helm package charts/attribution/
 $ helm install ./attribution-[VERSION].tgz --genertate-name
 ```
+
 _See [helm install](https://helm.sh/docs/helm/helm_install/) for command documentation._
 
 ## Dependencies
+
 You can enable to installs additional, dependent charts:
 
 - [bitnami/redis](https://artifacthub.io/packages/helm/bitnami/redis)
@@ -35,4 +37,3 @@ $ helm uninstall [RELEASE_NAME]
 This removes all the Kubernetes components associated with the chart and deletes the release.
 
 _See [helm uninstall](https://helm.sh/docs/helm/helm_uninstall/) for command documentation._
-

@@ -6,11 +6,6 @@
 
 ![image-20200924172953477](README.assets/image-20200924172953477.png)
 
-```shell
-docker pull attribution:latest
-docker run -d -p 9081:9081 attribution:latest -conv_parser_name=ams -click_parser_name=ams -attribution_result_storage=stdout -server_address=:9081 -v=50 -logtostderr
-```
-
 ## 功能介绍
 
 ### 系统功能
@@ -42,7 +37,7 @@ docker run -d -p 9081:9081 attribution:latest -conv_parser_name=ams -click_parse
 
 ### 点击日志索引
 
-根据量级可以选用不同的存储，如hbase、ckv、local memory等
+根据量级可以选用不同的存储，如hbase、kv storage、local memory等
 
 ### 归因匹配
 
@@ -73,7 +68,6 @@ docker run -d -p 9081:9081 attribution:latest -conv_parser_name=ams -click_parse
 
 - 数据加密，保证双方数据安全
 - 基于曝光数据实现归因，平台拿到转化明细，用于合约结案报告和效果提升
-
 
 <img src="README.assets/y5SjeOox98jQrOyN5EfexA.png" alt="img" style="zoom:50%;" />
 =======
