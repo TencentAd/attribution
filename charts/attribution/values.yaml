@@ -61,7 +61,7 @@ ia:
     enabled: false
     accessModes:
       - ReadWriteOnce
-    annotations: { }
+    annotations: {}
     existingClaim: ""
     mountPath: /data
     size: 2Gi
