@@ -33,6 +33,7 @@ jobs:
       - name: Run chart-testing (list-changed)
         id: list-changed
         run: |
+          ls -la
           changed=$(ct list-changed --chart-dirs charts)
           if [[ -n "$changed" ]]; then
             echo "::set-output name=changed::true"
@@ -40,6 +41,7 @@ jobs:
 
       - name: Run chart-testing (lint)
         run: |
+          ls -la
           ct lint --chart-dirs charts
 
       - name: Create kind cluster
