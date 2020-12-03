@@ -33,16 +33,14 @@ jobs:
       - name: Run chart-testing (list-changed)
         id: list-changed
         run: |
-          cd charts
-          changed=$(ct list-changed)
+          changed=$(ct list-changed --chart-dirs charts)
           if [[ -n "$changed" ]]; then
             echo "::set-output name=changed::true"
           fi
 
       - name: Run chart-testing (lint)
         run: |
-          cd charts
-          ct lint
+          ct lint --chart-dirs charts
 
       - name: Create kind cluster
         uses: helm/kind-action@v1.1.0
@@ -50,8 +48,7 @@ jobs:
 
       - name: Run chart-testing (install)
         run: |
-          cd charts
-          ct install
+          ct install --chart-dirs charts
         
   release:
     needs: 
@@ -71,8 +68,6 @@ jobs:
 
       - name: Install Helm
         uses: azure/setup-helm@v1
-        with:
-          version: v3.4.0
 
       - name: Add dependency chart repos
         run: |
