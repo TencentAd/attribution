@@ -2,7 +2,7 @@
 
 Attribution, a project helps advertisers achieve self-attribution, only cost some simply configuration to quickly use.
 
-This chart bootstraps a [Prometheus](https://prometheus.io/) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Attribution](https://github.com/TencentAd/attribution) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 

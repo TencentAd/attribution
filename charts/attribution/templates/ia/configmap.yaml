@@ -4,7 +4,7 @@ metadata:
   name: {{ include "attribution.ia.cmname" . }}
   namespace: {{ .Release.Namespace }}
 data:
-  default_redis_config: '{"address":["9.134.67.201:7000"],"is_cluster":1}'
+  default_redis_config: '{"address":["127.0.0.1:6379"],"is_cluster":1}'
   key_manager_name: redis
   serverAddress: :9020
   metric_server_address: :9025
