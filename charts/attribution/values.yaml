@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: tencentad/attribution
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   tag: latest
 
 imagePullSecrets: []
@@ -14,7 +14,8 @@ serviceAccount:
 ia:
   name: imp-attribution-server
   # exec command after image loaded
-  command: imp_attribution_server
+  commands:
+    - imp_attribution_server
 
   podAnnotations: {}
 

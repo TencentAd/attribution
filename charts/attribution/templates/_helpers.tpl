@@ -89,3 +89,8 @@ component: {{ .Values.ia.name | quote }}
 {{- end -}}
 {{- end -}}
 {{- end -}}
+
+
+{{- define "attribution.ia.cmname" -}}
+{{- printf "%s-%s" .Values.ia.name  "cm" }}
+{{- end -}}
