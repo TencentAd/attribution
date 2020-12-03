@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.ia.name }}
+  name: {{ include "attribution.ia.fullname" . }}
   labels:
     {{- include "attribution.labels" . | nindent 4 }}
 spec:

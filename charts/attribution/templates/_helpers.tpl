@@ -38,7 +38,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "attribution.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "attribution.name" . }}
+app.kubernetes.io/name: {{ template "attribution.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
@@ -78,19 +78,5 @@ component: {{ .Values.ia.name | quote }}
 {{- end -}}
 
 {{- define "attribution.ia.fullname" -}}
-{{- if .Values.ia.fullnameOverride -}}
-{{- .Values.ia.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- printf "%s-%s" .Release.Name .Values.ia.name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.ia.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-
-{{- define "attribution.ia.cmname" -}}
-{{- printf "%s-%s" .Values.ia.name  "cm" }}
+{{ template "attribution.fullname" . }}-{{ .Values.ia.name }}
 {{- end -}}
