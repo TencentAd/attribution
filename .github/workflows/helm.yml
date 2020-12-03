@@ -1,4 +1,4 @@
-name: Lint and Test Charts
+name: Charts
 
 on:
   push:
@@ -21,6 +21,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v1
+
+      - uses: actions/setup-python@v2
 
       - name: Helm Chart Testing
         uses: helm/chart-testing-action@v2.0.1
