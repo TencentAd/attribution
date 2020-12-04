@@ -9,11 +9,14 @@ serviceAccount:
   enabled: false
   annotations: {}
 
+metrics:
+  enabled: true
+  port: 8080
+
 ia:
   name: imp-attribution-server
   replicaCount: 1
-
-  # exec command after image loaded
+  
   commands:
   - imp_attribution_server
 

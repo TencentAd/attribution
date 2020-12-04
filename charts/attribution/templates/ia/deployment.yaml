@@ -5,18 +5,21 @@ metadata:
   labels:
     {{- include "attribution.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.ia.autoscaling.enabled }}
   replicas: {{ .Values.ia.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "attribution.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.ia.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- if .Values.metrics.enabled }}
+        prometheus.io/path: /metrics
+        prometheus.io/port: {{ .Value.metrics.port }}
+        prometheus.io/scrape: "true"
+        {{- end }}
+        {{- if .Values.ia.podAnnotations }}
+        {{- toYaml .Values.ia.podAnnotations | nindent 8 }}
+        {{- end }}
       labels:
         {{- include "attribution.selectorLabels" . | nindent 8 }}
     spec:
@@ -26,26 +29,31 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "attribution.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.ia.podSecurityContext | nindent 8 }}
+      {{- toYaml .Values.ia.securityContext | nindent 8 }}
       containers:
         - name: {{ .Values.ia.name }}
-          securityContext:
-            {{- toYaml .Values.ia.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             {{ range .Values.ia.commands }}
             - {{ . }}
             {{ end }}
-          ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          resources:
-            {{- toYaml .Values.ia.resources | nindent 12 }}
+          env:
+          - name: server_address
+            value: ":{{ .Value.ia.service.port }}"
+          {{- if .Values.metrics.enabled }}
+          - name: metrics_address
+            value: ":{{ .Value.metrics.port }}"
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "attribution.fullname" . }}
+          ports:
+            - name: http
+              containerPort: {{ .Value.ia.service.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.ia.resources | nindent 12 }}
       {{- with .Values.ia.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
