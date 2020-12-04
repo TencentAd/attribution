@@ -23,11 +23,12 @@ import (
 )
 
 var (
-	serverAddress        = flag.String("server_address", ":9020", "")
-	metricsServerAddress = flag.String("metric_server_address", ":9025", "")
-	impKvType            = flag.String("imp_kv_type", "LEVELDB", "")
-	impKvAddress         = flag.String("imp_kv_address", "./db", "")
-	impKvPassword        = flag.String("imp_kv_password", "", "")
+	serverAddress  = flag.String("server_address", ":80", "")
+	metricsAddress = flag.String("metrics_address", ":8080", "")
+
+	impKvType     = flag.String("imp_kv_type", "LEVELDB", "")
+	impKvAddress  = flag.String("imp_kv_address", "./db", "")
+	impKvPassword = flag.String("imp_kv_password", "", "")
 
 	workerCount    = flag.Int("imp_attribution_worker_count", 50, "")
 	queueSize      = flag.Int("imp_attribution_queue_size", 200, "")
@@ -86,7 +87,7 @@ func main() {
 	if err := flagx.Parse(); err != nil {
 		panic(err)
 	}
-	_ = metricutil.ServeMetrics(*metricsServerAddress)
+	_ = metricutil.ServeMetrics(*metricsAddress)
 	if err := serveHttp(); err != nil {
 		log.Fatal(err)
 	}
