@@ -19,11 +19,7 @@ type Redis struct {
 
 func (r *Redis) Get(key string) (string, error) {
 	ctx, _ := context.WithTimeout(context.Background(), DefaultClientTimeOut)
-	v, err := r.client.Get(ctx, opt.Prefix+key).Result()
-	if err == redis.Nil {
-		return "", nil
-	}
-	return v, err
+	return r.client.Get(ctx, opt.Prefix+key).Result()
 }
 
 func (r *Redis) Set(key string, value string) error {
