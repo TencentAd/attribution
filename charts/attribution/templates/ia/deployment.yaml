@@ -14,7 +14,7 @@ spec:
       annotations:
         {{- if .Values.metrics.enabled }}
         prometheus.io/path: /metrics
-        prometheus.io/port: {{ .Value.metrics.port }}
+        prometheus.io/port: {{ .Values.metrics.port }}
         prometheus.io/scrape: "true"
         {{- end }}
         {{- if .Values.ia.podAnnotations }}
