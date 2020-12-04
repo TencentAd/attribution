@@ -20,4 +20,4 @@ data:
   hdfs_user: ''
   v: "100"
   store_type: "SQLITE"
-  store_option: '{"dsn":"/data/sqlite.db"}''
+  store_option: '{"dsn":"/data/sqlite.db"}'
