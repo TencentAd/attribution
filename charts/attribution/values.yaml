@@ -9,17 +9,39 @@ serviceAccount:
   enabled: false
   annotations: {}
 
+metrics:
+  enabled: true
+  port: 8080
+
+configMap:
+  ## If false, configMap will not be applied
+  enabled: true
+  ## Define the key value pairs in the configmap
+  data:
+    # key_manager_name: redis
+    # default_redis_config: '{"address":["127.0.0.1:6379"],"is_cluster":1}'
+    # hdfs_address: ''
+    # hdfs_user: ''
+    # imp_kv_type: LEVELDB
+    # imp_kv_address: /data/db
+    # imp_kv_password: ''
+    # store_type: SQLITE
+    # store_option: '{"dsn":"/data/sqlite.db"}'
+    imp_attribution_worker_count: "50"
+    imp_attribution_queue_size: "200"
+    imp_attribution_queue_timeout_ms: "1000"
+    ams_encrypt_url: http://localhost:9010/encrypt
+    ams_decrypt_url: http://localhost:9010/decrypt
+    v: "100"
+
 ia:
-  name: imp-attribution-server
+  name: imp-attribution
   replicaCount: 1
 
-  # exec command after image loaded
   commands:
   - imp_attribution_server
 
   podAnnotations: {}
-
-  podSecurityContext: {}
 
   securityContext: {}
 
@@ -36,15 +58,15 @@ ia:
     tls: []
 
   resources: {}
-    # limits:
-    #   cpu: 100m
-    #   memory: 128Mi
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
   # requests:
   #   cpu: 100m
   #   memory: 128Mi
 
   autoscaling:
-    enabled: false
+    enabled: true
     minReplicas: 1
     maxReplicas: 100
     targetCPUUtilizationPercentage: 80
@@ -56,57 +78,20 @@ ia:
 
   affinity: {}
 
-
   persistentVolume:
-    ## If true, ia will create/use a Persistent Volume Claim
-    ##
     enabled: false
-
-    ## ia data Persistent Volume access modes
-    ## Must match those of existing PV or dynamic provisioner
-    ## Ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-    ##
     accessModes:
       - ReadWriteOnce
-
-    ## ia data Persistent Volume Claim annotations
-    ##
-    annotations: { }
-
-    ## ia data Persistent Volume existing claim name
-    ## Requires ia.persistentVolume.enabled: true
-    ## If defined, PVC must be created manually before volume will be bound
+    annotations: {}
     existingClaim: ""
-
-    ## ia data Persistent Volume mount root path
-    ##
     mountPath: /data
-
-    ## ia data Persistent Volume size
-    ##
-    size: 2Gi
-
-    ## ia data Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
+    size: 8Gi
     # storageClass: "-"
-
-    ## ia data Persistent Volume Binding Mode
-    ## If defined, volumeBindingMode: <volumeBindingMode>
-    ## If undefined (the default) or set to null, no volumeBindingMode spec is
-    ##   set, choosing the default mode.
-    ##
     # volumeBindingMode: ""
-
-    ## Subdirectory of ia data Persistent Volume to mount
-    ## Useful if the volume's root directory is not empty
-    ##
     subPath: ""
 
 redis:
-  enabled: false
-
+  enabled: true
+  cluster:
+    enabled: false
+  usePassword: false

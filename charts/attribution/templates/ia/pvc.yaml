@@ -9,7 +9,7 @@ metadata:
   {{- end }}
   labels:
   {{ include "attribution.ia.labels" . | nindent 4 }}
-  name: {{ template "attribution.ia.fullname" . }}
+  name: {{ include "attribution.ia.fullname" . }}
   namespace: {{ .Release.Namespace }}
 spec:
   accessModes:

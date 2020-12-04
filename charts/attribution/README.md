@@ -14,7 +14,7 @@ This chart bootstraps a [Attribution](https://github.com/TencentAd/attribution) 
 ```console
 # Helm
 $ helm package charts/attribution/
-$ helm install ./attribution-[VERSION].tgz --genertate-name
+$ helm install ./attribution-[VERSION].tgz --generate-name
 ```
 
 _See [helm install](https://helm.sh/docs/helm/helm_install/) for command documentation._

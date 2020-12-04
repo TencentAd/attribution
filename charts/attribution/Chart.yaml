@@ -1,15 +1,18 @@
 apiVersion: v2
 name: attribution
-version: 0.1.0
+version: 0.1.1
 appVersion: 0.1.0
-home: https://github.com/TencentAd
+description: "帮助广告主实现自归因，只需要简单的配置，就能快速使用"
+home: https://github.com/TencentAd/attribution/charts/attribution
 sources:
   - https://github.com/TencentAd/attribution
-description: "帮助广告主实现自归因，只需要简单的配置，就能快速使用"
 type: application
-
+maintainers:
+  - name: awatercolorpen
+    email: hellis@foxmail.com
+  - name: first-frost
 dependencies:
   - name: redis
-    version: "12.*.*"
+    version: 12.1.1
     repository: https://charts.bitnami.com/bitnami
     condition: redis.enabled
