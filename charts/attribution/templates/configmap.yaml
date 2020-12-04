@@ -5,7 +5,7 @@ metadata:
   name: {{ include "attribution.fullname" . }}
   namespace: {{ .Release.Namespace }}
 data:
-  {{ toYaml .Values. | indent 2 }}
+  {{ toYaml .Values.configMap.data | indent 2 }}
   {{- if .Values.redis.enabled }}
   default_redis_config: '{"address":["'{{ .Release.Name }}'-redis-headless:6379"],"is_cluster":1}'
   key_manager_name: redis
