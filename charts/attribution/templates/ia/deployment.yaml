@@ -40,17 +40,17 @@ spec:
             {{ end }}
           env:
           - name: server_address
-            value: ":{{ .Value.ia.service.port }}"
+            value: ":{{ .Values.ia.service.port }}"
           {{- if .Values.metrics.enabled }}
           - name: metrics_address
-            value: ":{{ .Value.metrics.port }}"
+            value: ":{{ .Values.metrics.port }}"
           {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "attribution.fullname" . }}
           ports:
             - name: http
-              containerPort: {{ .Value.ia.service.port }}
+              containerPort: {{ .Values.ia.service.port }}
               protocol: TCP
           resources:
             {{- toYaml .Values.ia.resources | nindent 12 }}
