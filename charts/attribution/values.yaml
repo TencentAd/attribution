@@ -35,7 +35,7 @@ configMap:
     v: 100
 
 ia:
-  name: imp-attribution-server
+  name: imp-attribution
   replicaCount: 1
 
   commands:

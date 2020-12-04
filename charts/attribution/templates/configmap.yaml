@@ -5,14 +5,14 @@ metadata:
   name: {{ include "attribution.fullname" . }}
   namespace: {{ .Release.Namespace }}
 data:
-  {{ toYaml .Values.configMap.data | indent 2 }}
+{{ toYaml .Values.configMap.data | indent 2 }}
   {{- if .Values.redis.enabled }}
-  default_redis_config: '{"address":["'{{ .Release.Name }}'-redis-headless:6379"],"is_cluster":1}'
+  default_redis_config: '{"address":["{{ .Release.Name }}-redis-headless:6379"],"is_cluster":1}'
   key_manager_name: redis
   imp_kv_type: REDIS
   imp_kv_address: {{ .Release.Name }}-redis-headless:6379
   imp_kv_password: ''
   store_type: REDIS
-  store_option: '{"addr":"'{{ .Release.Name }}'-redis-headless:6379"}'
+  store_option: '{"addr":"{{ .Release.Name }}-redis-headless:6379"}'
   {{- end }}
 {{- end }}
