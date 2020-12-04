@@ -37,7 +37,7 @@ configMap:
 ia:
   name: imp-attribution-server
   replicaCount: 1
-  
+
   commands:
   - imp_attribution_server
 
@@ -58,15 +58,15 @@ ia:
     tls: []
 
   resources: {}
-    # limits:
-    #   cpu: 100m
-    #   memory: 128Mi
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
   # requests:
   #   cpu: 100m
   #   memory: 128Mi
 
   autoscaling:
-    enabled: false
+    enabled: true
     minReplicas: 1
     maxReplicas: 100
     targetCPUUtilizationPercentage: 80
@@ -78,9 +78,8 @@ ia:
 
   affinity: {}
 
-
   persistentVolume:
-    enabled: true
+    enabled: false
     accessModes:
       - ReadWriteOnce
     annotations: {}
