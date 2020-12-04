@@ -28,8 +28,8 @@
 
 | name | description | default |
 | --- | --- | --- |
-| serverAddress | server address and port | `:80` |
-| metric_server_address | metric for prometheus address and port | `:8080` |
+| server_address | server address and port | `:80` |
+| metrics_address | metric for prometheus address and port | `:8080` |
 | ams_encrypt_url | ams crypto server's encrypt api address | `http://localhost:9010/encrypt` |
 | ams_decrypt_url | ams crypto server's decrypt api address | `http://localhost:9010/decrypt` |
 | v | glog's v | `100` |
