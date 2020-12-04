@@ -27,12 +27,12 @@ configMap:
     # imp_kv_password: ''
     # store_type: SQLITE
     # store_option: '{"dsn":"/data/sqlite.db"}'
-    imp_attribution_worker_count: 50
-    imp_attribution_queue_size: 200
-    imp_attribution_queue_timeout_ms: 1000
+    imp_attribution_worker_count: "50"
+    imp_attribution_queue_size: "200"
+    imp_attribution_queue_timeout_ms: "1000"
     ams_encrypt_url: http://localhost:9010/encrypt
     ams_decrypt_url: http://localhost:9010/decrypt
-    v: 100
+    v: "100"
 
 ia:
   name: imp-attribution
