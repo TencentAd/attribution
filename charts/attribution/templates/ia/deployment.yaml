@@ -45,7 +45,7 @@ spec:
             {{- toYaml .Values.ia.resources | nindent 12 }}
           envFrom:
             - configMapRef:
-                name: {{ include "attribution.ia.cmname" . }}
+                name: {{ include "attribution.fullname" . }}
       {{- with .Values.ia.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
