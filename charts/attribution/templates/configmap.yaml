@@ -7,7 +7,7 @@ metadata:
 data:
 {{ toYaml .Values.configMap.data | indent 2 }}
   {{- if .Values.redis.enabled }}
-  default_redis_config: '{"address":["{{ .Release.Name }}-redis-headless:6379"],"is_cluster":1}'
+  default_redis_config: '{"address":["{{ .Release.Name }}-redis-headless:6379"]}'
   key_manager_name: redis
   imp_kv_type: REDIS
   imp_kv_address: {{ .Release.Name }}-redis-headless:6379
