@@ -27,7 +27,7 @@ var (
 	metricsAddress = flag.String("metrics_address", ":8080", "")
 
 	impKvType     = flag.String("imp_kv_type", "LEVELDB", "")
-	impKvAddress  = flag.String("imp_kv_address", "./db", "")
+	impKvAddress  = flag.String("imp_kv_address", "/data/db", "")
 	impKvPassword = flag.String("imp_kv_password", "", "")
 
 	workerCount    = flag.Int("imp_attribution_worker_count", 50, "")
@@ -35,7 +35,7 @@ var (
 	queueTimeoutMS = flag.Int("imp_attribution_queue_timeout_ms", 1000, "")
 
 	storeType   = flag.String("store_type", "SQLITE", "")
-	storeOption = flag.String("store_option", "{\"dsn\": \"sqlite.db\"}", "")
+	storeOption = flag.String("store_option", "{\"dsn\": \"/data/sqlite.db\"}", "")
 )
 
 func serveHttp() error {
