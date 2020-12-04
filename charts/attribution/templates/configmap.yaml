@@ -4,20 +4,24 @@ metadata:
   name: {{ include "attribution.fullname" . }}
   namespace: {{ .Release.Namespace }}
 data:
-  default_redis_config: '{"address":["127.0.0.1:6379"],"is_cluster":1}'
+  {{- if .Values.redis.enabled }}
+  default_redis_config: '{"address":["'{{ .Release.Name }}'-redis-headless:6379"],"is_cluster":1}'
   key_manager_name: redis
+  {{- else }}
+  default_redis_config: '{"address":["127.0.0.1:6379"],"is_cluster":1}'
+  {{- end }}
   serverAddress: :80
   metric_server_address: :8080
   imp_kv_type: LEVELDB
   imp_kv_address: /data/db
   imp_kv_password: ''
-  imp_attribution_worker_count: "50"
-  imp_attribution_queue_size: "200"
-  imp_attribution_queue_timeout_ms: "1000"
+  imp_attribution_worker_count: 50
+  imp_attribution_queue_size: 200
+  imp_attribution_queue_timeout_ms: 1000
   ams_encrypt_url: http://localhost:9010/encrypt
   ams_decrypt_url: http://localhost:9010/decrypt
   hdfs_address: ''
   hdfs_user: ''
-  v: "100"
-  store_type: "SQLITE"
+  v: 100
+  store_type: SQLITE
   store_option: '{"dsn":"/data/sqlite.db"}'

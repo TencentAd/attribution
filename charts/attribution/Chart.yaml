@@ -3,7 +3,7 @@ name: attribution
 version: 0.1.1
 appVersion: 0.1.0
 description: "帮助广告主实现自归因，只需要简单的配置，就能快速使用"
-home: https://github.com/TencentAd
+home: https://github.com/TencentAd/attribution/charts/attribution
 sources:
   - https://github.com/TencentAd/attribution
 type: application
