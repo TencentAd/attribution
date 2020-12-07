@@ -13,8 +13,8 @@ This chart bootstraps a [Attribution](https://github.com/TencentAd/attribution) 
 
 ```console
 # Helm
-$ helm package charts/attribution/
-$ helm install ./attribution-[VERSION].tgz --generate-name
+$ helm repo add attribution https://tencenad.github.io/attribution
+$ helm install --generate-name attribution/attribution
 ```
 
 _See [helm install](https://helm.sh/docs/helm/helm_install/) for command documentation._
