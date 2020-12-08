@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	AmsEncryptUrl = flag.String("ams_encrypt_url", "", "")
+	AmsEncryptUrl = flag.String("ams_encrypt_url", "http://tracking.e.qq.com/crypto/encrypt", "")
 )
 
 // 发送给AMS进行第二次加密
