@@ -47,7 +47,7 @@ func main() {
 	if err := flagx.Parse(); err != nil {
 		panic(err)
 	}
-	_ = metricutil.ServeMetrics(*serverAddress)
+	_ = metricutil.ServeMetrics(*metricsAddress)
 	if err := serveHttp(); err != nil {
 		glog.Fatal(err)
 	}
