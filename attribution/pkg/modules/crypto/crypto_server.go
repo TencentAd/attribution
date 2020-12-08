@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/flagx"
+	"github.com/TencentAd/attribution/attribution/pkg/common/loader"
 	"github.com/TencentAd/attribution/attribution/pkg/common/metricutil"
 	"github.com/TencentAd/attribution/attribution/pkg/crypto"
 	"github.com/TencentAd/attribution/attribution/pkg/handler/http/decrypt"
@@ -39,6 +40,8 @@ func serveHttp() error {
 	}
 	http.Handle("/decrypt", decrypt.NewHttpHandle().WithSafeguard(decryptSafeguard))
 	glog.Info("init done")
+
+	loader.StartDoubleBufferLoad(5)
 
 	return http.ListenAndServe(*serverAddress, nil)
 }
