@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	AmsDecryptUrl = flag.String("ams_decrypt_url", "", "")
+	AmsDecryptUrl = flag.String("ams_decrypt_url", "http://tracking.e.qq.com/crypto/decrypt", "")
 )
 
 // 发送给AMS进行第二次解密
