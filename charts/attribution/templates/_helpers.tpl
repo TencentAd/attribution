@@ -38,17 +38,34 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "attribution.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "attribution.name" . }}
+app.kubernetes.io/name: {{ template "attribution.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Create the name of the service account to use
+Create unified labels for components
 */}}
-{{- define "attribution.serviceAccountName" -}}
-{{- if .Values.serviceAccount.enabled }}
-{{- default (include "attribution.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}
+{{- define "attribution.common.matchLabels" -}}
+app: {{ template "attribution.name" . }}
+release: {{ .Release.Name }}
+{{- end -}}
+
+{{- define "attribution.common.metaLabels" -}}
+chart: {{ template "attribution.chart" . }}
+heritage: {{ .Release.Service }}
+{{- end -}}
+
+
+{{- define "attribution.ia.labels" -}}
+{{ include "attribution.ia.matchLabels" . }}
+{{ include "attribution.common.metaLabels" . }}
+{{- end -}}
+
+{{- define "attribution.ia.matchLabels" -}}
+component: {{ .Values.ia.name | quote }}
+{{ include "attribution.common.matchLabels" . }}
+{{- end -}}
+
+{{- define "attribution.ia.fullname" -}}
+{{ template "attribution.fullname" . }}-{{ .Values.ia.name }}
+{{- end -}}

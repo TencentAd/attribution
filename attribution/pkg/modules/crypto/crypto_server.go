@@ -15,8 +15,8 @@ import (
 )
 
 var (
-	serverAddress        = flag.String("crypto_server_address", ":9010", "")
-	metricsServerAddress = flag.String("crypto_metrics_address", ":9015", "")
+	serverAddress  = flag.String("crypto_server_address", ":80", "")
+	metricsAddress = flag.String("crypto_metrics_address", ":8080", "")
 )
 
 func serveHttp() error {
@@ -47,7 +47,7 @@ func main() {
 	if err := flagx.Parse(); err != nil {
 		panic(err)
 	}
-	_ = metricutil.ServeMetrics(*metricsServerAddress)
+	_ = metricutil.ServeMetrics(*serverAddress)
 	if err := serveHttp(); err != nil {
 		glog.Fatal(err)
 	}

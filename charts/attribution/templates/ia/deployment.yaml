@@ -1,22 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.ia.name }}
+  name: {{ include "attribution.ia.fullname" . }}
   labels:
     {{- include "attribution.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.ia.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
+  replicas: {{ .Values.ia.replicaCount }}
   selector:
     matchLabels:
       {{- include "attribution.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.ia.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- if .Values.metrics.enabled }}
+        prometheus.io/path: /metrics
+        prometheus.io/port: "{{ .Values.metrics.port }}"
+        prometheus.io/scrape: "true"
+        {{- end }}
+        {{- if .Values.ia.podAnnotations }}
+        {{- toYaml .Values.ia.podAnnotations | nindent 8 }}
+        {{- end }}
       labels:
         {{- include "attribution.selectorLabels" . | nindent 8 }}
     spec:
@@ -24,20 +27,32 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "attribution.serviceAccountName" . }}
+      {{- if .Values.serviceAccount.enabled -}}
+      serviceAccountName: {{ include "attribution.fullname" . }}
+      {{- end }}
       securityContext:
-        {{- toYaml .Values.ia.podSecurityContext | nindent 8 }}
+      {{- toYaml .Values.ia.securityContext | nindent 8 }}
       containers:
         - name: {{ .Values.ia.name }}
-          securityContext:
-            {{- toYaml .Values.ia.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: 
-            - {{ .Values.ia.command }}
+          command:
+            {{ range .Values.ia.commands }}
+            - {{ . }}
+            {{ end }}
+          env:
+          - name: server_address
+            value: ":{{ .Values.ia.service.port }}"
+          {{- if .Values.metrics.enabled }}
+          - name: metrics_address
+            value: ":{{ .Values.metrics.port }}"
+          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "attribution.fullname" . }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: {{ .Values.ia.service.port }}
               protocol: TCP
           resources:
             {{- toYaml .Values.ia.resources | nindent 12 }}
