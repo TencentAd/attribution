@@ -19,7 +19,7 @@ configMap:
   ## Define the key value pairs in the configmap
   data:
     # key_manager_name: redis
-    # default_redis_config: '{"address":["127.0.0.1:6379"],"is_cluster":1}'
+    # default_redis_config: '{"address":["127.0.0.1:6379"],"is_cluster":0}'
     # hdfs_address: ''
     # hdfs_user: ''
     # imp_kv_type: LEVELDB
@@ -30,8 +30,8 @@ configMap:
     imp_attribution_worker_count: "50"
     imp_attribution_queue_size: "200"
     imp_attribution_queue_timeout_ms: "1000"
-    ams_encrypt_url: http://localhost:9010/encrypt
-    ams_decrypt_url: http://localhost:9010/decrypt
+    ams_encrypt_url: http://tracking.e.qq.com/crypto/encrypt
+    ams_decrypt_url: http://tracking.e.qq.com/crypto/decrypt
     v: "100"
 
 ia:

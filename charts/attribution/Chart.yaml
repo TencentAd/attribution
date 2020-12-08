@@ -1,7 +1,7 @@
 apiVersion: v2
 name: attribution
-version: 0.1.2
-appVersion: 0.1.2
+version: 0.1.3
+appVersion: 0.1.3
 description: "帮助广告主实现自归因，只需要简单的配置，就能快速使用"
 home: https://github.com/TencentAd/attribution/charts/attribution
 sources:
