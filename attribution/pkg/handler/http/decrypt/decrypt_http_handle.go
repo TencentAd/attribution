@@ -3,6 +3,7 @@ package decrypt
 import (
 	"encoding/json"
 	"io/ioutil"
+	"math/rand"
 	"net/http"
 	"strconv"
 	"time"
@@ -67,14 +68,24 @@ func (handle *HttpHandle) process(r *http.Request) (*protocal.CryptoResponse, er
 	}
 
 	groupId := strconv.FormatInt(req.CampaignId, 10)
-	var resp protocal.CryptoResponse
+	resp := &protocal.CryptoResponse{
+		Message:    "success",
+	}
 	var p crypto.Parallel
 	for _, reqData := range req.Data {
 		var respData protocal.ResponseData
 		protocal.ProcessData(&p, groupId, reqData, crypto.Decrypt, &respData)
 		resp.Data = append(resp.Data, &respData)
 	}
-	return &resp, p.WaitAndCheck()
+	if err = p.WaitAndCheck(); err != nil {
+		return nil, err
+	}
+
+	rand.Shuffle(len(resp.Data), func(i, j int) {
+		resp.Data[i], resp.Data[j] = resp.Data[j], resp.Data[i]
+	})
+
+	return resp, nil
 }
 
 func (handle *HttpHandle) writeResponse(w http.ResponseWriter, resp *protocal.CryptoResponse) {
