@@ -1,0 +1,72 @@
+{{- if .Values.crypto.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "attribution.crypto.fullname" . }}
+  labels:
+    {{- include "attribution.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.crypto.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "attribution.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        {{- if .Values.metrics.enabled }}
+        prometheus.io/path: /metrics
+        prometheus.io/port: "{{ .Values.metrics.port }}"
+        prometheus.io/scrape: "true"
+        {{- end }}
+        {{- if .Values.crypto.podAnnotations }}
+        {{- toYaml .Values.crypto.podAnnotations | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "attribution.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.serviceAccount.enabled -}}
+      serviceAccountName: {{ include "attribution.fullname" . }}
+      {{- end }}
+      securityContext:
+      {{- toYaml .Values.crypto.securityContext | nindent 8 }}
+      containers:
+        - name: {{ .Values.crypto.name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            {{ range .Values.crypto.commands }}
+            - {{ . }}
+            {{ end }}
+          env:
+          - name: server_address
+            value: ":{{ .Values.crypto.service.port }}"
+          {{- if .Values.metrics.enabled }}
+          - name: metrics_address
+            value: ":{{ .Values.metrics.port }}"
+          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "attribution.fullname" . }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.crypto.service.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.crypto.resources | nindent 12 }}
+      {{- with .Values.crypto.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.crypto.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.crypto.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

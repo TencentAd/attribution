@@ -34,6 +34,12 @@ configMap:
     ams_decrypt_url: http://tracking.e.qq.com/crypto/decrypt
     v: "100"
 
+    # crypto server config
+    crypto_server_address: :80
+    crypto_metrics_address: :8080
+    encrypt_handle_pattern: /crypto/encrypt
+    decrypt_handle_pattern: /crypto/decrypt
+
 ia:
   name: imp-attribution
   replicaCount: 1
@@ -89,6 +95,53 @@ ia:
     # storageClass: "-"
     # volumeBindingMode: ""
     subPath: ""
+
+crypto:
+  enabled: false
+
+  name: crypto
+  replicaCount: 1
+
+  commands:
+    - crypto_server
+
+  podAnnotations: { }
+
+  securityContext: { }
+
+  service:
+    type: ClusterIP
+    port: 80
+
+  ingress:
+    enabled: false
+    annotations: { }
+    hosts:
+      - host: chart-example.local
+        paths: [ ]
+    tls: [ ]
+
+  resources: { }
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+  nodeSelector: { }
+
+  tolerations: [ ]
+
+  affinity: { }
+
 
 redis:
   enabled: true
