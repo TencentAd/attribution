@@ -5,7 +5,7 @@
 | name | description | default |
 | --- | --- | --- |
 | key_manager_name | key manager storage type: `redis` / `hdfs` | `redis` |
-| default_redis_config | redis config | `{"address":["127.0.0.1:6379"],"is_cluster":1}` |
+| default_redis_config | redis config | `{"address":["127.0.0.1:6379"],"is_cluster":0}` |
 | hdfs_address | hdfs config | `""` |
 | hdfs_user | hdfs config | `""` |
 
@@ -30,6 +30,6 @@
 | --- | --- | --- |
 | server_address | server address and port | `:80` |
 | metrics_address | metric for prometheus address and port | `:8080` |
-| ams_encrypt_url | ams crypto server's encrypt api address | `http://localhost:9010/encrypt` |
-| ams_decrypt_url | ams crypto server's decrypt api address | `http://localhost:9010/decrypt` |
+| ams_encrypt_url | ams crypto server's encrypt api address | `http://tracking.e.qq.com/crypto/encrypt` |
+| ams_decrypt_url | ams crypto server's decrypt api address | `http://tracking.e.qq.com/crypto/decrypt` |
 | v | glog's v | `100` |

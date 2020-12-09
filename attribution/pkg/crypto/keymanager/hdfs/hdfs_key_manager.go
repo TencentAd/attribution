@@ -42,7 +42,9 @@ func NewHDFSKeyManager() interface{} {
 	buffer := loader.NewFileDoubleBuffer(l)
 	buffer.SetNotify(
 		func(err error) {
-			glog.Errorf("failed to load hdfs keys, err: %v", err.Error())
+			if err != nil {
+				glog.Errorf("failed to load hdfs keys, err: %v", err)
+			}
 		})
 	return &KeyManager{
 		buffer: buffer,
