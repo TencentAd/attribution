@@ -11,6 +11,7 @@ package encrypt
 import (
 	"encoding/json"
 	"io/ioutil"
+	"math/rand"
 	"net/http"
 	"strconv"
 	"time"
@@ -83,8 +84,15 @@ func (handle *HttpHandle) doServeHttp(r *http.Request) (*protocal.CryptoResponse
 		protocal.ProcessData(&p, groupId, reqData, crypto.Encrypt, &respData)
 		resp.Data = append(resp.Data, &respData)
 	}
+	if err = p.WaitAndCheck(); err != nil {
+		return nil, err
+	}
 
-	return resp, p.WaitAndCheck()
+	rand.Shuffle(len(resp.Data), func(i, j int) {
+		resp.Data[i], resp.Data[j] = resp.Data[j], resp.Data[i]
+	})
+
+	return resp, nil
 }
 
 func (handle *HttpHandle) writeResponse(w http.ResponseWriter, resp *protocal.CryptoResponse) {
