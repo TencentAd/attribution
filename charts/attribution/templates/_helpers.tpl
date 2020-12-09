@@ -70,7 +70,6 @@ component: {{ .Values.ia.name | quote }}
 {{ template "attribution.fullname" . }}-{{ .Values.ia.name }}
 {{- end -}}
 
-
 {{- define "attribution.crypto.fullname" -}}
 {{ template "attribution.fullname" . }}-{{ .Values.crypto.name }}
 {{- end -}}

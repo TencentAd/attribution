@@ -12,15 +12,10 @@ spec:
       {{- include "attribution.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      {{- with .Values.ia.podAnnotations }}
       annotations:
-        {{- if .Values.metrics.enabled }}
-        prometheus.io/path: /metrics
-        prometheus.io/port: "{{ .Values.metrics.port }}"
-        prometheus.io/scrape: "true"
-        {{- end }}
-        {{- if .Values.crypto.podAnnotations }}
-        {{- toYaml .Values.crypto.podAnnotations | nindent 8 }}
-        {{- end }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
         {{- include "attribution.selectorLabels" . | nindent 8 }}
     spec:

@@ -37,9 +37,9 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
-            {{ range .Values.ia.commands }}
+            {{- range .Values.ia.commands }}
             - {{ . }}
-            {{ end }}
+            {{- end }}
           env:
           - name: server_address
             value: ":{{ .Values.ia.service.port }}"

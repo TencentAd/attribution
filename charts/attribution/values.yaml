@@ -105,9 +105,9 @@ crypto:
   commands:
     - crypto_server
 
-  podAnnotations: { }
+  podAnnotations: {}
 
-  securityContext: { }
+  securityContext: {}
 
   service:
     type: ClusterIP
@@ -115,13 +115,13 @@ crypto:
 
   ingress:
     enabled: false
-    annotations: { }
+    annotations: {}
     hosts:
       - host: chart-example.local
-        paths: [ ]
-    tls: [ ]
+        paths: []
+    tls: []
 
-  resources: { }
+  resources: {}
   # limits:
   #   cpu: 100m
   #   memory: 128Mi
@@ -136,11 +136,11 @@ crypto:
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
 
-  nodeSelector: { }
+  nodeSelector: {}
 
-  tolerations: [ ]
+  tolerations: []
 
-  affinity: { }
+  affinity: {}
 
 
 redis:
