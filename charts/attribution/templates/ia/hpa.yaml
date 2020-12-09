@@ -1,5 +1,5 @@
 {{- if .Values.ia.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "attribution.ia.fullname" . }}
@@ -13,16 +13,5 @@ spec:
   minReplicas: {{ .Values.ia.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.ia.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.ia.autoscaling.targetCPUUtilizationPercentage }}
-    - type: Resource
-      resource:
-        name: cpu
-        targetAverageUtilization: {{ .Values.ia.autoscaling.targetCPUUtilizationPercentage }}
-    {{- end }}
-    {{- if .Values.ia.autoscaling.targetMemoryUtilizationPercentage }}
-    - type: Resource
-      resource:
-        name: memory
-        targetAverageUtilization: {{ .Values.ia.autoscaling.targetMemoryUtilizationPercentage }}
-    {{- end }}
+{{ toYaml .Values.ia.autoscaling.metrics | indent 4 }}
 {{- end }}
