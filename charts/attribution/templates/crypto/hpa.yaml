@@ -1,11 +1,11 @@
 {{- if .Values.crypto.enabled -}}
-{{- if .Values.crypto.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta1
+  {{- if .Values.crypto.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "attribution.crypto.fullname" . }}
   labels:
-    {{- include "attribution.labels" . | nindent 4 }}
+  {{- include "attribution.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -14,17 +14,6 @@ spec:
   minReplicas: {{ .Values.crypto.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.crypto.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.crypto.autoscaling.targetCPUUtilizationPercentage }}
-    - type: Resource
-      resource:
-        name: cpu
-        targetAverageUtilization: {{ .Values.crypto.autoscaling.targetCPUUtilizationPercentage }}
-    {{- end }}
-    {{- if .Values.crypto.autoscaling.targetMemoryUtilizationPercentage }}
-    - type: Resource
-      resource:
-        name: memory
-        targetAverageUtilization: {{ .Values.crypto.autoscaling.targetMemoryUtilizationPercentage }}
-    {{- end }}
-{{- end }}
+  {{ toYaml .Values.crypto.autoscaling.metrics | indent 4 }}
+  {{- end }}
 {{- end }}
