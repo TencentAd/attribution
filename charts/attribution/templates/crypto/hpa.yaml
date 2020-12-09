@@ -1,0 +1,19 @@
+{{- if .Values.crypto.enabled -}}
+  {{- if .Values.crypto.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "attribution.crypto.fullname" . }}
+  labels:
+  {{- include "attribution.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "attribution.crypto.fullname" . }}
+  minReplicas: {{ .Values.crypto.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.crypto.autoscaling.maxReplicas }}
+  metrics:
+  {{ toYaml .Values.crypto.autoscaling.metrics | indent 4 }}
+  {{- end }}
+{{- end }}

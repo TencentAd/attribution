@@ -1,25 +1,21 @@
+{{- if .Values.crypto.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "attribution.ia.fullname" . }}
+  name: {{ include "attribution.crypto.fullname" . }}
   labels:
     {{- include "attribution.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.ia.replicaCount }}
+  replicas: {{ .Values.crypto.replicaCount }}
   selector:
     matchLabels:
       {{- include "attribution.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      {{- with .Values.ia.podAnnotations }}
       annotations:
-        {{- if .Values.metrics.enabled }}
-        prometheus.io/path: /metrics
-        prometheus.io/port: "{{ .Values.metrics.port }}"
-        prometheus.io/scrape: "true"
-        {{- end }}
-        {{- if .Values.ia.podAnnotations }}
-        {{- toYaml .Values.ia.podAnnotations | nindent 8 }}
-        {{- end }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
         {{- include "attribution.selectorLabels" . | nindent 8 }}
     spec:
@@ -31,18 +27,18 @@ spec:
       serviceAccountName: {{ include "attribution.fullname" . }}
       {{- end }}
       securityContext:
-      {{- toYaml .Values.ia.securityContext | nindent 8 }}
+      {{- toYaml .Values.crypto.securityContext | nindent 8 }}
       containers:
-        - name: {{ .Values.ia.name }}
+        - name: {{ .Values.crypto.name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
-            {{- range .Values.ia.commands }}
+            {{ range .Values.crypto.commands }}
             - {{ . }}
-            {{- end }}
+            {{ end }}
           env:
           - name: server_address
-            value: ":{{ .Values.ia.service.port }}"
+            value: ":{{ .Values.crypto.service.port }}"
           {{- if .Values.metrics.enabled }}
           - name: metrics_address
             value: ":{{ .Values.metrics.port }}"
@@ -52,19 +48,20 @@ spec:
                 name: {{ include "attribution.fullname" . }}
           ports:
             - name: http
-              containerPort: {{ .Values.ia.service.port }}
+              containerPort: {{ .Values.crypto.service.port }}
               protocol: TCP
           resources:
-            {{- toYaml .Values.ia.resources | nindent 12 }}
-      {{- with .Values.ia.nodeSelector }}
+            {{- toYaml .Values.crypto.resources | nindent 12 }}
+      {{- with .Values.crypto.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.ia.affinity }}
+      {{- with .Values.crypto.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.ia.tolerations }}
+      {{- with .Values.crypto.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}

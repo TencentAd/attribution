@@ -1,0 +1,17 @@
+{{- if .Values.crypto.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "attribution.crypto.fullname" . }}
+  labels:
+    {{- include "attribution.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.crypto.service.type }}
+  ports:
+    - port: {{ .Values.crypto.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "attribution.selectorLabels" . | nindent 4 }}
+{{- end }}
