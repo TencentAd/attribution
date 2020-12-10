@@ -35,8 +35,6 @@ configMap:
     v: "100"
 
     # crypto server config
-    crypto_server_address: :80
-    crypto_metrics_address: :8080
     encrypt_handle_pattern: /crypto/encrypt
     decrypt_handle_pattern: /crypto/decrypt
 
@@ -144,15 +142,25 @@ crypto:
     enabled: true
     minReplicas: 1
     maxReplicas: 100
-    targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
+    metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 60
 
   nodeSelector: {}
 
   tolerations: []
 
   affinity: {}
-
 
 redis:
   enabled: true
