@@ -13,7 +13,7 @@ This chart bootstraps a [Attribution](https://github.com/TencentAd/attribution) 
 
 ```console
 # Helm
-$ helm repo add attribution https://tencenad.github.io/attribution
+$ helm repo add attribution https://tencentad.github.io/attribution
 $ helm install --generate-name attribution/attribution
 ```
 

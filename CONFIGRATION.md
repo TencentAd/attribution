@@ -24,7 +24,7 @@
 | store_type | metadata storage type: `SQLITE` / `REDIS` | `SQLITE` |
 | store_option | metadata storage config | `{"dsn":"/data/sqlite.db"}` |
 
-## server config
+## ia server config
 
 | name | description | default |
 | --- | --- | --- |
@@ -32,4 +32,14 @@
 | metrics_address | metric for prometheus address and port | `:8080` |
 | ams_encrypt_url | ams crypto server's encrypt api address | `http://tracking.e.qq.com/crypto/encrypt` |
 | ams_decrypt_url | ams crypto server's decrypt api address | `http://tracking.e.qq.com/crypto/decrypt` |
+| v | glog's v | `100` |
+
+## crypto server config
+
+| name | description | default |
+| --- | --- | --- |
+| crypto_server_address | server address and port | `:80` |
+| crypto_metrics_address | metric for prometheus address and port | `:8080` |
+| encrypt_handle_pattern | crypto server's encrypt http path | `/crypto/encrypt` |
+| decrypt_handle_pattern | crypto server's decrypt http path | `/crypto/decrypt` |
 | v | glog's v | `100` |

@@ -12,7 +12,7 @@ spec:
       {{- include "attribution.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.ia.podAnnotations }}
+      {{- with .Values.crypto.podAnnotations }}
       annotations:
       {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -37,10 +37,10 @@ spec:
             - {{ . }}
             {{ end }}
           env:
-          - name: server_address
+          - name: crypto_server_address
             value: ":{{ .Values.crypto.service.port }}"
           {{- if .Values.metrics.enabled }}
-          - name: metrics_address
+          - name: crypto_metrics_address
             value: ":{{ .Values.metrics.port }}"
           {{- end }}
           envFrom:
