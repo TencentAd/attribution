@@ -33,6 +33,10 @@ message ClickLog {
   int64 encrypted_position_id = 24; // 联盟广告位id
   string adgroup_name = 25; // 广告名称
   string site_set_name = 26; // 版位名称
+  int64 cid = 27; // 头条专属，广告创意id
+
+  Platform platform = 28; // 投放平台
+
 }
 
 enum BillingEvent {
@@ -42,4 +46,9 @@ enum BillingEvent {
   CPS = 3;
   CPM = 4;
   CPD = 5;
+}
+
+enum Platform {
+  AMS = 0;
+  OCEAN = 1;
 }
