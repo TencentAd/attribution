@@ -1,0 +1,126 @@
+<settings>
+
+    <offline>false</offline>
+
+    <proxies>
+        <proxy>
+            <id>dev</id>
+            <active>true</active>
+            <protocol>http</protocol>
+            <username></username>
+            <password></password>
+            <host>127.0.0.1</host>
+            <port>12639</port>
+            <nonProxyHosts>maven.oa.com|mirrors.tencent.com</nonProxyHosts>
+        </proxy>
+        <proxy>
+            <id>dev_1</id>
+            <active>true</active>
+            <protocol>https</protocol>
+            <username></username>
+            <password></password>
+            <host>127.0.0.1</host>
+            <port>12639</port>
+            <nonProxyHosts>maven.oa.com|mirrors.tencent.com</nonProxyHosts>
+        </proxy>
+    </proxies>
+
+    <profiles>
+        <profile>
+            <id>nexus</id>
+            <repositories>
+                <!-- 开源库，包括中央仓库、Apache等仓库，由RDM团队维护 -->
+                <repository>
+                    <id>central</id>
+                    <url>http://maven.oa.com/nexus/content/groups/public</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+                <!-- 公司内部release仓库，由RDM团队维护 -->
+                <repository>
+                    <id>rdm-releases-repo</id>
+                    <url>http://maven.oa.com/nexus/content/repositories/releases</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+                <!-- 数平内部release仓库，后续会考虑统一用RDM团队维护的仓库 -->
+                <repository>
+                    <id>tdw-release-repo</id>
+                    <url>http://maven.data.oa.com/nexus/content/repositories/releases</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+                <!-- 公司内部release仓库，仅包含Spark相关jar包 -->
+                <repository>
+                    <id>tencent_spark_repo</id>
+                    <name>Tencent Spark Repository</name>
+                    <url>https://mirrors.tencent.com/repository/maven/tencent_spark_release</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>central</id>
+                    <url>https://repo.maven.apache.org/maven2/</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                </repository>
+                <repository>
+                    <id>jet</id>
+                    <url>https://mirrors.tencent.com/repository/maven/jet/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>central</id>
+                    <url>http://maven.oa.com/nexus/content/groups/public</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </pluginRepository>
+                <pluginRepository>
+                    <id>central</id>
+                    <url>https://repo.maven.apache.org/maven2/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
+
+    <activeProfiles>
+        <activeProfile>nexus</activeProfile>
+    </activeProfiles>
+</settings>

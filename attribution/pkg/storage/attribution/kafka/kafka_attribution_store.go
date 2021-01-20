@@ -2,10 +2,10 @@ package kafka
 
 import (
 	"context"
-	"encoding/json"
 	"flag"
 	"github.com/TencentAd/attribution/attribution/proto/conv"
 	"github.com/golang/glog"
+	"github.com/golang/protobuf/proto"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/segmentio/kafka-go"
 )
@@ -59,7 +59,7 @@ func (a *AmsKafkaAttributionStore) Store(conv *conv.ConversionLog) error {
 }
 
 func (a *AmsKafkaAttributionStore) doStore(conv *conv.ConversionLog) error {
-	value, err := json.Marshal(conv)
+	value, err := proto.Marshal(conv)
 	if err != nil {
 		return err
 	}

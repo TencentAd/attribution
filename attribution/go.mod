@@ -19,6 +19,7 @@ require (
 	github.com/tencentad/marketing-api-go-sdk v1.4.1
 	github.com/tsuna/gohbase v0.0.0-20200831170559-79db14850535
 	github.com/yuin/gopher-lua v0.0.0-20200816102855-ee81675732da // indirect
+	google.golang.org/protobuf v1.23.0
 	gorm.io/driver/sqlite v1.1.4
 	gorm.io/gorm v1.20.7
 	modernc.org/mathutil v1.1.1 // indirect
