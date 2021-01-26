@@ -61,6 +61,9 @@ func (c ClickParser) Parse(input interface{}) (*click.ClickLog, error) {
 	clickLog.Callback = httpx.HttpQueryStringParam(query, "callback_url", "")
 
 	clickLog.DeviceOsType, err = httpx.HttpMustQueryStringParam(query, "os")
+	if err != nil {
+		return nil, err
+	}
 
 	if clickLog.DeviceOsType == "0" {
 		userData.Imei = httpx.HttpQueryStringParam(query, "imei", "")
