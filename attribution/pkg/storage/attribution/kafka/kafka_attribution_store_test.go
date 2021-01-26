@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-func TestNewAmsKafkaAttributionStore(t *testing.T) {
+func testNewAmsKafkaAttributionStore(t *testing.T) {
 	flag.Parse()
 
 	store, err := NewAmsKafkaAttributionStore()
@@ -37,7 +37,7 @@ func TestNewAmsKafkaAttributionStore(t *testing.T) {
 	assert.NoError(t, store.Store(c))
 }
 
-func TestConsumer(t *testing.T) {
+func testConsumer(t *testing.T) {
 	topic := "flink_result_test"
 	partition := 0
 
