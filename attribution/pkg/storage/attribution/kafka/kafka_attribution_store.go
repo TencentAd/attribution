@@ -21,10 +21,10 @@ var (
 		[]string{"conv_id", "status"},
 	)
 
-	Address          = flag.String("kafka_address", ":9092", "kafka address, split with comma")
+	Address          = flag.String("kafka_address", "localhost:9092", "kafka address, split with comma")
 	AttributionTopic = flag.String("attribution_kafka_topic", "attribution_test", "")
-	ClickTopic = flag.String("attribution_kafka_topic", "click_test", "")
-	ConversionTopic = flag.String("attribution_kafka_topic", "conversion_test", "")
+	ClickTopic = flag.String("click_kafka_topic", "click_test", "")
+	ConversionTopic = flag.String("conversion_kafka_topic", "conversion_test", "")
 )
 
 func init() {
