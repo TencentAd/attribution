@@ -23,6 +23,8 @@ attribution-datacube-us/attribution-proto/attribution-proto.iml
 attribution-datacube-us/click-index/click-index.iml
 attribution-datacube-us/conv-attribution/conv-attribution.iml
 
+**/**/*.iml
+
 
 attribution-web/yarn-error.log
 attribution-web/node_modules/
