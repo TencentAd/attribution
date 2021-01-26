@@ -57,7 +57,8 @@ type convResponse struct {
 	Message string
 }
 
-func (f *AmsAttributionForward) Store(convLog *conv.ConversionLog) error {
+func (f *AmsAttributionForward) Store(message interface{}) error {
+	convLog := message.(*conv.ConversionLog)
 	// 没有归因上点击
 	if convLog.MatchClick == nil {
 		AmsConvReportCount.WithLabelValues(convLog.ConvId, "no_match").Add(1)

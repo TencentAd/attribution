@@ -22,22 +22,23 @@ func NewStdoutAttributionStore() interface{} {
 	return &StdoutAttributionStore{}
 }
 
-func (s *StdoutAttributionStore) Store(conv *conv.ConversionLog) error {
+func (s *StdoutAttributionStore) Store(message interface{}) error {
+	conversionLog := message.(*conv.ConversionLog)
 	var convContent []byte
 	var clickContent []byte
 	var err error
-	convContent, err = json.Marshal(conv)
+	convContent, err = json.Marshal(conversionLog)
 	if err != nil {
 		return err
 	}
 
-	if conv.MatchClick != nil {
-		clickContent, err = json.Marshal(conv.MatchClick)
+	if conversionLog.MatchClick != nil {
+		clickContent, err = json.Marshal(conversionLog.MatchClick)
 		if err != nil {
 			return err
 		}
 	}
 
-	fmt.Printf("conv: %s\nclick:%s\n", string(convContent), string(clickContent))
+	fmt.Printf("conversionLog: %s\nclick:%s\n", string(convContent), string(clickContent))
 	return nil
 }

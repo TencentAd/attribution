@@ -14,17 +14,17 @@ import (
 	"time"
 )
 
-func testNewAmsKafkaAttributionStore(t *testing.T) {
+func TestNewAmsKafkaAttributionStore(t *testing.T) {
 	flag.Parse()
 
-	store, err := NewAmsKafkaAttributionStore()
+	store, err := NewAmsKafkaAttributionStore("localhost:9092", "attribution_test")
 	assert.NoError(t, err)
 
 	c := &conv.ConversionLog{
 		UserData:   nil,
 		EventTime:  0,
-		AppId:      "test appid",
-		ConvId:     "test convid",
+		AppId:      "test appid!!!",
+		ConvId:     "test convid!!!",
 		CampaignId: 0,
 		Index:      0,
 		MatchClick: &conv.MatchClick{

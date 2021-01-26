@@ -15,6 +15,7 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import java.util.Properties;
 
 public class AttributionStreamingProcess {
+
     public static void main(String[] args) throws Exception {
         String env = "test";
         String jobName = "attribution";
@@ -46,7 +47,8 @@ public class AttributionStreamingProcess {
                 System.out.println(conversionLog.getAppId());
                 return conversionLog.getAppId();
             }
-        }).addSink(producer);
+        }).print();
+//                addSink(producer);
 
         see.execute("test kafka");
     }
