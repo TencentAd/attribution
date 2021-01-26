@@ -14,11 +14,10 @@ import (
 	"time"
 )
 
-func TestNewAmsKafkaAttributionStore(t *testing.T) {
+func testNewAmsKafkaAttributionStore(t *testing.T) {
 	flag.Parse()
 
-	store, err := NewAmsKafkaAttributionStore("localhost:9092", "attribution_test")
-	assert.NoError(t, err)
+	store := NewAmsKafkaAttributionStore().(*AmsKafkaAttributionStore)
 
 	c := &conv.ConversionLog{
 		UserData:   nil,
