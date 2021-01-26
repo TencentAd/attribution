@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-func TestNewAmsKafkaAttributionStore(t *testing.T) {
+func testNewAmsKafkaAttributionStore(t *testing.T) {
 	flag.Parse()
 
 	store := NewAmsKafkaAttributionStore().(*AmsKafkaAttributionStore)
