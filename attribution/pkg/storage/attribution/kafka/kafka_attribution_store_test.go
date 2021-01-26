@@ -72,4 +72,6 @@ func testConsumer(t *testing.T) {
 	if err := conn.Close(); err != nil {
 		log.Fatal("failed to close connection:", err)
 	}
+
+	fmt.Println("test finished")
 }
