@@ -5,8 +5,11 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.attribution.datacube.common.vars.ConfigVars;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
+import org.apache.flink.core.fs.Path;
+import org.apache.flink.formats.parquet.avro.ParquetAvroWriters;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 
@@ -40,6 +43,9 @@ public class StringStreamingProcess {
 
         // todo 中间的处理逻辑
         messageDataStreamSource.print();
+        messageDataStreamSource.addSink(StreamingFileSink
+                .forBulkFormat(new Path(""), ParquetAvroWriters.forReflectRecord(String.class))
+                .build());
 
         see.execute("test kafka");
     }

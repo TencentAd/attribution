@@ -10,10 +10,11 @@ import com.tencent.attribution.proto.user.User;
 public class FlattenedConversionLogParser extends FlattenParser{
     @Override
     public FlattenedRecord parse(Message message) {
+        System.out.println("start to parse message");
         Conv.ConversionLog conversionLog = (Conv.ConversionLog)message;
         User.UserData userData = conversionLog.getUserData();
         Click.ClickLog clickLog = conversionLog.getMatchClick().getClickLog();
-        return FlattenedConversionLog.builder()
+        FlattenedConversionLog log = FlattenedConversionLog.builder()
                 .eventTime(conversionLog.getEventTime())
                 .appId(conversionLog.getAppId())
                 .convId(conversionLog.getConvId())
@@ -59,6 +60,9 @@ public class FlattenedConversionLogParser extends FlattenParser{
                 .siteSetName(clickLog.getSiteSetName())
                 .cid(clickLog.getCid())
                 .billingEvent(clickLog.getBillingEventValue())
-                .platform(clickLog.getPlatformValue()).build();
+                .platform(clickLog.getPlatformValue())
+                .build();
+        System.out.println("parse message done");
+        return log;
     }
 }
