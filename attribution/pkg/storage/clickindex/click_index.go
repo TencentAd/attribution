@@ -31,7 +31,7 @@ func init() {
 
 type ClickIndex interface {
 	Set(idType user.IdType, key string, click *click.ClickLog) error
-	Get(idtype user.IdType, key string) (*click.ClickLog, error)
+	Get(idType user.IdType, key string) (*click.ClickLog, error)
 	Remove(idType user.IdType, key string) error
 }
 

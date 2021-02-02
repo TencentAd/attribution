@@ -26,13 +26,13 @@ import (
 var (
 	AmsConvReportCount = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Namespace:   "attribution",
-			Subsystem:   "",
-			Name:        "ams_conv_report_count",
-			Help:        "ams conv report count",
+			Namespace: "attribution",
+			Subsystem: "",
+			Name:      "ams_conv_report_count",
+			Help:      "ams conv report count",
 		},
 		[]string{"conv_id", "status"},
-		)
+	)
 
 	amsConvServerUrl = flag.String("ams_conv_server_url",
 		"http://tracking.e.qq.com/conv?cb=__CALLBACK__&conv_id=__CONV_ID__", "")
@@ -57,8 +57,9 @@ type convResponse struct {
 	Message string
 }
 
-func (f *AmsAttributionForward) Store(convLog *conv.ConversionLog) error {
-	 // 没有归因上点击
+func (f *AmsAttributionForward) Store(message interface{}) error {
+	convLog := message.(*conv.ConversionLog)
+	// 没有归因上点击
 	if convLog.MatchClick == nil {
 		AmsConvReportCount.WithLabelValues(convLog.ConvId, "no_match").Add(1)
 		return nil
@@ -89,7 +90,7 @@ func (f *AmsAttributionForward) doStore(convLog *conv.ConversionLog) error {
 	}
 	defer resp.Body.Close()
 
-	body,err := ioutil.ReadAll(resp.Body)
+	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return err
 	}

@@ -10,12 +10,12 @@ package attribution
 
 import (
 	"flag"
+	"github.com/TencentAd/attribution/attribution/pkg/storage/attribution/kafka"
 	"strings"
 
 	"github.com/TencentAd/attribution/attribution/pkg/common/factory"
 	"github.com/TencentAd/attribution/attribution/pkg/storage/attribution/http"
 	"github.com/TencentAd/attribution/attribution/pkg/storage/attribution/native"
-	"github.com/TencentAd/attribution/attribution/proto/conv"
 )
 
 var (
@@ -25,12 +25,16 @@ var (
 )
 
 type Storage interface {
-	Store(conv *conv.ConversionLog) error
+	//Store(conv *conv.ConversionLog) error
+	Store(message interface{}) error
 }
 
 func init() {
 	attributionStoreFactory.Register("ams", http.NewAmsAttributionForward)
 	attributionStoreFactory.Register("stdout", native.NewStdoutAttributionStore)
+	attributionStoreFactory.Register("kafka_click", kafka.NewAmsKafkaClickStore)
+	attributionStoreFactory.Register("kafka_conversion", kafka.NewAmsKafkaConversionStore)
+	attributionStoreFactory.Register("kafka_attribution", kafka.NewAmsKafkaAttributionStore)
 }
 
 func CreateAttributionStore() ([]Storage, error) {

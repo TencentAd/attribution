@@ -13,11 +13,13 @@ require (
 	github.com/orcaman/concurrent-map v0.0.0-20190826125027-8c72a8bb44f6
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.8.0
+	github.com/segmentio/kafka-go v0.4.8
 	github.com/stretchr/testify v1.6.1
 	github.com/syndtr/goleveldb v1.0.0
 	github.com/tencentad/marketing-api-go-sdk v1.4.1
 	github.com/tsuna/gohbase v0.0.0-20200831170559-79db14850535
 	github.com/yuin/gopher-lua v0.0.0-20200816102855-ee81675732da // indirect
+	google.golang.org/protobuf v1.23.0
 	gorm.io/driver/sqlite v1.1.4
 	gorm.io/gorm v1.20.7
 	modernc.org/mathutil v1.1.1 // indirect
