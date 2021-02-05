@@ -8,8 +8,11 @@ public class FlattenParserFactory {
             case "click": {
                 return new FlattenedClickLogParser();
             }
-            case "conversion" : {
+            case "conversion": {
                 return new FlattenedConversionLogParser();
+            }
+            case "conversion_test": {
+                return new FlattenedConversionTestLogParser();
             }
             default: {
                 throw new Exception("no such parser type");
