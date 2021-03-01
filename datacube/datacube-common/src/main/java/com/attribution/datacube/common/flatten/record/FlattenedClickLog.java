@@ -185,6 +185,6 @@ public class FlattenedClickLog extends FlattenedRecord{
 
     @Override
     public long getEventTime() {
-        return 0;
+        return clickTime;
     }
 }

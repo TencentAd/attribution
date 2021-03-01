@@ -1,6 +1,8 @@
 package com.attribution.datacube.flatten.tool;
 
 import com.attribution.datacube.common.flatten.record.FlattenedRecord;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.serialization.SerializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
@@ -28,17 +30,13 @@ public class FlattenedMessageSchema implements DeserializationSchema<FlattenedRe
 
     @Override
     public byte[] serialize(FlattenedRecord o) {
-        byte[] bytes = null;
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            ObjectOutputStream outputStream = new ObjectOutputStream(byteArrayOutputStream);
-            outputStream.writeObject(o);
-            outputStream.flush();
-            bytes = byteArrayOutputStream.toByteArray();
-        } catch (IOException e) {
+            return objectMapper.writeValueAsBytes(o);
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return bytes;
+        return null;
     }
 
     @Override

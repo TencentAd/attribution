@@ -18,10 +18,7 @@ public class LogFlatMapper extends RichFlatMapFunction<Message, FlattenedRecord>
 
     @Override
     public void flatMap(Message message, Collector<FlattenedRecord> collector) {
-        System.out.println("get message");
         FlattenedRecord flattenedrecord = flattenParser.parse(message);
-        System.out.println(flattenedrecord);
         collector.collect(flattenedrecord);
-        System.out.println("collect message done");
     }
 }
