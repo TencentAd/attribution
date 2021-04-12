@@ -201,6 +201,6 @@ public class FlattenedConversionLog extends FlattenedRecord {
 
     @Override
     public long getEventTime() {
-        return getProcessTime();
+        return eventTime;
     }
 }

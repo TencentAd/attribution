@@ -8,7 +8,7 @@ public class FlattenParserFactory {
             case "click": {
                 return new FlattenedClickLogParser();
             }
-            case "conversion" : {
+            case "conversion": {
                 return new FlattenedConversionLogParser();
             }
             default: {

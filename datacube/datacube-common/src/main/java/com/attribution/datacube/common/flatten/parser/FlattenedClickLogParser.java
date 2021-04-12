@@ -6,6 +6,9 @@ import com.google.protobuf.Message;
 import com.tencent.attribution.proto.click.Click;
 import com.tencent.attribution.proto.user.User;
 
+/**
+ * 将click数据打平的parser，parse方法将Message类的数据打平成FlattenedRecord类的数据
+ */
 public class FlattenedClickLogParser extends FlattenParser{
 
     @Override
