@@ -11,7 +11,6 @@ import com.tencent.attribution.proto.conv.Conv;
 import com.twitter.chill.protobuf.ProtobufSerializer;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.formats.parquet.avro.ParquetAvroWriters;
 import org.apache.flink.runtime.state.filesystem.FsStateBackend;
@@ -68,12 +67,13 @@ public class StreamingLogFlattenJob {
 
         LOG.info("set datasource done");
 
-        // todo 中间的处理逻辑
+        // 中间的处理逻辑
         SingleOutputStreamOperator<FlattenedRecord> flattenedResultStream = messageDataStreamSource
                 .flatMap(new LogFlatMapper(FlattenParserFactory.getFlattenedParser(logType)))
                 .name("flatten map");
         LOG.info("flat map done");
 
+        // 将数据落到cos存储
         StreamingFileSink sink = StreamingFileSink
                 .forBulkFormat(
                         new Path(savingPath),
@@ -87,25 +87,21 @@ public class StreamingLogFlattenJob {
         // 设置broker的事务最大超时时间为5分钟，小于broker的默认事务超时时间15分钟才能正常工作
         properties.setProperty("transaction.timeout.ms", 1000 * 60 * 5 + "");
 
-//        FlinkKafkaProducer<FlattenedRecord> kafkaProducer = new FlinkKafkaProducer<>(
-//                streamSinkConfig.getString("topic"),
-//                new FlattenedMessageSchema(),
-//                properties);
-
+        // 将数据落到kafka存储
         FlinkKafkaProducer<FlattenedRecord> kafkaProducer = new FlinkKafkaProducer<>(
-                streamSinkConfig.getString("topic"),                 // 目标 topic
+                streamSinkConfig.getString("topic"), // 目标 topic
                 new KafkaSerializationSchemaWrapper<>(
                         streamSinkConfig.getString("topic"),
                         new FlinkFixedPartitioner<>(),
                         false,
-                        new FlattenedMessageSchema()),    // 序列化 schema
-                properties,                  // producer 配置
+                        new FlattenedMessageSchema()), // 序列化 schema
+                properties, // producer 配置
                 FlinkKafkaProducer.Semantic.AT_LEAST_ONCE);
 
         flattenedResultStream.addSink(sink).name("sink to file");
 
         flattenedResultStream.addSink(kafkaProducer).name("sink to kafka");
 
-        see.execute("flatten log test");
+        see.execute("flatten log");
     }
 }

@@ -11,9 +11,6 @@ public class FlattenParserFactory {
             case "conversion": {
                 return new FlattenedConversionLogParser();
             }
-            case "conversion_test": {
-                return new FlattenedConversionTestLogParser();
-            }
             default: {
                 throw new Exception("no such parser type");
             }

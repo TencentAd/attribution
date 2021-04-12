@@ -7,6 +7,9 @@ import com.tencent.attribution.proto.click.Click;
 import com.tencent.attribution.proto.conv.Conv;
 import com.tencent.attribution.proto.user.User;
 
+/**
+ *  将转化数据打平的parser
+ */
 public class FlattenedConversionLogParser extends FlattenParser{
     @Override
     public FlattenedRecord parse(Message message) {

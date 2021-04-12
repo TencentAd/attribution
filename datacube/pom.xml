@@ -11,8 +11,6 @@
     <modules>
         <module>datacube-common</module>
         <module>datacube-proto</module>
-        <module>datacube-service</module>
-        <module>datacube-join</module>
         <module>datacube-flatten</module>
         <module>datacube-attribution</module>
     </modules>
